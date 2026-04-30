@@ -29,63 +29,20 @@ export function Navbar() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <nav 
-      ref={navRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        height: '76px',
-        padding: '0 2rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: 'rgba(10, 10, 15, 0.85)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(185, 239, 163, 0.1)',
-        maxWidth: '100%',
-      }}
-    >
-      <Link href="/" style={{ textDecoration: 'none', alignSelf: 'center' }} onClick={closeMenu}>
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <img 
-            src="/Seif-Logo.png" 
-            alt="Seif El-Din Logo" 
-            style={{ 
-              height: '40px', 
-              width: '40px',
-              objectFit: 'contain'
-            }} 
-          />
+    <nav className="navbar" ref={navRef}>
+      <Link href="/" className="navbar-logo" onClick={closeMenu}>
+        <motion.div whileHover={{ scale: 1.05 }} className="logo-wrapper">
+          <img src="/Seif-Logo.png" alt="Seif El-Din Logo" className="logo-img" />
         </motion.div>
       </Link>
 
       {/* Desktop Nav */}
-      <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }} className="desktop-nav">
+      <div className="desktop-nav">
         {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
           <a
             key={item}
             href={`#${item.toLowerCase()}`}
-             style={{
-               fontFamily: "'Montserrat', sans-serif",
-               fontSize: '0.8rem',
-               letterSpacing: '0.15em',
-               textTransform: 'uppercase' as const,
-               color: 'rgba(255, 255, 255, 0.6)',
-               textDecoration: 'none',
-               transition: 'color 0.3s ease',
-               cursor: 'pointer',
-             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#b9efa3' }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)' }}
+            className="nav-link"
           >
             {item}
           </a>
@@ -93,85 +50,23 @@ export function Navbar() {
       </div>
 
       {/* Mobile Hamburger */}
-      <button 
-        onClick={toggleMenu}
-        style={{
-          display: 'none',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: '0.5rem',
-        }}
-        className="mobile-menu-btn"
-        aria-label="Toggle menu"
-      >
-        <div style={{ 
-          width: '24px', 
-          height: '2px', 
-          background: '#b9efa3', 
-          position: 'relative',
-          transition: 'all 0.3s ease',
-        }}>
-          <div style={{
-            position: 'absolute',
-            top: '-6px',
-            left: 0,
-            width: '24px',
-            height: '2px',
-            background: '#b9efa3',
-            transition: 'all 0.3s ease',
-            transform: menuOpen ? 'translateY(6px) rotate(45deg)' : 'none',
-          }} />
-          <div style={{
-            position: 'absolute',
-            bottom: '-6px',
-            left: 0,
-            width: '24px',
-            height: '2px',
-            background: '#b9efa3',
-            transition: 'all 0.3s ease',
-            transform: menuOpen ? 'translateY(-6px) rotate(-45deg)' : 'none',
-          }} />
+      <button onClick={toggleMenu} className="mobile-menu-btn" aria-label="Toggle menu">
+        <div className={`hamburger ${menuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </button>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div 
-          style={{
-            position: 'fixed',
-            top: '76px',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(10, 10, 15, 0.95)',
-            backdropFilter: 'blur(12px)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '2rem',
-            zIndex: 99,
-          }}
-          className="mobile-menu"
-        >
+        <div className="mobile-menu">
           {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
               onClick={closeMenu}
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: '1.2rem',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase' as const,
-                color: 'rgba(255, 255, 255, 0.8)',
-                textDecoration: 'none',
-                transition: 'color 0.3s ease',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#b9efa3' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)' }}
+              className="mobile-menu-item"
             >
               {item}
             </a>
@@ -180,21 +75,8 @@ export function Navbar() {
       )}
 
       {/* Scroll Progress Bar */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        height: '1px',
-        background: 'rgba(185, 239, 163, 0.1)',
-      }}>
-        <div style={{
-          width: `${scrollProgress * 100}%`,
-          height: '100%',
-          background: '#b9efa3',
-          transformOrigin: 'left',
-          transition: 'width 0.1s linear',
-        }} />
+      <div className="scroll-progress">
+        <div className="scroll-progress-bar" style={{ width: `${scrollProgress * 100}%` }} />
       </div>
     </nav>
   )
