@@ -32,17 +32,18 @@ export function Navbar() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 1000,
-        padding: '1.5rem 2rem',
+        zIndex: 100,
+        height: '76px',
+        padding: '0 2rem',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: 'rgba(10, 10, 15, 0.8)',
-        backdropFilter: 'blur(10px)',
+        background: 'rgba(10, 10, 15, 0.85)',
+        backdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(185, 239, 163, 0.1)',
       }}
     >
-      <Link href="/" style={{ textDecoration: 'none' }}>
+      <Link href="/" style={{ textDecoration: 'none', alignSelf: 'center' }}>
         <motion.div 
           whileHover={{ scale: 1.05 }}
           style={{
@@ -54,29 +55,29 @@ export function Navbar() {
             src="/Seif-Logo.png" 
             alt="Seif El-Din Logo" 
             style={{ 
-              height: '55px', 
-              width: 'auto',
+              height: '40px', 
+              width: '40px',
               objectFit: 'contain'
             }} 
           />
         </motion.div>
       </Link>
 
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
         {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
           <a
             key={item}
             href={`#${item.toLowerCase()}`}
-            style={{
-              fontFamily: "'Gotham', sans-serif",
-              fontSize: '0.875rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase' as const,
-              color: 'rgba(255, 255, 255, 0.6)',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              cursor: 'pointer',
-            }}
+             style={{
+               fontFamily: "'Montserrat', sans-serif",
+               fontSize: '0.8rem',
+               letterSpacing: '0.15em',
+               textTransform: 'uppercase' as const,
+               color: 'rgba(255, 255, 255, 0.6)',
+               textDecoration: 'none',
+               transition: 'color 0.3s ease',
+               cursor: 'pointer',
+             }}
             onMouseEnter={(e) => { e.currentTarget.style.color = '#b9efa3' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)' }}
           >

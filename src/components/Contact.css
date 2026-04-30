@@ -46,7 +46,7 @@
 }
 
 .contact-link-text {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.125rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -79,7 +79,7 @@
 }
 
 .contact-email a {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
@@ -128,7 +128,7 @@
 
 .contact-footer::after {
   content: 'Cairo, Egypt';
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.25);
   letter-spacing: 0.05em;

@@ -3,7 +3,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 8rem 0;
+  padding: 10rem 0;
   background: #0a0a0f;
   overflow: hidden;
 }
@@ -21,11 +21,11 @@
 .about-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 4rem;
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 8rem;
-  align-items: stretch;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
 }
 
 .about-content {
@@ -36,24 +36,14 @@
   justify-content: center;
 }
 
-.about-label {
-  font-family: 'Gotham', sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #b9efa3;
-  display: block;
-  margin-bottom: 2rem;
-  overflow: hidden;
-}
-
 .about-title {
   font-family: 'Mochi Boom', sans-serif;
-  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-size: clamp(3rem, 6vw, 5rem);
   color: #ffffff;
   line-height: 1.05;
   margin-top: 0;
   margin-bottom: 2.5rem;
+  text-transform: lowercase;
 }
 
 .about-bio {
@@ -61,7 +51,7 @@
 }
 
 .about-text-line {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: clamp(1.125rem, 1.5vw, 1.375rem);
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.8);
@@ -70,14 +60,15 @@
   will-change: transform, opacity;
 }
 
-.about-skills {
+.skill-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  margin-top: 2rem;
 }
 
 .skill-tag {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   padding: 0.625rem 1.25rem;
   border: 1px solid rgba(185, 239, 163, 0.2);
@@ -87,6 +78,8 @@
   will-change: transform, opacity;
   position: relative;
   overflow: hidden;
+  border-radius: 9999px;
+  cursor: pointer;
 }
 
 .skill-tag::before {
@@ -109,90 +102,67 @@
   transform: scaleX(1);
 }
 
+/* Image Section */
 .about-image {
   position: relative;
-  will-change: transform, opacity;
+  width: 100%;
+  max-width: 100%;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .about-image-wrapper {
   position: relative;
   width: 100%;
-  display: flex;
-  align-items: stretch;
-}
-
-.about-image-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #161f6e 0%, #0d0d18 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Mochi Boom', sans-serif;
-  font-size: 4rem;
-  color: rgba(185, 239, 163, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.about-image-placeholder::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(185, 239, 163, 0.03) 100%);
-}
-
-.about-title {
-  font-family: 'Mochi Boom', sans-serif;
-  font-size: clamp(2.5rem, 4vw, 4rem);
-  color: #ffffff;
-  line-height: 1.05;
-  margin-top: 0;
-  margin-bottom: 2.5rem;
-}
-
-.about-title {
-  font-family: 'Mochi Boom', sans-serif;
-  font-size: clamp(2.5rem, 4vw, 4rem);
-  color: #ffffff;
-  line-height: 1.05;
-  margin-top: 0;
-  margin-bottom: 2.5rem;
-}
-
-.about-image-frame-outer {
-  position: absolute;
-  inset: -1.2rem;
+  height: auto;
+  border-radius: 12px;
   border: 1px solid rgba(185, 239, 163, 0.15);
-  pointer-events: none;
+  overflow: visible;
+  cursor: pointer;
   transition: transform 0.5s ease;
 }
 
-.about-image-wrapper:hover .about-image-frame-outer {
-  transform: translate(0.6rem, 0.6rem);
+.about-image-wrapper:hover {
+  transform: scale(1.03);
 }
 
-.about-image-frame {
-  position: absolute;
-  inset: -1rem;
-  border: 1px solid rgba(185, 239, 163, 0.15);
+.image-glow {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 60px 15px rgba(185, 239, 163, 0.12), 0 0 120px 30px rgba(185, 239, 163, 0.06);
+  z-index: 1;
   pointer-events: none;
+  transition: box-shadow 0.5s ease;
+}
+
+.about-image-wrapper:hover .image-glow {
+  box-shadow: 0 0 80px 25px rgba(185, 239, 163, 0.2), 0 0 160px 50px rgba(185, 239, 163, 0.1);
+}
+
+.image-glow img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
 }
 
 @media (max-width: 968px) {
   .about-container {
     grid-template-columns: 1fr;
     gap: 4rem;
+    padding: 0 2rem;
   }
-
-.about {
+  
+  .about {
     padding: 6rem 0;
   }
-
-  .about-image-wrapper {
-    max-width: 300px;
+  
+  .about-image {
+    justify-content: center;
   }
 }
 

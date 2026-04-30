@@ -22,7 +22,7 @@
 }
 
 .portfolio-label {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -51,7 +51,7 @@
 }
 
 .filter-btn {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -113,7 +113,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -136,7 +136,7 @@
 }
 
 .project-view {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -168,7 +168,7 @@
 }
 
 .project-category {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -195,7 +195,7 @@
 }
 
 .cta-button-premium {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;

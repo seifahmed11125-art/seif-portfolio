@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 
@@ -12,12 +12,21 @@ export function Hero() {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [fontsLoaded, setFontsLoaded] = useState(false)
 
   useEffect(() => {
+    document.fonts.ready.then(() => {
+      setFontsLoaded(true)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!fontsLoaded) return
+    
     const ctx = gsap.context(() => {
       // Name reveal with word-level animation (restored from original)
       const words = nameRef.current?.querySelectorAll('.word')
-      if (words) {
+      if (words && words.length > 0) {
         gsap.from(words, {
           y: '100%',
           opacity: 0,
@@ -29,26 +38,30 @@ export function Hero() {
       }
 
       // Subtitle reveal
-      gsap.from(subtitleRef.current, {
-        opacity: 0,
-        y: 20,
-        duration: 1,
-        delay: 1.5,
-        ease: 'power3.out',
-      })
+      if (subtitleRef.current) {
+        gsap.from(subtitleRef.current, {
+          opacity: 0,
+          y: 20,
+          duration: 1,
+          delay: 1.5,
+          ease: 'power3.out',
+        })
+      }
 
       // Scroll indicator
-      gsap.from(scrollRef.current, {
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        delay: 2,
-        ease: 'power2.out',
-      })
+      if (scrollRef.current) {
+        gsap.from(scrollRef.current, {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          delay: 2,
+          ease: 'power2.out',
+        })
+      }
     }, heroRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [fontsLoaded])
 
   return (
     <section id="home" ref={heroRef} className="hero">
@@ -72,7 +85,7 @@ export function Hero() {
         }}
       />
 
-      <div className="hero-content">
+       <div className="hero-content" style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}>
         <h1 
           ref={nameRef} 
           className="hero-name"
@@ -116,7 +129,7 @@ export function Hero() {
           whileTap={{ scale: 0.95 }}
           style={{
             display: 'inline-block',
-            marginTop: '3rem',
+            marginTop: '2.5rem',
             padding: '1rem 2.5rem',
             border: '1px solid #b9efa3',
             color: '#b9efa3',
@@ -151,8 +164,8 @@ export function Hero() {
           />
         </motion.a>
       </div>
-
-      {/* Scroll Indicator */}
+      
+      {/* Scroll Indicator - positioned below button */}
       <div 
         ref={scrollRef} 
         className="scroll-indicator"
@@ -164,21 +177,11 @@ export function Hero() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '1rem'
+          gap: '1rem',
+          marginTop: '2rem'
         }}
       >
-        <span style={{
-          fontSize: '0.625rem',
-          fontFamily: "'Gotham', sans-serif",
-          textTransform: 'uppercase',
-          letterSpacing: '0.3em',
-          color: 'rgba(255, 255, 255, 0.6)',
-          transform: 'rotate(-90deg)',
-          marginBottom: '2rem'
-        }}>
-          Scroll
-        </span>
-        <div style={{ 
+        <div style={{
           width: '1px', 
           height: '5rem', 
           background: 'rgba(185, 239, 163, 0.3)', 

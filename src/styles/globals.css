@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @font-face {
@@ -8,9 +9,9 @@
 }
 
 @font-face {
-  font-family: 'Gotham';
-  src: url('/fonts/GothamMedium.otf') format('opentype');
-  font-weight: 500;
+  font-family: 'Montserrat';
+  src: url('https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1cY2Tr4HNYRKj_T5AbA.woff2') format('woff2');
+  font-weight: 300 700;
   font-display: swap;
 }
 
@@ -23,8 +24,8 @@
   --color-text-secondary: #8888aa;
 
   --font-display: 'Mochi Boom', sans-serif;
-  --font-body: 'Gotham', sans-serif;
-  --font-ui: 'Gotham', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+  --font-ui: 'Montserrat', sans-serif;
 }
 
 body {
@@ -82,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Premium Section Styles */
 .section-label {
-  font-family: 'Gotham', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;

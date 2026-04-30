@@ -33,50 +33,59 @@ export function PortfolioGrid({
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Label reveal
-      gsap.to('.portfolio-label', {
-        y: 0,
-        opacity: 1,
-        filter: 'blur(0px)',
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse',
-        },
-      });
+      const label = sectionRef.current?.querySelector('.portfolio-label')
+      if (label) {
+        gsap.to(label, {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
 
       // Title reveal
-      gsap.to('.portfolio-title', {
-        y: 0,
-        opacity: 1,
-        filter: 'blur(0px)',
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse',
-        },
-      });
+      const title = sectionRef.current?.querySelector('.portfolio-title')
+      if (title) {
+        gsap.to(title, {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
 
       // Filters stagger
       if (showFilters) {
-        gsap.fromTo('.filter-btn',
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: '.portfolio-filters',
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        )
+        const filterBtns = sectionRef.current?.querySelectorAll('.filter-btn')
+        if (filterBtns && filterBtns.length > 0) {
+          gsap.fromTo(filterBtns,
+            { y: 20, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: sectionRef.current?.querySelector('.portfolio-filters'),
+                start: 'top 80%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          )
+        }
       }
     }, sectionRef);
 
@@ -86,19 +95,26 @@ export function PortfolioGrid({
   useEffect(() => {
     // Small delay to allow DOM to update after filter change
     const timer = setTimeout(() => {
-      if (containerRef.current) {
-        gsap.fromTo(".project-card", 
-          { y: 20, opacity: 0, scale: 0.98 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power3.out'
+      const ctx = gsap.context(() => {
+        if (containerRef.current) {
+          const cards = containerRef.current.querySelectorAll(".project-card");
+          if (cards.length > 0) {
+            gsap.fromTo(cards, 
+              { y: 20, opacity: 0, scale: 0.98 },
+              {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out'
+              }
+            );
           }
-        );
-      }
+        }
+      }, containerRef);
+
+      return () => ctx.revert();
     }, 50);
     
     return () => clearTimeout(timer);
