@@ -219,7 +219,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(10, 10, 15, 0.97);
+  background: rgba(10, 10, 15, 1);
   backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
