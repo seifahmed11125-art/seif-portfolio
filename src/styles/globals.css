@@ -29,9 +29,11 @@
 }
 
 body {
-  @apply bg-bg-dark font-body;
-  color: #ffffff;
+  background-color: var(--color-bg-dark);
+  font-family: var(--font-body);
+  color: var(--color-white);
   overflow-x: hidden;
+  margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
