@@ -82,7 +82,7 @@ export function PortfolioGrid({
               stagger: 0.1,
               ease: 'power3.out',
               scrollTrigger: {
-                trigger: sectionRef.current?.querySelector('.portfolio-filters'),
+                trigger: sectionRef.current?.querySelector('.portfolio-filters') || sectionRef.current,
                 start: 'top 80%',
                 toggleActions: 'play none none reverse',
               },
@@ -105,8 +105,8 @@ export function PortfolioGrid({
       const ctx = gsap.context(() => {
         if (containerRef.current) {
           const cards = containerRef.current.querySelectorAll(".project-card");
-          if (cards.length > 0) {
-            gsap.fromTo(cards,
+          if (cards && cards.length > 0) {
+            gsap.fromTo(cards, 
               { y: 20, opacity: 0, scale: 0.98 },
               {
                 y: 0,
