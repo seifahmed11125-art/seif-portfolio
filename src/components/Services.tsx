@@ -44,24 +44,20 @@ export function Services() {
     const ctx = gsap.context(() => {
       // Services scroll animation
       const items = servicesRef.current?.querySelectorAll('.service-item')
-      if (items) {
-        gsap.fromTo(items, 
-          { y: 60, opacity: 0 },
-          { 
-            y: 0,
-            opacity: 1, 
-            duration: 1, 
-            stagger: 0.2, 
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: servicesRef.current,
-              start: 'top 95%',
-            },
-          }
-        )
-        ScrollTrigger.refresh()
+      if (items && items.length > 0 && servicesRef.current) {
+        gsap.from(items, {
+          y: 60,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: servicesRef.current,
+            start: 'top 80%',
+          },
+        })
       }
-    }, sectionRef)
+    }, servicesRef)
 
     return () => {
       ctx.revert()
@@ -82,89 +78,54 @@ export function Services() {
         <h2 className="services-title">Services</h2>
 
         <div ref={servicesRef} style={{ maxWidth: '4xl', margin: '0 auto' }}>
-           {services.map((service, index) => (
-               <div 
-                 key={service.number}
-                 className="service-item"
-                 style={{ 
-                   position: 'relative',
-                   borderTop: index === 0 ? '1px solid rgba(185, 239, 163, 0.1)' : 'none',
-                   cursor: 'pointer',
-                   zIndex: 0
-                 }}
-                 onMouseEnter={() => setHoveredIndex(index)}
-                 onMouseLeave={() => setHoveredIndex(null)}
-               >
-                {/* Left accent line */}
-                <motion.div
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    width: '2px',
-                    height: '100%',
-                    background: '#b9efa3',
-                    originY: 0,
-                    zIndex: 1
-                  }}
-                   initial={{ scaleY: 0 }}
-                   animate={{ scaleY: hoveredIndex === index ? 1 : 0 }}
-                   transition={{ duration:0.5, ease: "easeOut" }}
-                  />
-                 
-                {/* Top row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2.5rem 1.5rem', position: 'relative', zIndex: 2 }}>
+          {services.map((service, index) => (
+             <div 
+               key={service.number}
+               className="service-item"
+               style={{ 
+                 borderTop: index === 0 ? '1px solid rgba(185, 239, 163, 0.1)' : 'none',
+                 cursor: 'pointer'
+               }}
+               onMouseEnter={() => setHoveredIndex(index)}
+               onMouseLeave={() => setHoveredIndex(null)}
+             >
+               <div className="service-header">
                   <div className="service-number">{service.number}</div>
                   <h3 className="service-title">{service.name}</h3>
-                 
+                  
                   <motion.span 
                     style={{ 
                       marginLeft: 'auto',
                       fontSize: '1.5rem',
                       color: '#b9efa3',
                       display: 'flex',
-                      alignItems: 'center',
+                      alignItems: 'center'
                     }}
-                    initial={{ y: -8, opacity: 0 }}
+                    initial={{ x: -8, opacity: 0 }}
                     animate={{ 
-                      y: hoveredIndex === index ? 0 : -8, 
+                      x: hoveredIndex === index ? 0 : -8, 
                       opacity: hoveredIndex === index ? 1 : 0 
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    ↓
+                    →
                   </motion.span>
                 </div>
                 
-                <AnimatePresence>
-                  {hoveredIndex === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                      style={{ overflow: 'hidden', paddingLeft: '1.5rem' }}
-                    >
-                      <p className="service-description">{service.description}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-               {/* Hover Background */}
-                <motion.div
-                  style={{ 
-                    position: 'absolute', 
-                    inset: 0, 
-                    background: 'rgba(185, 239, 163, 0.1)', 
-                    zIndex: -1,
-                    originX: 0,
-                    pointerEvents: 'none'
-                  }}
-                   initial={{ scaleX: 0 }}
-                   whileHover={{ scaleX: 1 }}
-                   transition={{ duration: 0.5, ease: "easeInOut" }}
-                 />
-            </div>
+               <AnimatePresence>
+                 {hoveredIndex === index && (
+                   <motion.div
+                     initial={{ height: 0, opacity: 0 }}
+                     animate={{ height: 'auto', opacity: 1 }}
+                     exit={{ height: 0, opacity: 0 }}
+                     transition={{ duration: 0.5, ease: "easeInOut" }}
+                     style={{ overflow: 'hidden', paddingLeft: '80px' }}
+                   >
+                     <p className="service-description">{service.description}</p>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+             </div>
           ))}
           <div style={{ borderTop: '1px solid rgba(185, 239, 163, 0.1)' }} />
         </div>

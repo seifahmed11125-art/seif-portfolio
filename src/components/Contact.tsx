@@ -37,7 +37,7 @@ export function Contact() {
 
       // Links stagger animation
       const links = linksRef.current?.querySelectorAll('.contact-link')
-      if (links) {
+      if (links && links.length > 0 && linksRef.current) {
         gsap.from(links, {
           y: 30,
           opacity: 0,
