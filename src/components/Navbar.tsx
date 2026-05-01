@@ -29,41 +29,56 @@ export function Navbar() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <>
-      <nav className="navbar" ref={navRef}>
-        <Link href="/" className="navbar-logo" onClick={closeMenu}>
-          <motion.div whileHover={{ scale: 1.05 }} className="logo-wrapper">
-            <img src="/Seif-Logo.png" alt="Seif El-Din Logo" className="logo-img" />
-          </motion.div>
-        </Link>
+    <nav className="navbar" ref={navRef}>
+      <Link href="/" className="navbar-logo" onClick={closeMenu}>
+        <motion.div whileHover={{ scale: 1.05 }} className="logo-wrapper">
+          <img src="/Seif-Logo.png" alt="Seif El-Din Logo" className="logo-img" />
+        </motion.div>
+      </Link>
 
-        <div className="desktop-nav">
-          {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
-          ))}
+      {/* Desktop Nav */}
+      <div className="desktop-nav">
+        {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
+          <a
+            key={item}
+            href={`#${item.toLowerCase()}`}
+            className="nav-link"
+          >
+            {item}
+          </a>
+        ))}
+      </div>
+
+      {/* Mobile Hamburger */}
+      <button onClick={toggleMenu} className="mobile-menu-btn" aria-label="Toggle menu">
+        <div className={`hamburger ${menuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
+      </button>
 
-        <button onClick={toggleMenu} className="mobile-menu-btn" aria-label="Toggle menu">
-          <div className={`hamburger ${menuOpen ? 'open' : ''}`}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </button>
-
-        <div className="scroll-progress">
-          <div className="scroll-progress-bar" style={{ width: `${scrollProgress * 100}%` }} />
-        </div>
-      </nav>
-
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="mobile-menu">
           {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} onClick={closeMenu} className="mobile-menu-item">{item}</a>
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={closeMenu}
+              className="mobile-menu-item"
+            >
+              {item}
+            </a>
           ))}
         </div>
       )}
-    </>
+
+      {/* Scroll Progress Bar */}
+      <div className="scroll-progress">
+        <div className="scroll-progress-bar" style={{ width: `${scrollProgress * 100}%` }} />
+      </div>
+    </nav>
   )
 }
 
