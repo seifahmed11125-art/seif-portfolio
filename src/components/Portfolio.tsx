@@ -160,7 +160,7 @@ export function Portfolio({
               >
                 <div className="project-image">
                   <img
-                    src={toPublicSettingsImageUrl('projects/placeholder.png')}
+                    src={toPublicSettingsImageUrl(project.image || 'projects/placeholder.png')}
                     alt={project.title ?? 'Project'}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   />

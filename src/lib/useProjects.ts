@@ -14,13 +14,11 @@ type DbProject = {
 function toProjectsBucketPath(image: string) {
   // Accept:
   // - full public URL
-  // - "images/projects/foo.png"
   // - "projects/foo.png"
   // - "foo.png"
   if (/^https?:\/\//i.test(image)) return image
-  if (image.startsWith('images/projects/')) return image
-  if (image.startsWith('projects/')) return `images/${image}`
-  return `images/projects/${image.replace(/^\/+/, '')}`
+  if (image.startsWith('projects/')) return image
+  return `projects/${image.replace(/^\/+/, '')}`
 }
 
 export function useProjects() {

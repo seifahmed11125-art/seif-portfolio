@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { supabase } from '@/lib/supabase'
 import { categories, type Category } from '@/data/portfolio'
 
 export default function AdminPage() {
@@ -16,8 +15,6 @@ export default function AdminPage() {
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const DEFAULT_IMAGE_PATH = 'images/projects/placeholder.png'
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,52 +33,24 @@ export default function AdminPage() {
     }
   }
 
-  const uploadImage = async (): Promise<string | null> => {
-    if (!image) return null
-    
-    const fileExt = image.name.split('.').pop()
-    const fileName = `${Date.now()}.${fileExt}`
-    const filePath = `projects/${fileName}`
-
-    const { error } = await supabase.storage
-      .from('images')
-      .upload(filePath, image)
-
-    if (error) {
-      throw error
-    }
-
-    return `images/${filePath}`
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setUploading(true)
     setMessage('')
 
     try {
-      let imageUrl = null
-      
-      if (image) {
-        imageUrl = await uploadImage()
-      }
+      const body = new FormData()
+      body.set('title', title)
+      body.set('description', description)
+      body.set('category', category)
+      if (image) body.set('image', image)
 
-      const { data: inserted, error } = await supabase
-        .from('projects')
-        .insert([
-          {
-            title,
-            description,
-            category,
-            image: imageUrl || DEFAULT_IMAGE_PATH
-          }
-        ])
-        .select('id')
-        .single()
+      const res = await fetch('/api/admin/projects', { method: 'POST', body })
+      const json = (await res.json()) as { id?: string; error?: string }
 
-      if (error) throw error
+      if (!res.ok) throw new Error(json.error || 'Upload failed')
 
-      setMessage(`Project added successfully!${inserted?.id ? ` (id: ${inserted.id})` : ''}`)
+      setMessage(`Project added successfully!${json.id ? ` (id: ${json.id})` : ''}`)
       setTitle('')
       setDescription('')
       setCategory('Brand Identity')
