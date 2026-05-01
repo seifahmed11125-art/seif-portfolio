@@ -51,6 +51,7 @@ export function Services() {
           duration: 1,
           stagger: 0.2,
           ease: 'power3.out',
+          immediateRender: false,
           scrollTrigger: {
             trigger: servicesRef.current,
             start: 'top 80%',
