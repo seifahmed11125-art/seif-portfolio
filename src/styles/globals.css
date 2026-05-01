@@ -215,7 +215,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Mobile Menu */
 .mobile-menu {
   position: fixed;
-  top: 77px;
+  top: 76px;
   left: 0;
   right: 0;
   bottom: auto;
