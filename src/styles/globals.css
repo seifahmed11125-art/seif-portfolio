@@ -1,19 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --color-white: #ffffff;
-  --color-primary: #161f6e;
-  --color-accent: #b9efa3;
-  --color-bg-dark: #0a0a0f;
-  --color-bg-offset: #0d0d18;
-  --color-text-secondary: #8888aa;
-  --font-display: 'Mochi Boom', sans-serif;
-  --font-body: 'Montserrat', sans-serif;
-  --font-ui: 'Montserrat', sans-serif;
-  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 @font-face {
   font-family: 'Mochi Boom';
   src: url('/fonts/MochiBoomDEMO.ttf') format('truetype');
@@ -26,6 +13,19 @@
   src: url('https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1cY2Tr4HNYRKj_T5AbA.woff2') format('woff2');
   font-weight: 300 700;
   font-display: swap;
+}
+
+:root {
+  --color-white: #ffffff;
+  --color-primary: #161f6e;
+  --color-accent: #b9efa3;
+  --color-bg-dark: #0a0a0f;
+  --color-bg-offset: #0d0d18;
+  --color-text-secondary: #8888aa;
+  --font-display: 'Mochi Boom', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+  --font-ui: 'Montserrat', sans-serif;
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
@@ -46,12 +46,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-primary);
 }
 
-/* Focus styles for accessibility */
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
 /* Custom Cursor Styles */
 .custom-cursor {
   pointer-events: none;
@@ -62,6 +56,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  will-change: width, height, background-color, border-color;
 }
 
 .cursor-dot {
@@ -140,7 +135,6 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: space-between;
   align-items: center;
   background: rgba(10, 10, 15, 0.85);
-  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(185, 239, 163, 0.1);
   max-width: 100%;
@@ -176,7 +170,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
@@ -230,14 +224,12 @@ h1, h2, h3, h4, h5, h6 {
   right: 0;
   bottom: 0;
   background: rgba(10, 10, 15, 0.97);
-  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  z-index: 9999;
 }
 
 .mobile-menu-item {
@@ -247,7 +239,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -297,8 +289,8 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   background-image: linear-gradient(rgba(185, 239, 163, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(185, 239, 163, 0.03) 1px, transparent 1px);
   background-size: 80px 80px;
-  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   pointer-events: none;
   z-index: 0;
 }
@@ -471,7 +463,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(185, 239, 163, 0.2);
   color: var(--color-accent);
   letter-spacing: 0.05em;
-  transition: color 0.5s var(--ease-premium), background-color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
   position: relative;
   overflow: hidden;
   border-radius: 9999px;
@@ -517,6 +509,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: visible;
   cursor: pointer;
   transition: transform 0.5s ease;
+  will-change: transform;
 }
 
 .about-image-wrapper:hover {
@@ -532,6 +525,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1;
   pointer-events: none;
   transition: box-shadow 0.5s ease;
+  will-change: box-shadow;
 }
 
 .about-image-wrapper:hover .image-glow {
@@ -601,7 +595,7 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.6);
   display: block;
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
   padding: 0.5rem 0;
 }
 
@@ -634,7 +628,7 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   position: relative;
   padding-bottom: 0.5rem;
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .contact-email a::after {
@@ -742,7 +736,7 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255, 255, 255, 0.4);
   padding: 0.75rem 1.5rem;
   position: relative;
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
   background: none;
   border: none;
   cursor: pointer;
@@ -811,7 +805,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .project-card:hover .project-overlay {
@@ -843,7 +837,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: 1.5rem;
   color: var(--color-white);
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .project-card:hover .project-title {
@@ -956,7 +950,7 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   position: relative;
   opacity: 1;
-  transition: background-color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .service-item:hover {
@@ -967,7 +961,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body);
   font-size: 0.875rem;
   color: rgba(185, 239, 163, 0.4);
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .service-item:hover .service-number {
@@ -978,7 +972,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   color: var(--color-white);
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .service-item:hover .service-title {
@@ -992,7 +986,7 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255, 255, 255, 0.6);
   max-width: 600px;
   padding-bottom: 2.5rem;
-  transition: color 0.5s var(--ease-premium);
+  transition: all 0.5s var(--ease-premium);
 }
 
 .service-item:hover .service-description {
@@ -1102,21 +1096,5 @@ h1, h2, h3, h4, h5, h6 {
   
   .portfolio-title {
     margin-bottom: 3rem;
-  }
-}
-
-/* Accessibility: Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  
-  .custom-cursor {
-    display: none;
   }
 }
