@@ -17,34 +17,28 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     const ctx = gsap.context(() => {
       // Animate logo in
       if (logoRef.current) {
-        // Set initial state
-        gsap.set(logoRef.current, {
-          opacity:0,
-          scale: 0.5,
-        })
-        
-        // Animate logo in
+        gsap.set(logoRef.current, { scale: 0.8 })
         gsap.to(logoRef.current, {
           opacity: 1,
           scale: 1,
           duration: 1.2,
           ease: 'power4.out',
         })
-       
+
         // Sophisticated floating/pulse animation
         gsap.to(logoRef.current, {
-          y: -12,
-          scale: 1.08,
-          duration: 2.5,
+          y: -10,
+          scale: 1.05,
+          duration: 2,
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
         })
-       
+
         // Subtle rotation for premium feel
         gsap.to(logoRef.current, {
           rotation: 360,
-          duration: 25,
+          duration: 20,
           repeat: -1,
           ease: 'none',
         })

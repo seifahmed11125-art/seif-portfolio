@@ -83,31 +83,22 @@ export function About() {
           <div className="about-bio">
             <p className="about-text-line reveal-line" style={{ 
               marginBottom: '1.5rem',
-              fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
-              lineHeight: 1.8,
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontFamily: "'Montserrat', sans-serif'"
-            }}>
-              I am a passionate Creative Designer and Visual Identity Specialist based in Cairo.
-            </p>
-            <p className="about-text-line reveal-line" style={{ 
-              marginBottom: '1.5rem',
-              fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
-              lineHeight: 1.8,
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontFamily: "'Montserrat', sans-serif'"
-            }}>
-              With a deep focus on storytelling through design, I help brands build unique
+               fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
+               lineHeight: 1.8,
+               color: 'rgba(255, 255, 255, 0.8)',
+               fontFamily: "'Montserrat', sans-serif'"
+             }}>
+               With a deep focus on storytelling through design, I help brands build unique
               personalities that resonate with their audience.
             </p>
             <p className="about-text-line reveal-line" style={{ 
               marginBottom: '1.5rem',
-              fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
-              lineHeight: 1.8,
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontFamily: "'Montserrat', sans-serif'"
-            }}>
-              My approach combines strategic thinking with bold aesthetics, ensuring that
+               fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
+               lineHeight: 1.8,
+               color: 'rgba(255, 255, 255, 0.8)',
+               fontFamily: "'Montserrat', sans-serif'"
+             }}>
+               My approach combines strategic thinking with bold aesthetics, ensuring that
               every project—from a single social media post to a full brand identity—delivers 
               impact and value.
             </p>
@@ -123,17 +114,17 @@ export function About() {
                   borderColor: '#161f6e' 
                 }}
                 style={{
-                   display: 'inline-block',
+                  display: 'inline-block',
                    padding: '0.5rem 1.5rem',
                    border: '1px solid #b9efa3',
                    color: 'rgba(255, 255, 255, 0.8)',
                    fontFamily: "'Montserrat', sans-serif",
-                   fontSize: '0.875rem',
-                   borderRadius: '9999px',
-                   cursor: 'pointer',
-                   transition: 'all 0.3s ease',
-                   marginRight: '0.75rem',
-                   marginBottom: '0.75rem'
+                  fontSize: '0.875rem',
+                  borderRadius: '9999px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  marginRight: '0.75rem',
+                  marginBottom: '0.75rem'
                 }}
               >
                 {skill}
