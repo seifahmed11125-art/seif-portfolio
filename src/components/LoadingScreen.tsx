@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import gsap from 'gsap'
+import { toPublicSettingsImageUrl } from '@/lib/publicImageUrl'
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void
@@ -97,7 +98,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     >
         <img 
           ref={logoRef}
-          src="/icon.png" 
+          src={toPublicSettingsImageUrl('/icon.png')} 
           alt="Loading Icon" 
           style={{ 
             opacity: 0,

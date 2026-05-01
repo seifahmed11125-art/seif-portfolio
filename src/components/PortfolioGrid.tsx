@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { type Category, projects, categories } from "../data/portfolio";
+import { type Category, categories } from "../data/portfolio";
 import Link from "next/link";
+import { toPublicSupabaseImageUrl } from '@/lib/publicImageUrl'
+import { useProjects } from '@/lib/useProjects'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,6 +27,7 @@ export function PortfolioGrid({
 }: PortfolioGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeFilter, setActiveFilter] = useState<Category>("All");
+  const { projects, loading } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState(projects);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +96,10 @@ export function PortfolioGrid({
   }, []);
 
   useEffect(() => {
+    setFilteredProjects(projects)
+  }, [projects])
+
+  useEffect(() => {
     // Small delay to allow DOM to update after filter change
     const timer = setTimeout(() => {
       const ctx = gsap.context(() => {
@@ -154,19 +161,21 @@ export function PortfolioGrid({
         )}
 
         <div ref={containerRef} className="portfolio-grid">
-          {displayProjects.map((project) => (
+          {!loading && displayProjects.map((project) => (
             <div key={project.id} className="project-card">
               <div className="project-image">
-                <div className="project-image-placeholder">
-                  <span>{project.category}</span>
-                </div>
+                <img
+                  src={toPublicSupabaseImageUrl(project.image) || toPublicSupabaseImageUrl('images/projects/placeholder.png')}
+                  alt={project.title ?? 'Project'}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
                 <div className="project-overlay">
                   <span className="project-view">View Project</span>
                 </div>
               </div>
               <div className="project-info">
-                <h3 className="project-title">{project.title}</h3>
-                <span className="project-category">{project.category}</span>
+                <h3 className="project-title">{project.title ?? 'Untitled'}</h3>
+                <span className="project-category">{project.category ?? 'Uncategorized'}</span>
               </div>
             </div>
           ))}

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { toPublicSettingsImageUrl } from '@/lib/publicImageUrl'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -146,7 +147,7 @@ export function About() {
           <div className="about-image-wrapper">
             <div className="image-glow">
               <img 
-                src="/Seif.img.png" 
+                src={toPublicSettingsImageUrl('/Seif.img.png')} 
                 alt="Seif El-Din" 
                 style={{ 
                   width: '100%', 

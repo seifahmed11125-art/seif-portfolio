@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { type Category, projects, categories } from "../data/portfolio"
+import { type Category, categories } from "../data/portfolio"
 import Link from "next/link"
+import { toPublicSupabaseImageUrl } from '@/lib/publicImageUrl'
+import { useProjects } from '@/lib/useProjects'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -27,6 +29,7 @@ export function Portfolio({
   const sectionRef = useRef<HTMLElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [activeFilter, setActiveFilter] = useState<Category>("All")
+  const { projects, loading } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState(projects)
 
   const displayProjects = limit ? filteredProjects.slice(0, limit) : filteredProjects;
@@ -67,6 +70,10 @@ export function Portfolio({
 
     return () => ctx.revert()
   }, [])
+
+  useEffect(() => {
+    setFilteredProjects(projects)
+  }, [projects])
 
   useEffect(() => {
     // Project cards animation on filter change
@@ -141,7 +148,7 @@ export function Portfolio({
           className="portfolio-grid"
         >
           <AnimatePresence mode='popLayout'>
-            {displayProjects.map((project) => (
+            {!loading && displayProjects.map((project) => (
               <motion.div
                 key={project.id}
                 layout
@@ -152,22 +159,18 @@ export function Portfolio({
                 className="project-card"
               >
                 <div className="project-image">
-                  <div className="project-image-placeholder">
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      textTransform: 'uppercase' as const, 
-                      letterSpacing: '0.1em' 
-                    }}>
-                      {project.category}
-                    </span>
-                  </div>
+                  <img
+                    src={toPublicSupabaseImageUrl(project.image) || toPublicSupabaseImageUrl('images/projects/placeholder.png')}
+                    alt={project.title ?? 'Project'}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
                   <div className="project-overlay">
                     <span className="project-view">View Project</span>
                   </div>
                 </div>
                 <div className="project-info">
-                  <h3 className="project-title">{project.title}</h3>
-                  <span className="project-category">{project.category}</span>
+                  <h3 className="project-title">{project.title ?? 'Untitled'}</h3>
+                  <span className="project-category">{project.category ?? 'Uncategorized'}</span>
                 </div>
               </motion.div>
             ))}

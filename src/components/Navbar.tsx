@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { toPublicSettingsImageUrl } from '@/lib/publicImageUrl'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -32,7 +33,7 @@ export function Navbar() {
     <nav className="navbar" ref={navRef}>
       <Link href="/" className="navbar-logo" onClick={closeMenu}>
         <motion.div whileHover={{ scale: 1.05 }} className="logo-wrapper">
-          <img src="/Seif-Logo.png" alt="Seif El-Din Logo" className="logo-img" />
+          <img src={toPublicSettingsImageUrl('/Seif-Logo.png')} alt="Seif El-Din Logo" className="logo-img" />
         </motion.div>
       </Link>
 

@@ -17,6 +17,8 @@ export default function AdminPage() {
   const [message, setMessage] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const DEFAULT_IMAGE_PATH = 'images/projects/placeholder.png'
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
     if (email === 'admin' && password === 'admin') {
@@ -49,11 +51,7 @@ export default function AdminPage() {
       throw error
     }
 
-    const { data } = supabase.storage
-      .from('images')
-      .getPublicUrl(filePath)
-
-    return data.publicUrl
+    return `images/${filePath}`
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,20 +66,22 @@ export default function AdminPage() {
         imageUrl = await uploadImage()
       }
 
-      const { error } = await supabase
+      const { data: inserted, error } = await supabase
         .from('projects')
         .insert([
           {
             title,
             description,
             category,
-            image: imageUrl || 'https://via.seifportfolio.com/300'
+            image: imageUrl || DEFAULT_IMAGE_PATH
           }
         ])
+        .select('id')
+        .single()
 
       if (error) throw error
 
-      setMessage('Project added successfully!')
+      setMessage(`Project added successfully!${inserted?.id ? ` (id: ${inserted.id})` : ''}`)
       setTitle('')
       setDescription('')
       setCategory('Brand Identity')
