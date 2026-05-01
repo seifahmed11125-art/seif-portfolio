@@ -215,7 +215,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Mobile Menu */
 .mobile-menu {
   position: fixed;
-  top: 74px;
+  top: 77px;
   left: 0;
   right: 0;
   bottom: auto;
@@ -229,8 +229,8 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 99999;
   opacity: 0.75;
   transition: opacity 0.3s ease-in-out;
-  padding-top: 108px;
-  padding-bottom: 140px;
+  padding-top: 70px;
+  padding-bottom: 174px;
 }
 
 .mobile-menu-item {
