@@ -44,7 +44,7 @@ export function Services() {
     const ctx = gsap.context(() => {
       // Services scroll animation
       const items = servicesRef.current?.querySelectorAll('.service-item')
-      if (items) {
+      if (items && items.length > 0 && servicesRef.current) {
         gsap.from(items, {
           y: 60,
           opacity: 0,
@@ -57,7 +57,7 @@ export function Services() {
           },
         })
       }
-    }, sectionRef)
+    }, servicesRef)
 
     return () => ctx.revert()
   }, [])
@@ -70,56 +70,68 @@ export function Services() {
 
         <div ref={servicesRef} style={{ maxWidth: '4xl', margin: '0 auto' }}>
           {services.map((service, index) => (
-            <div 
-              key={service.number}
-              className="service-item"
-              style={{ 
-                position: 'relative',
-                borderTop: index === 0 ? '1px solid rgba(185, 239, 163, 0.1)' : 'none',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {/* Left accent line */}
-              <motion.div
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  width: '2px',
-                  height: '100%',
-                  background: '#b9efa3',
-                  originY: 0,
-                  zIndex: 1
-                }}
-                 initial={{ scaleY: 0 }}
-                 animate={{ scaleY: hoveredIndex === index ? 1 : 0 }}
-                 transition={{ duration: 0.5, ease: "easeOut" }}
-                />
+             <div 
+               key={service.number}
+               className="service-item"
+               style={{ 
+                 borderTop: index === 0 ? '1px solid rgba(185, 239, 163, 0.1)' : 'none',
+                 cursor: 'pointer'
+               }}
+               onMouseEnter={() => setHoveredIndex(index)}
+               onMouseLeave={() => setHoveredIndex(null)}
+             >
+               <div className="service-header">
+                  <div className="service-number">{service.number}</div>
+                  <h3 className="service-title">{service.name}</h3>
+                  
+                  <motion.span 
+                    style={{ 
+                      marginLeft: 'auto',
+                      fontSize: '1.5rem',
+                      color: '#b9efa3',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    initial={{ x: -8, opacity: 0 }}
+                    animate={{ 
+                      x: hoveredIndex === index ? 0 : -8, 
+                      opacity: hoveredIndex === index ? 1 : 0 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    →
+                  </motion.span>
+                </div>
                 
-                <div className="service-header">
-                <div className="service-number">{service.number}</div>
-                <h3 className="service-title">{service.name}</h3>
+               <AnimatePresence>
+                 {hoveredIndex === index && (
+                   <motion.div
+                     initial={{ height: 0, opacity: 0 }}
+                     animate={{ height: 'auto', opacity: 1 }}
+                     exit={{ height: 0, opacity: 0 }}
+                     transition={{ duration: 0.5, ease: "easeInOut" }}
+                     style={{ overflow: 'hidden', paddingLeft: '80px' }}
+                   >
+                     <p className="service-description">{service.description}</p>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+             </div>
                 
-                <motion.span 
-                  style={{ 
-                    marginLeft: 'auto',
-                    fontSize: '1.5rem',
-                    color: '#b9efa3',
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                  initial={{ x: -8, opacity: 0 }}
-                  animate={{ 
-                    x: hoveredIndex === index ? 0 : -8, 
-                    opacity: hoveredIndex === index ? 1 : 0 
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  →
-                </motion.span>
-              </div>
+               <AnimatePresence>
+                 {hoveredIndex === index && (
+                   <motion.div
+                     initial={{ height: 0, opacity: 0 }}
+                     animate={{ height: 'auto', opacity: 1 }}
+                     exit={{ height: 0, opacity: 0 }}
+                     transition={{ duration: 0.5, ease: "easeInOut" }}
+                     style={{ overflow: 'hidden', paddingLeft: '80px' }}
+                   >
+                     <p className="service-description">{service.description}</p>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+             </div>
               
               <AnimatePresence>
                 {hoveredIndex === index && (

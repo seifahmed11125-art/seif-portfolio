@@ -16,38 +16,31 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Animate logo in
-      gsap.to(logoRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 1.2,
-        ease: 'power4.out',
-      })
-
-      // Sophisticated floating/pulse animation
-      gsap.to(logoRef.current, {
-        y: -10,
-        scale: 1.05,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      })
-
-      // Subtle rotation for premium feel
-      gsap.to(logoRef.current, {
-        rotation: 360,
-        duration: 20,
-        repeat: -1,
-        ease: 'none',
-      })
-
-      // Animate progress line
-      if (progressRef.current) {
-        gsap.to(progressRef.current, {
-          width: '100%',
-          duration: 1.8,
-          ease: 'power2.inOut',
-          delay: 0.3,
+      if (logoRef.current) {
+        gsap.set(logoRef.current, { scale: 0.8 })
+        gsap.to(logoRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          ease: 'power4.out',
+        })
+      
+        // Sophisticated floating/pulse animation
+        gsap.to(logoRef.current, {
+          y: -10,
+          scale: 1.05,
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        })
+      
+        // Subtle rotation for premium feel
+        gsap.to(logoRef.current, {
+          rotation: 360,
+          duration: 20,
+          repeat: -1,
+          ease: 'none',
         })
       }
 
