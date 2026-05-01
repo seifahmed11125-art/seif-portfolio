@@ -215,10 +215,10 @@ h1, h2, h3, h4, h5, h6 {
 /* Mobile Menu */
 .mobile-menu {
   position: fixed;
-  top: 0;
+  top: 74px;
   left: 0;
   right: 0;
-  bottom: 50px;
+  bottom: auto;
   background: rgba(10, 10, 15, 1);
   backdrop-filter: blur(12px);
   display: flex;
@@ -227,6 +227,10 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   gap: 2rem;
   z-index: 99999;
+  opacity: 0.75;
+  transition: opacity 0.3s ease-in-out;
+  padding-top: 108px;
+  padding-bottom: 140px;
 }
 
 .mobile-menu-item {
