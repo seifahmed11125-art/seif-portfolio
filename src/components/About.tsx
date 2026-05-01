@@ -147,7 +147,7 @@ export function About() {
           <div className="about-image-wrapper">
             <div className="image-glow">
               <img 
-                src={toPublicSettingsImageUrl('/Seif.img.png')} 
+                src={toPublicSettingsImageUrl('settings/Seif.img.png')} 
                 alt="Seif El-Din" 
                 style={{ 
                   width: '100%', 

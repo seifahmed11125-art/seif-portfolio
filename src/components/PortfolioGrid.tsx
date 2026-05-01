@@ -5,8 +5,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { type Category, categories } from "../data/portfolio";
 import Link from "next/link";
-import { toPublicSupabaseImageUrl } from '@/lib/publicImageUrl'
 import { useProjects } from '@/lib/useProjects'
+import { toPublicSettingsImageUrl } from "@/lib/publicImageUrl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,7 +106,7 @@ export function PortfolioGrid({
         if (containerRef.current) {
           const cards = containerRef.current.querySelectorAll(".project-card");
           if (cards.length > 0) {
-            gsap.fromTo(cards, 
+            gsap.fromTo(cards,
               { y: 20, opacity: 0, scale: 0.98 },
               {
                 y: 0,
@@ -123,7 +123,7 @@ export function PortfolioGrid({
 
       return () => ctx.revert();
     }, 50);
-    
+
     return () => clearTimeout(timer);
   }, [activeFilter]);
 
@@ -165,7 +165,7 @@ export function PortfolioGrid({
             <div key={project.id} className="project-card">
               <div className="project-image">
                 <img
-                  src={toPublicSupabaseImageUrl(project.image) || toPublicSupabaseImageUrl('images/projects/placeholder.png')}
+                  src={toPublicSettingsImageUrl('projects/placeholder.png')}
                   alt={project.title ?? 'Project'}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />

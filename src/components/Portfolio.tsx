@@ -6,8 +6,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { type Category, categories } from "../data/portfolio"
 import Link from "next/link"
-import { toPublicSupabaseImageUrl } from '@/lib/publicImageUrl'
 import { useProjects } from '@/lib/useProjects'
+import { toPublicSettingsImageUrl } from '@/lib/publicImageUrl'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -39,7 +39,7 @@ export function Portfolio({
       // Section label and title animation
       const label = sectionRef.current?.querySelector('.portfolio-label')
       const title = sectionRef.current?.querySelector('.portfolio-title')
-      
+
       if (label) {
         gsap.from(label, {
           y: 30,
@@ -52,7 +52,7 @@ export function Portfolio({
           },
         })
       }
-      
+
       if (title) {
         gsap.from(title, {
           y: 30,
@@ -128,21 +128,21 @@ export function Portfolio({
                   fontSize: '0.875rem',
                   textTransform: 'uppercase' as const,
                   letterSpacing: '0.1em',
-                   transition: 'all 0.3s ease',
-                   cursor: 'pointer',
-                   background: activeFilter === category ? '#b9efa3' : 'transparent',
-                   color: activeFilter === category ? '#0a0a0f' : 'rgba(255, 255, 255, 0.8)',
-                   border: `1px solid ${activeFilter === category ? '#b9efa3' : 'rgba(255, 255, 255, 0.1)'}`,
-                   fontFamily: "'Montserrat', sans-serif",
-                 }}
-               >
-                 {category}
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  background: activeFilter === category ? '#b9efa3' : 'transparent',
+                  color: activeFilter === category ? '#0a0a0f' : 'rgba(255, 255, 255, 0.8)',
+                  border: `1px solid ${activeFilter === category ? '#b9efa3' : 'rgba(255, 255, 255, 0.1)'}`,
+                  fontFamily: "'Montserrat', sans-serif",
+                }}
+              >
+                {category}
               </button>
             ))}
           </div>
         )}
 
-        <motion.div 
+        <motion.div
           ref={containerRef}
           layout
           className="portfolio-grid"
@@ -160,7 +160,7 @@ export function Portfolio({
               >
                 <div className="project-image">
                   <img
-                    src={toPublicSupabaseImageUrl(project.image) || toPublicSupabaseImageUrl('images/projects/placeholder.png')}
+                    src={toPublicSettingsImageUrl('projects/placeholder.png')}
                     alt={project.title ?? 'Project'}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   />

@@ -33,7 +33,7 @@ export function Navbar() {
     <nav className="navbar" ref={navRef}>
       <Link href="/" className="navbar-logo" onClick={closeMenu}>
         <motion.div whileHover={{ scale: 1.05 }} className="logo-wrapper">
-          <img src={toPublicSettingsImageUrl('/Seif-Logo.png')} alt="Seif El-Din Logo" className="logo-img" />
+          <img src={toPublicSettingsImageUrl('settings/Seif-Logo.png')} alt="Seif El-Din Logo" className="logo-img" />
         </motion.div>
       </Link>
 

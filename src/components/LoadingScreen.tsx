@@ -98,7 +98,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     >
         <img 
           ref={logoRef}
-          src={toPublicSettingsImageUrl('/icon.png')} 
+          src={toPublicSettingsImageUrl('settings/icon.png')} 
           alt="Loading Icon" 
           style={{ 
             opacity: 0,
