@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
+import { categories, type Category } from '@/data/portfolio'
 
 export default function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -10,7 +11,7 @@ export default function AdminPage() {
   const [error, setError] = useState('')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('web')
+  const [category, setCategory] = useState<Category>('Brand Identity')
   const [image, setImage] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
@@ -83,7 +84,7 @@ export default function AdminPage() {
       setMessage('Project added successfully!')
       setTitle('')
       setDescription('')
-      setCategory('web')
+      setCategory('Brand Identity')
       setImage(null)
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
@@ -180,13 +181,16 @@ export default function AdminPage() {
               <label className="block text-[#8888aa] text-sm mb-2">Category</label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value as Category)}
                 className="w-full p-3 bg-[#0a0a0f] border border-[rgba(185,239,163,0.2)] text-white rounded focus:border-[#b9efa3] outline-none"
               >
-                <option value="web">Web</option>
-                <option value="mobile">Mobile</option>
-                <option value="design">Design</option>
-                <option value="branding">Branding</option>
+                {categories
+                  .filter((c) => c !== 'All')
+                  .map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
               </select>
             </div>
 
