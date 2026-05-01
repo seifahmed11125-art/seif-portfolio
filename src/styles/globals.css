@@ -135,7 +135,6 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(185, 239, 163, 0.1);
   max-width: 100%;
-  overflow: hidden;
 }
 
 .navbar-logo {
@@ -227,7 +226,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  z-index: 99;
+  z-index: 99999;
 }
 
 .mobile-menu-item {
