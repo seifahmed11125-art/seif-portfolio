@@ -9,7 +9,7 @@ interface LoadingScreenProps {
 
 export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const logoRef = useRef<HTMLDivElement>(null)
+  const logoRef = useRef<HTMLImageElement>(null)
   const progressRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(true)
 
@@ -17,23 +17,43 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     const ctx = gsap.context(() => {
       // Animate logo in
       if (logoRef.current) {
+<<<<<<< HEAD
         gsap.set(logoRef.current, { scale: 0.8 })
+=======
+        // Set initial state
+        gsap.set(logoRef.current, {
+          opacity:0,
+          scale: 0.5,
+        })
+        
+        // Animate logo in
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
         gsap.to(logoRef.current, {
           opacity: 1,
           scale: 1,
           duration: 1.2,
           ease: 'power4.out',
         })
+<<<<<<< HEAD
       
         // Sophisticated floating/pulse animation
         gsap.to(logoRef.current, {
           y: -10,
           scale: 1.05,
           duration: 2,
+=======
+       
+        // Sophisticated floating/pulse animation
+        gsap.to(logoRef.current, {
+          y: -12,
+          scale: 1.08,
+          duration: 2.5,
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
         })
+<<<<<<< HEAD
       
         // Subtle rotation for premium feel
         gsap.to(logoRef.current, {
@@ -41,20 +61,41 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
           duration: 20,
           repeat: -1,
           ease: 'none',
+=======
+       
+        // Subtle rotation for premium feel
+        gsap.to(logoRef.current, {
+          rotation: 360,
+          duration: 25,
+          repeat: -1,
+          ease: 'none',
+        })
+      }
+
+      // Animate progress line
+      if (progressRef.current) {
+        gsap.to(progressRef.current, {
+          width: '100%',
+          duration: 1.8,
+          ease: 'power2.inOut',
+          delay: 0.3,
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
         })
       }
 
       // Exit animation
-      gsap.to(containerRef.current, {
-        yPercent: -100,
-        duration: 0.9,
-        ease: 'power4.inOut',
-        delay: 2.2,
-        onComplete: () => {
-          setIsVisible(false)
-          onLoadingComplete()
-        },
-      })
+      if (containerRef.current) {
+        gsap.to(containerRef.current, {
+          yPercent: -100,
+          duration: 0.9,
+          ease: 'power4.inOut',
+          delay: 2.2,
+          onComplete: () => {
+            setIsVisible(false)
+            onLoadingComplete()
+          },
+        })
+      }
     }, containerRef)
 
     return () => ctx.revert()
@@ -77,47 +118,38 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
         gap: '1.5rem',
       }}
     >
-      <div 
-        ref={logoRef}
-        style={{
-          opacity: 0,
-          scale: 0.8,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
         <img 
+          ref={logoRef}
           src="/icon.png" 
           alt="Loading Icon" 
           style={{ 
-            width: '180px', 
+            opacity: 0,
+            width: 'clamp(150px, 25vw, 350px)', 
             height: 'auto',
-            filter: 'drop-shadow(0 0 40px rgba(185, 239, 163, 0.2))'
+            filter: 'drop-shadow(0 0 60px rgba(185, 239, 163, 0.3))'
           }} 
         />
-      </div>
-      <div style={{
-        width: '120px',
-        height: '1px',
-        background: 'rgba(185, 239, 163, 0.15)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        <div 
-          ref={progressRef}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            height: '100%',
-            width: '0%',
-            background: '#b9efa3',
-          }}
-        />
-      </div>
-    </div>
-  )
+       <div style={{
+         width: '120px',
+         height: '1px',
+         background: 'rgba(185, 239, 163, 0.15)',
+         position: 'relative',
+         overflow: 'hidden',
+       }}>
+         <div 
+           ref={progressRef}
+           style={{
+             position: 'absolute',
+             left: 0,
+             top: 0,
+             height: '100%',
+             width: '0%',
+             background: '#b9efa3',
+           }}
+         />
+       </div>
+     </div>
+   )
 }
 
 export default LoadingScreen

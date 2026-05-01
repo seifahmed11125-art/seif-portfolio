@@ -65,7 +65,7 @@ const Cursor = () => {
         animate={{
           width: isHovering ? 80 : 40,
           height: isHovering ? 80 : 40,
-          backgroundColor: isHovering ? 'rgba(185, 239, 163, 0.2)' : 'transparent',
+          backgroundColor: isHovering ? 'rgba(185, 239, 163, 0.2)' : 'rgba(0, 0, 0, 0)',
           borderColor: isHovering ? '#b9efa3' : '#161f6e',
           borderWidth: '1px',
         }}

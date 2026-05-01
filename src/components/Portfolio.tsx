@@ -25,6 +25,7 @@ export function Portfolio({
   showCTA = false,
 }: PortfolioProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [activeFilter, setActiveFilter] = useState<Category>("All")
   const [filteredProjects, setFilteredProjects] = useState(projects)
 
@@ -69,17 +70,23 @@ export function Portfolio({
 
   useEffect(() => {
     // Project cards animation on filter change
-    const cards = document.querySelectorAll('.project-card')
-    if (cards.length > 0) {
-      gsap.from(cards, {
-        y: 30,
-        opacity: 0,
-        scale: 0.95,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-      })
-    }
+    const ctx = gsap.context(() => {
+      if (containerRef.current) {
+        const cards = containerRef.current.querySelectorAll('.project-card')
+        if (cards.length > 0) {
+          gsap.from(cards, {
+            y: 30,
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power3.out',
+          })
+        }
+      }
+    }, containerRef)
+
+    return () => ctx.revert()
   }, [activeFilter])
 
   const handleFilter = (category: Category) => {
@@ -111,24 +118,25 @@ export function Portfolio({
                 style={{
                   padding: '0.75rem 2rem',
                   borderRadius: '9999px',
-                  fontFamily: "'Gotham', sans-serif",
                   fontSize: '0.875rem',
                   textTransform: 'uppercase' as const,
                   letterSpacing: '0.1em',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                  background: activeFilter === category ? '#b9efa3' : 'transparent',
-                  color: activeFilter === category ? '#0a0a0f' : 'rgba(255, 255, 255, 0.8)',
-                  border: `1px solid ${activeFilter === category ? '#b9efa3' : 'rgba(255, 255, 255, 0.1)'}`,
-                }}
-              >
-                {category}
+                   transition: 'all 0.3s ease',
+                   cursor: 'pointer',
+                   background: activeFilter === category ? '#b9efa3' : 'transparent',
+                   color: activeFilter === category ? '#0a0a0f' : 'rgba(255, 255, 255, 0.8)',
+                   border: `1px solid ${activeFilter === category ? '#b9efa3' : 'rgba(255, 255, 255, 0.1)'}`,
+                   fontFamily: "'Montserrat', sans-serif",
+                 }}
+               >
+                 {category}
               </button>
             ))}
           </div>
         )}
 
         <motion.div 
+          ref={containerRef}
           layout
           className="portfolio-grid"
         >

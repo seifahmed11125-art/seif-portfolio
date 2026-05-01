@@ -19,9 +19,8 @@ export function About() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Text lines animation - from hidden state (matching original)
       const lines = textRef.current?.querySelectorAll('.reveal-line')
-      if (lines) {
+      if (lines && lines.length > 0 && textRef.current) {
         gsap.from(lines, {
           y: 50,
           opacity: 0,
@@ -35,17 +34,33 @@ export function About() {
         })
       }
 
-      // Image parallax effect
-      if (imageRef.current) {
-        gsap.from(imageRef.current, {
-          y: 50,
+      const imageWrapper = imageRef.current?.querySelector('.about-image-wrapper')
+      if (imageWrapper) {
+        gsap.set(imageWrapper, {
           opacity: 0,
-          duration: 1.2,
+          y: 30,
+          scale: 0.9,
+        })
+        
+        gsap.to(imageWrapper, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.4,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: imageRef.current,
+            trigger: imageWrapper,
             start: 'top 85%',
           },
+        })
+
+        gsap.to(imageWrapper, {
+          y: -8,
+          duration: 4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: 1.4
         })
       }
     }, sectionRef)
@@ -56,97 +71,61 @@ export function About() {
   return (
     <section id="about" ref={sectionRef} className="about">
       <div className="about-container">
-        <div ref={imageRef} className="about-image">
-          <div className="about-image-wrapper">
-            {/* Visual element matching original */}
-            <div style={{ 
-              position: 'relative',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <div style={{
-                position: 'absolute',
-                inset: '-1rem',
-                border: '1px solid rgba(185, 239, 163, 0.2)',
-                transform: 'translate(1rem, 1rem)',
-                transition: 'transform 0.5s ease',
-                zIndex: 0
-              }} />
-              <div style={{
-                width: '100%',
-                flex: 1,
-                background: 'rgba(22, 31, 110, 0.2)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(185, 239, 163, 0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '3rem 2rem',
-                textAlign: 'center' as const,
-                position: 'relative',
-                zIndex: 1
-              }}>
-                {/* Top accent bar */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '3px',
-                  background: 'linear-gradient(90deg, transparent, #b9efa3, transparent)'
-                }} />
-                
-                <div>
-                  <p style={{
-                    fontFamily: "'Mochi Boom', sans-serif",
-                    fontStyle: 'italic',
-                    fontSize: '1.5rem',
-                    color: '#b9efa3',
-                    lineHeight: 1.4
-                  }}>
-                    "Design is the silent ambassador of your brand."
-                  </p>
-                  <p style={{
-                    fontFamily: "'Gotham', sans-serif",
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase' as const,
-                    color: 'rgba(185, 239, 163, 0.6)',
-                    marginTop: '0.5rem'
-                  }}>
-                    — Paul Rand
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div ref={textRef} className="about-content">
           <div className="reveal-line" style={{ marginBottom: '2rem' }}>
-            <h2 className="about-title" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', textTransform: 'lowercase' }}>about me</h2>
+            <h2 className="about-title" style={{ 
+              fontSize: 'clamp(3rem, 6vw, 5rem)', 
+              textTransform: 'lowercase',
+              fontFamily: "'Mochi Boom', sans-serif"
+            }}>about me</h2>
           </div>
 
           <div className="about-bio">
             <p className="about-text-line reveal-line" style={{ 
               marginBottom: '1.5rem',
+<<<<<<< HEAD
                fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
                lineHeight: 1.8,
                color: 'rgba(255, 255, 255, 0.8)',
                fontFamily: "'Montserrat', sans-serif'"
              }}>
                With a deep focus on storytelling through design, I help brands build unique
+=======
+              fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
+              lineHeight: 1.8,
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontFamily: "'Montserrat', sans-serif'"
+            }}>
+              I am a passionate Creative Designer and Visual Identity Specialist based in Cairo.
+            </p>
+            <p className="about-text-line reveal-line" style={{ 
+              marginBottom: '1.5rem',
+              fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
+              lineHeight: 1.8,
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontFamily: "'Montserrat', sans-serif'"
+            }}>
+              With a deep focus on storytelling through design, I help brands build unique
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
               personalities that resonate with their audience.
             </p>
             <p className="about-text-line reveal-line" style={{ 
               marginBottom: '1.5rem',
+<<<<<<< HEAD
                fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
                lineHeight: 1.8,
                color: 'rgba(255, 255, 255, 0.8)',
                fontFamily: "'Montserrat', sans-serif'"
              }}>
                My approach combines strategic thinking with bold aesthetics, ensuring that
+=======
+              fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
+              lineHeight: 1.8,
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontFamily: "'Montserrat', sans-serif'"
+            }}>
+              My approach combines strategic thinking with bold aesthetics, ensuring that
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
               every project—from a single social media post to a full brand identity—delivers 
               impact and value.
             </p>
@@ -162,22 +141,53 @@ export function About() {
                   borderColor: '#161f6e' 
                 }}
                 style={{
+<<<<<<< HEAD
                   display: 'inline-block',
+=======
+                   display: 'inline-block',
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
                    padding: '0.5rem 1.5rem',
                    border: '1px solid #b9efa3',
                    color: 'rgba(255, 255, 255, 0.8)',
                    fontFamily: "'Montserrat', sans-serif",
+<<<<<<< HEAD
                   fontSize: '0.875rem',
                   borderRadius: '9999px',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   marginRight: '0.75rem',
                   marginBottom: '0.75rem'
+=======
+                   fontSize: '0.875rem',
+                   borderRadius: '9999px',
+                   cursor: 'pointer',
+                   transition: 'all 0.3s ease',
+                   marginRight: '0.75rem',
+                   marginBottom: '0.75rem'
+>>>>>>> 55fab1b1b5442c75ba8fcc8f4f18bc31970607a6
                 }}
               >
                 {skill}
               </motion.span>
             ))}
+          </div>
+        </div>
+
+        <div ref={imageRef} className="about-image">
+          <div className="about-image-wrapper">
+            <div className="image-glow">
+              <img 
+                src="/Seif.img.png" 
+                alt="Seif El-Din" 
+                style={{ 
+                  width: '100%', 
+                  height: '100%',
+                  objectFit: 'contain',
+                  display: 'block',
+                  filter: 'drop-shadow(0 0 40px rgba(185, 239, 163, 0.15))'
+                }} 
+              />
+            </div>
           </div>
         </div>
       </div>

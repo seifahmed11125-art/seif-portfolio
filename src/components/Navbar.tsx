@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 export function Navbar() {
   const navRef = useRef<HTMLElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,83 +25,58 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const toggleMenu = () => setMenuOpen(!menuOpen)
+  const closeMenu = () => setMenuOpen(false)
+
   return (
-    <nav 
-      ref={navRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        padding: '1.5rem 2rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: 'rgba(10, 10, 15, 0.8)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(185, 239, 163, 0.1)',
-      }}
-    >
-      <Link href="/" style={{ textDecoration: 'none' }}>
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <img 
-            src="/Seif-Logo.png" 
-            alt="Seif El-Din Logo" 
-            style={{ 
-              height: '55px', 
-              width: 'auto',
-              objectFit: 'contain'
-            }} 
-          />
+    <nav className="navbar" ref={navRef}>
+      <Link href="/" className="navbar-logo" onClick={closeMenu}>
+        <motion.div whileHover={{ scale: 1.05 }} className="logo-wrapper">
+          <img src="/Seif-Logo.png" alt="Seif El-Din Logo" className="logo-img" />
         </motion.div>
       </Link>
 
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+      {/* Desktop Nav */}
+      <div className="desktop-nav">
         {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
           <a
             key={item}
             href={`#${item.toLowerCase()}`}
-            style={{
-              fontFamily: "'Gotham', sans-serif",
-              fontSize: '0.875rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase' as const,
-              color: 'rgba(255, 255, 255, 0.6)',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#b9efa3' }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)' }}
+            className="nav-link"
           >
             {item}
           </a>
         ))}
       </div>
 
+      {/* Mobile Hamburger */}
+      <button onClick={toggleMenu} className="mobile-menu-btn" aria-label="Toggle menu">
+        <div className={`hamburger ${menuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="mobile-menu">
+          {['Home', 'About', 'Services', 'Portfolio', 'Contact'].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={closeMenu}
+              className="mobile-menu-item"
+            >
+              {item}
+            </a>
+          ))}
+        </div>
+      )}
+
       {/* Scroll Progress Bar */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        height: '1px',
-        background: 'rgba(185, 239, 163, 0.1)',
-      }}>
-        <div style={{
-          width: `${scrollProgress * 100}%`,
-          height: '100%',
-          background: '#b9efa3',
-          transformOrigin: 'left',
-          transition: 'width 0.1s linear',
-        }} />
+      <div className="scroll-progress">
+        <div className="scroll-progress-bar" style={{ width: `${scrollProgress * 100}%` }} />
       </div>
     </nav>
   )

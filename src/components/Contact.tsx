@@ -74,7 +74,7 @@ export function Contact() {
           marginBottom: '5rem'
         }}>
           <span style={{
-            fontFamily: "'Gotham', sans-serif",
+            fontFamily: "'Montserrat', sans-serif",
             fontSize: '0.75rem',
             letterSpacing: '0.3em',
             textTransform: 'uppercase' as const,
@@ -121,8 +121,8 @@ export function Contact() {
                 alignItems: 'center',
                 gap: '0.5rem',
                 fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                fontFamily: "'Gotham', sans-serif",
-                color: '#ffffff',
+                 fontFamily: "'Montserrat', sans-serif",
+                 color: '#ffffff',
                 textDecoration: 'none',
                 cursor: 'pointer',
                 position: 'relative',
@@ -163,7 +163,7 @@ export function Contact() {
           }}
         >
           <span style={{
-            fontFamily: "'Gotham', sans-serif",
+            fontFamily: "'Montserrat', sans-serif",
             fontSize: '0.75rem',
             letterSpacing: '0.3em',
             textTransform: 'uppercase' as const,
@@ -171,30 +171,34 @@ export function Contact() {
           }}>
             Email
           </span>
-          <a 
-            href="mailto:seifeldinahmed11125@gmail.com"
-            style={{
-              fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
-              fontFamily: "'Mochi Boom', sans-serif",
-              color: '#ffffff',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              letterSpacing: '0.05em',
-              position: 'relative',
-              paddingBottom: '8px'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#b9efa3';
-              const line = e.currentTarget.querySelector('.email-line') as HTMLDivElement;
-              if (line) line.style.transform = 'scaleX(1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#ffffff';
-              const line = e.currentTarget.querySelector('.email-line') as HTMLDivElement;
-              if (line) line.style.transform = 'scaleX(0)';
-            }}
-          >
-            seifeldinahmed11125
+           <a 
+              href="https://mail.google.com/mail/?view=cm&to=seifeldinahmed11125@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
+                fontFamily: "'DM Sans', sans-serif",
+                color: '#ffffff',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease',
+                letterSpacing: '0.05em',
+                position: 'relative',
+                paddingBottom: '8px',
+                wordBreak: 'break-all',
+                overflowWrap: 'break-word'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#b9efa3';
+                const line = e.currentTarget.querySelector('.email-line') as HTMLDivElement;
+                if (line) line.style.transform = 'scaleX(1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#ffffff';
+                const line = e.currentTarget.querySelector('.email-line') as HTMLDivElement;
+                if (line) line.style.transform = 'scaleX(0)';
+              }}
+            >
+              seifeldinahmed11125@gmail.com
             <div 
               className="email-line"
               style={{
@@ -214,7 +218,7 @@ export function Contact() {
       </div>
 
       <footer className="contact-footer" style={{ position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'center', width: '100%', borderTop: 'none', padding: '4rem 0 2rem' }}>
-        <p style={{ fontFamily: "'Gotham', sans-serif", fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.3)', letterSpacing: '0.1em' }}>
+         <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.3)', letterSpacing: '0.1em' }}>
           &copy; {new Date().getFullYear()} Seif El-Din. All rights reserved.
         </p>
       </footer>
