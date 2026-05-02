@@ -162,7 +162,7 @@ export function Portfolio({
                   <img
                     src={toPublicSettingsImageUrl(project.image || 'projects/placeholder.png')}
                     alt={project.title ?? 'Project'}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    style={{ width: 'auto', height: 'auto', objectFit: 'contain', display: 'block' }}
                   />
                   <div className="project-overlay">
                     <span className="project-view">View Project</span>
