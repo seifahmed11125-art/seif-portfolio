@@ -6,6 +6,7 @@ export async function POST(req: Request) {
     const form = await req.formData()
 
     const title = String(form.get('title') ?? '')
+    const external_link = String(form.get('external_link') ?? '')
     const description = String(form.get('description') ?? '')
     const category = String(form.get('category') ?? '')
     const file = form.get('image')
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
       .insert([
         {
           title: title || null,
+          external_link: external_link || null,
           description: description || null,
           category: category || null,
           image: imagePath,

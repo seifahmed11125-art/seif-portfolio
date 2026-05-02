@@ -9,6 +9,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [title, setTitle] = useState('')
+  const [externalLink, setExternalLink] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState<Category>('Brand Identity')
   const [image, setImage] = useState<File | null>(null)
@@ -43,6 +44,7 @@ export default function AdminPage() {
       body.set('title', title)
       body.set('description', description)
       body.set('category', category)
+      body.set('external_link', externalLink)
       if (image) body.set('image', image)
 
       const res = await fetch('/api/admin/projects', { method: 'POST', body })
@@ -53,6 +55,7 @@ export default function AdminPage() {
       setMessage(`Project added successfully!${json.id ? ` (id: ${json.id})` : ''}`)
       setTitle('')
       setDescription('')
+      setExternalLink('')
       setCategory('Brand Identity')
       setImage(null)
       if (fileInputRef.current) {
@@ -120,7 +123,7 @@ export default function AdminPage() {
 
         <div className="bg-[#0d0d18] p-8 rounded-lg border border-[rgba(185,239,163,0.2)]">
           <h2 className="font-display text-2xl text-white mb-6">Add New Project</h2>
-          
+
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-[#8888aa] text-sm mb-2">Title</label>
@@ -131,6 +134,18 @@ export default function AdminPage() {
                 required
                 className="w-full p-3 bg-[#0a0a0f] border border-[rgba(185,239,163,0.2)] text-white rounded focus:border-[#b9efa3] outline-none"
                 placeholder="Project Title"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-[#8888aa] text-sm mb-2">External Link</label>
+              <input
+                type="url"
+                value={externalLink}
+                onChange={(e) => setExternalLink(e.target.value)}
+                required
+                className="w-full p-3 bg-[#0a0a0f] border border-[rgba(185,239,163,0.2)] text-white rounded focus:border-[#b9efa3] outline-none"
+                placeholder="Project External link example: (behance.net/project)"
               />
             </div>
 

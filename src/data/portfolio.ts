@@ -5,6 +5,7 @@ export interface Project {
   title: string | null
   category: string | null
   description?: string | null
+  external_link: string | null
   image?: string | null
   created_at?: string | null
 }

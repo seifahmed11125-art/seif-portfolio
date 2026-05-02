@@ -5,6 +5,7 @@ import { type Project } from '@/data/portfolio'
 type DbProject = {
   id: string
   title: string | null
+  external_link: string | null
   description: string | null
   image: string | null
   category: string | null
@@ -36,16 +37,17 @@ export function useProjects() {
 
         const { data: projectRows, error: dbError } = await supabase
           .from('projects')
-          .select('id,title,description,image,category,created_at')
+          .select('*')
           .order('created_at', { ascending: false })
 
         if (dbError) throw dbError
 
         const normalizedProjects = (projectRows ?? []).map((p: any) => {
-          const row = p as DbProject
+          const row = p as DbProject          
           return {
             id: row.id,
             title: row.title,
+            external_link: row.external_link,
             category: row.category,
             description: row.description ?? null,
             image: row.image ? toProjectsBucketPath(row.image) : null,

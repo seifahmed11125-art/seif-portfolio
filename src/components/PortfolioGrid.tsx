@@ -106,7 +106,7 @@ export function PortfolioGrid({
         if (containerRef.current) {
           const cards = containerRef.current.querySelectorAll(".project-card");
           if (cards && cards.length > 0) {
-            gsap.fromTo(cards, 
+            gsap.fromTo(cards,
               { y: 20, opacity: 0, scale: 0.98 },
               {
                 y: 0,
@@ -170,7 +170,7 @@ export function PortfolioGrid({
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
                 <div className="project-overlay">
-                  <span className="project-view">View Project</span>
+                  <a className="project-view" href={project.external_link || '/'} target="_blank" rel="noopener noreferrer">View Project</a>
                 </div>
               </div>
               <div className="project-info">
