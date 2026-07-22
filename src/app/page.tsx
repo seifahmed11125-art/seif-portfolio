@@ -37,7 +37,7 @@ export default function Home() {
             <Hero />
             <About />
             <Services />
-            <PortfolioGrid limit={6} showFilters={true} title="Selected Works" label="Portfolio" showCTA={true} />
+            <PortfolioGrid limit={4} showFilters={true} title="Selected Works" label="Portfolio" showCTA={true} />
             <Contact />
           </main>
         </>
