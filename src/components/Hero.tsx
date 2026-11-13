@@ -1,211 +1,63 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import gsap from 'gsap'
-
-const name = "Seif El-Din"
-const subtitle = "Creative Designer"
+import { useEffect, useRef } from 'react'
+import { mountHeroScene } from './heroScene'
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null)
-  const nameRef = useRef<HTMLHeadingElement>(null)
-  const subtitleRef = useRef<HTMLParagraphElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [fontsLoaded, setFontsLoaded] = useState(false)
-
   useEffect(() => {
-    document.fonts.ready.then(() => {
-      setFontsLoaded(true)
-    })
+    if (heroRef.current) return mountHeroScene(heroRef.current)
   }, [])
 
-  useEffect(() => {
-    if (!fontsLoaded) return
-    
-    const ctx = gsap.context(() => {
-      // Name reveal with word-level animation (restored from original)
-      const words = nameRef.current?.querySelectorAll('.word')
-      if (words && words.length > 0) {
-        gsap.from(words, {
-          y: '100%',
-          opacity: 0,
-          duration: 1.5,
-          stagger: 0.1,
-          ease: 'power4.out',
-          delay: 0.5,
-        })
-      }
-
-      // Subtitle reveal
-      if (subtitleRef.current) {
-        gsap.from(subtitleRef.current, {
-          opacity: 0,
-          y: 20,
-          duration: 1,
-          delay: 1.5,
-          ease: 'power3.out',
-        })
-      }
-
-      // Scroll indicator
-      if (scrollRef.current) {
-        gsap.from(scrollRef.current, {
-          opacity: 0,
-          y: 20,
-          duration: 0.8,
-          delay: 2,
-          ease: 'power2.out',
-        })
-      }
-    }, heroRef)
-
-    return () => ctx.revert()
-  }, [fontsLoaded])
-
   return (
-    <section id="home" ref={heroRef} className="hero">
-      {/* Animated Background Gradient */}
-      <motion.div
-        className="hero-gradient"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        style={{ 
-          position: 'absolute', 
-          inset: 0, 
-          userSelect: 'none', 
-          pointerEvents: 'none' 
-        }}
-      />
-
-       <div className="hero-content" style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}>
-        <h1 
-          ref={nameRef} 
-          className="hero-name"
-          style={{ 
-            overflow: 'visible',
-            paddingTop: '0.2em'
-          }}
-        >
-          <span style={{ 
-            display: 'inline-block', 
-            overflow: 'visible', 
-            paddingBottom: '0.2em' 
-          }}>
-            <span className="word" style={{ display: 'inline-block' }}>Seif</span>
-          </span>
-          {' '}
-          <span style={{ 
-            display: 'inline-block', 
-            overflow: 'visible', 
-            paddingBottom: '0.2em' 
-          }}>
-            <span className="word" style={{ display: 'inline-block' }}>El-Din</span>
-          </span>
-        </h1>
-        
-        <p 
-          ref={subtitleRef} 
-          className="hero-subtitle"
-          style={{ 
-            marginTop: '1.5rem',
-            letterSpacing: '0.3em'
-          }}
-        >
-          {subtitle}
-        </p>
-
-        {/* CTA Button - restored and polished */}
-        <motion.a
-          href="#portfolio"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            display: 'inline-block',
-            marginTop: '2.5rem',
-            padding: '1rem 2.5rem',
-            border: '1px solid #b9efa3',
-            color: '#b9efa3',
-            textDecoration: 'none',
-            textTransform: 'uppercase',
-            letterSpacing: '0.3em',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-            position: 'relative',
-            overflow: 'hidden',
-            zIndex: 10,
-            cursor: 'pointer',
-            transition: 'color 0.3s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#0a0a0f'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#b9efa3'
-          }}
-        >
-          <span style={{ position: 'relative', zIndex: 10 }}>View My Work</span>
-          <motion.div 
-            style={{ 
-              position: 'absolute', 
-              inset: 0, 
-              background: '#b9efa3',
-              y: '100%'
-            }}
-            whileHover={{ y: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.a>
-      </div>
-      
-      {/* Scroll Indicator - positioned below button */}
-      <div 
-        ref={scrollRef} 
-        className="scroll-indicator"
-        style={{ 
-          position: 'absolute',
-          bottom: '3rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1rem',
-          marginTop: '2rem'
-        }}
-      >
-        <div style={{
-          width: '1px', 
-          height: '5rem', 
-          background: 'rgba(185, 239, 163, 0.3)', 
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <motion.div 
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '50%',
-              background: 'linear-gradient(to bottom, transparent, #b9efa3)'
-            }}
-            initial={{ y: '-100%' }}
-            animate={{ y: '200%' }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              repeatDelay: 0.5
-            }}
-          />
+    <section id="home" className="director-reel" ref={heroRef} aria-labelledby="reel-title">
+      <div className="reel-stage">
+        <div className="reel-grid" aria-hidden="true" />
+        <div className="reel-media" aria-hidden="true">
+          <div className="reel-paper" />
+          <svg className="reel-mark" viewBox="0 0 440 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="reel-dot-grid" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r=".85" fill="#b9efa3" fillOpacity=".29" /></pattern>
+            </defs>
+            <g className="reel-drawing">
+              <path d="M39 39H401V401H39Z" fill="url(#reel-dot-grid)" />
+              <circle cx="220" cy="220" r="172" stroke="currentColor" strokeOpacity=".40" strokeDasharray="4 7" />
+              <circle cx="220" cy="220" r="126" stroke="currentColor" strokeOpacity=".2" />
+              <path d="M220 21V419M21 220H419M54 54L386 386M386 54L54 386" stroke="currentColor" strokeOpacity=".17" />
+              <path d="M79 136H361M79 220H361M79 304H361" stroke="currentColor" strokeOpacity=".46" strokeDasharray="3 4" />
+              <path d="M39 55V39H55M385 39H401V55M401 385V401H385M55 401H39V385" stroke="currentColor" strokeWidth="1.4" />
+            </g>
+            <g className="reel-piece reel-piece-a">
+              <path d="M158 94H331V126C331 155 308 178 279 178H115V137C115 113 134 94 158 94Z" />
+              <path className="reel-piece-seam" d="M115 137H331" />
+            </g>
+            <g className="reel-piece reel-piece-b">
+              <path d="M115 178H275C306 178 331 203 331 234V262H170C140 262 115 237 115 207V178Z" />
+              <path className="reel-piece-seam" d="M116 179L330 261" />
+            </g>
+            <g className="reel-piece reel-piece-c">
+              <path d="M168 262H331V294C331 323 308 346 279 346H115V315C115 286 139 262 168 262Z" />
+              <path className="reel-piece-seam" d="M115 315H331" />
+            </g>
+            <circle className="reel-mark-dot" cx="359" cy="325" r="21" />
+          </svg>
+        </div>
+        <div className="reel-guides" aria-hidden="true"><span /><span /><span /><span /></div>
+        <div className="reel-intro">
+          <p className="reel-role"><span /> DESIGN &amp; MOTION</p>
+          <h1 id="reel-title">Seif<br />{' '}El-Din<span>.</span></h1>
+          <p className="reel-sub">Creative Designer &amp;<br className="reel-desktop" /> Visual Storyteller</p>
+          <a href="#portfolio" className="reel-work">View my work <span aria-hidden="true">↗</span></a>
+        </div>
+        <div className="reel-statement" aria-hidden="true">
+          <p className="reel-line">Design in<br />{' '}motion<span>.</span></p>
+        </div>
+        <div className="reel-controls">
+          <button type="button" className="reel-cue"><span className="reel-cue-arrow" aria-hidden="true">↓</span> <span className="reel-cue-text">Scroll to assemble</span></button>
+          <div className="reel-timeline" aria-hidden="true">
+            <span className="reel-counter">01</span><div className="reel-progress"><i /></div><span>03</span>
+          </div>
+          <a href="#about" className="reel-next">About me <span aria-hidden="true">↘</span></a>
         </div>
       </div>
     </section>
