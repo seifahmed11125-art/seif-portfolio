@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { AI_VIDEOS_CATEGORY } from '@/data/portfolio'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,6 +33,11 @@ const services = [
     number: '05',
     name: 'Presentation Designs',
     description: 'Elevating data and vision into persuasive, authority-driven pitch decks that ensure clarity and strategic impact.',
+  },
+  {
+    number: '06',
+    name: AI_VIDEOS_CATEGORY,
+    description: 'Creating AI-generated videos for brands, from product showcases and social ads to short cinematic stories.',
   },
 ];
 

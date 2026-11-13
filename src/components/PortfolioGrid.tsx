@@ -3,12 +3,24 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { type Category, categories } from "../data/portfolio";
+import { AI_VIDEOS_CATEGORY, type Category, categories } from "../data/portfolio";
 import Link from "next/link";
 import { useProjects } from '@/lib/useProjects'
 import { toPublicSettingsImageUrl } from "@/lib/publicImageUrl";
 
 gsap.registerPlugin(ScrollTrigger);
+
+function getDirectVideoUrl(link: string | null) {
+  if (!link) return null;
+
+  try {
+    const url = new URL(link);
+    const isWebUrl = url.protocol === 'https:' || url.protocol === 'http:';
+    return isWebUrl && /\.(mp4|webm)$/i.test(url.pathname) ? url.href : null;
+  } catch {
+    return null;
+  }
+}
 
 interface PortfolioGridProps {
   limit?: number;
@@ -27,10 +39,12 @@ export function PortfolioGrid({
 }: PortfolioGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeFilter, setActiveFilter] = useState<Category>("All");
-  const { projects, loading } = useProjects()
-  const [filteredProjects, setFilteredProjects] = useState(projects);
+  const { projects, loading, error } = useProjects();
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const filteredProjects = activeFilter === 'All'
+    ? projects
+    : projects.filter((project) => project.category === activeFilter);
   const displayProjects = limit ? filteredProjects.slice(0, limit) : filteredProjects;
 
   useEffect(() => {
@@ -96,45 +110,20 @@ export function PortfolioGrid({
   }, []);
 
   useEffect(() => {
-    setFilteredProjects(projects)
-  }, [projects])
+    if (loading) return;
 
-  useEffect(() => {
-    // Small delay to allow DOM to update after filter change
-    const timer = setTimeout(() => {
-      const ctx = gsap.context(() => {
-        if (containerRef.current) {
-          const cards = containerRef.current.querySelectorAll(".project-card");
-          if (cards && cards.length > 0) {
-            gsap.fromTo(cards,
-              { y: 20, opacity: 0, scale: 0.98 },
-              {
-                y: 0,
-                opacity: 1,
-                scale: 1,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'power3.out'
-              }
-            );
-          }
-        }
-      }, containerRef);
+    const cards = containerRef.current?.querySelectorAll('.project-card');
+    if (!cards?.length) return;
 
-      return () => ctx.revert();
-    }, 50);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(cards,
+        { y: 20, opacity: 0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+      );
+    }, containerRef);
 
-    return () => clearTimeout(timer);
-  }, [activeFilter]);
-
-  const handleFilter = (category: Category) => {
-    setActiveFilter(category);
-    if (category === "All") {
-      setFilteredProjects(projects);
-    } else {
-      setFilteredProjects(projects.filter((p) => p.category === category));
-    }
-  }
+    return () => ctx.revert();
+  }, [activeFilter, loading, projects]);
 
   return (
     <section
@@ -151,8 +140,10 @@ export function PortfolioGrid({
             {categories.map((category) => (
               <button
                 key={category}
+                type="button"
+                aria-pressed={activeFilter === category}
                 className={`filter-btn ${activeFilter === category ? 'active' : ''}`}
-                onClick={() => handleFilter(category)}
+                onClick={() => setActiveFilter(category)}
               >
                 {category}
               </button>
@@ -160,26 +151,60 @@ export function PortfolioGrid({
           </div>
         )}
 
-        <div ref={containerRef} className="portfolio-grid">
-          {!loading && displayProjects.map((project) => (
-            <div key={project.id} className="project-card">
-              <div className="project-image">
-                <img
-                  src={toPublicSettingsImageUrl(project.image || 'projects/placeholder.png')}
-                  alt={project.title ?? 'Project'}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-                <div className="project-overlay">
-                  <a className="project-view" href={project.external_link || '/'} target="_blank" rel="noopener noreferrer">View Project</a>
+        <div ref={containerRef} className="portfolio-grid" aria-busy={loading}>
+          {!loading && displayProjects.map((project) => {
+            const isVideoProject = project.category === AI_VIDEOS_CATEGORY;
+            const videoUrl = isVideoProject ? getDirectVideoUrl(project.external_link) : null;
+            const imageUrl = project.image && (
+              /^https?:\/\//i.test(project.image)
+                ? project.image
+                : toPublicSettingsImageUrl(project.image)
+            );
+
+            return (
+              <div key={project.id} className="project-card">
+                {videoUrl ? (
+                  <video
+                    className="project-image project-video"
+                    src={videoUrl}
+                    poster={imageUrl || undefined}
+                    controls
+                    playsInline
+                    preload="none"
+                    aria-label={project.title ?? 'AI video'}
+                  />
+                ) : (
+                  <div className="project-image">
+                    <img
+                      src={imageUrl || toPublicSettingsImageUrl('projects/placeholder.png')}
+                      alt={project.title ?? 'Project'}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                    {!isVideoProject && (
+                      <div className="project-overlay">
+                        <a className="project-view" href={project.external_link || '/'} target="_blank" rel="noopener noreferrer">View Project</a>
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div className="project-info">
+                  <h3 className="project-title">{project.title ?? 'Untitled'}</h3>
+                  <span className="project-category">{project.category ?? 'Uncategorized'}</span>
                 </div>
+                {isVideoProject && project.external_link && (
+                  <a className="project-video-link" href={project.external_link} target="_blank" rel="noopener noreferrer">
+                    {videoUrl ? 'Open video' : 'View Project'}
+                  </a>
+                )}
               </div>
-              <div className="project-info">
-                <h3 className="project-title">{project.title ?? 'Untitled'}</h3>
-                <span className="project-category">{project.category ?? 'Uncategorized'}</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+        {!loading && activeFilter === AI_VIDEOS_CATEGORY && displayProjects.length === 0 && (
+          <p className="portfolio-empty" role="status">
+            {error ? 'Could not load projects.' : 'No AI video projects yet.'}
+          </p>
+        )}
       </div>
 
       {showCTA && (

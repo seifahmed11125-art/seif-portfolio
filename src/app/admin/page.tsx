@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { categories, type Category } from '@/data/portfolio'
+import { AI_VIDEOS_CATEGORY, categories, type Category } from '@/data/portfolio'
 
 export default function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -138,15 +138,22 @@ export default function AdminPage() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-[#8888aa] text-sm mb-2">External Link</label>
+              <label htmlFor="external-link" className="block text-[#8888aa] text-sm mb-2">External Link</label>
               <input
+                id="external-link"
                 type="url"
                 value={externalLink}
                 onChange={(e) => setExternalLink(e.target.value)}
                 required
+                aria-describedby={category === AI_VIDEOS_CATEGORY ? 'video-link-help' : undefined}
                 className="w-full p-3 bg-[#0a0a0f] border border-[rgba(185,239,163,0.2)] text-white rounded focus:border-[#b9efa3] outline-none"
                 placeholder="Project External link example: (behance.net/project)"
               />
+              {category === AI_VIDEOS_CATEGORY && (
+                <p id="video-link-help" className="text-[#8888aa] text-sm mt-2">
+                  Use a public MP4 or WebM link for inline playback. Project page links open in a new tab.
+                </p>
+              )}
             </div>
 
             <div className="mb-4">

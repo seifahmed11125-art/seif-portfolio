@@ -4,14 +4,12 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { categories } from '@/data/portfolio'
 import { toPublicSettingsImageUrl } from '@/lib/publicImageUrl'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const skills = [
-  'Brand Identity', 'Social Media Designs', 'Motion Graphics',
-  'Print Designs', 'Presentation Designs'
-];
+const skills = categories.filter((category) => category !== 'All')
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null)

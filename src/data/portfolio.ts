@@ -1,4 +1,16 @@
-export type Category = 'All' | 'Brand Identity' | 'Social Media Designs' | 'Motion Graphics' | 'Print Designs' | 'Presentation Designs'
+export const AI_VIDEOS_CATEGORY = 'AI Videos'
+
+export const categories = [
+  'All',
+  'Brand Identity',
+  'Social Media Designs',
+  'Motion Graphics',
+  AI_VIDEOS_CATEGORY,
+  'Print Designs',
+  'Presentation Designs',
+] as const
+
+export type Category = (typeof categories)[number]
 
 export interface Project {
   id: string
@@ -9,5 +21,3 @@ export interface Project {
   image?: string | null
   created_at?: string | null
 }
-
-export const categories: Category[] = ['All', 'Brand Identity', 'Social Media Designs', 'Motion Graphics', 'Print Designs', 'Presentation Designs']
