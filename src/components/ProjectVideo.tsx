@@ -52,7 +52,12 @@ export default function ProjectVideo({ title, coverUrl, videoUrl }: ProjectVideo
       />
       {!hasStarted && (
         <button className="project-video-play" type="button" onClick={play} aria-label={'Play ' + title}>
-          {coverUrl && <img src={coverUrl} alt="" loading="lazy" decoding="async" />}
+          {coverUrl && (
+            <>
+              <img className="project-video-backdrop" src={coverUrl} alt="" loading="lazy" decoding="async" />
+              <img className="project-video-cover" src={coverUrl} alt="" loading="lazy" decoding="async" />
+            </>
+          )}
           <span className="project-video-play-icon"><Play aria-hidden="true" size={25} fill="currentColor" /></span>
         </button>
       )}

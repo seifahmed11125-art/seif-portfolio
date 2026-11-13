@@ -17,6 +17,7 @@ const panelClass = 'rounded-lg border border-[rgba(185,239,163,0.2)] bg-[#0d0d18
 
 export default function AdminPage() {
   const [session, setSession] = useState<Session | null>(null)
+  const [unlockedUserId, setUnlockedUserId] = useState<string | null>(null)
   const [checkingSession, setCheckingSession] = useState(true)
   const [signingIn, setSigningIn] = useState(false)
   const [loginError, setLoginError] = useState('')
@@ -30,6 +31,7 @@ export default function AdminPage() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession)
+      if (!nextSession) setUnlockedUserId(null)
       setCheckingSession(false)
     })
     return () => subscription.unsubscribe()
@@ -44,6 +46,21 @@ export default function AdminPage() {
     const username = String(form.get('username') ?? '').trim()
     const password = String(form.get('password') ?? '')
     try {
+      // The public legacy password can only unlock an existing, verified admin session.
+      if (username.toLowerCase() === 'admin' && password === 'admin') {
+        if (session) {
+          const { data, error } = await supabase.auth.getUser()
+          if (!error && data.user?.id === session.user.id
+            && data.user.app_metadata.portfolio_admin === true
+            && data.user.app_metadata.portfolio_username === 'admin') {
+            setUnlockedUserId(data.user.id)
+            return
+          }
+        }
+        setLoginError('Sign in with your account password to enable quick unlock on this browser.')
+        return
+      }
+
       if (username.toLowerCase() === 'admin') {
         const response = await fetch('/api/admin/login', {
           method: 'POST',
@@ -55,17 +72,26 @@ export default function AdminPage() {
           setLoginError(result.error || 'Could not sign in. Please try again.')
           return
         }
-        const { error } = await supabase.auth.setSession(result)
+        const { data, error } = await supabase.auth.setSession(result)
         if (error) throw error
+        setUnlockedUserId(data.session?.user.id ?? null)
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email: username, password })
+        const { data, error } = await supabase.auth.signInWithPassword({ email: username, password })
         if (error) setLoginError('Could not sign in. Check your username and password.')
+        else setUnlockedUserId(data.session?.user.id ?? null)
       }
     } catch {
       setLoginError('Could not sign in. Please try again.')
     } finally {
       setSigningIn(false)
     }
+  }
+
+  async function handleSignOut() {
+    setLoginError('')
+    setUnlockedUserId(null)
+    const { error } = await supabase.auth.signOut({ scope: 'local' })
+    if (error) setLoginError('Could not sign out. Please try again.')
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -132,7 +158,7 @@ export default function AdminPage() {
     return <p className="p-8 text-[#b9efa3]" role="status">Loading admin panel…</p>
   }
 
-  if (!session) {
+  if (!session || unlockedUserId !== session.user.id) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#0a0a0f] p-4">
         <div className={panelClass + ' w-full max-w-md'}>
@@ -159,6 +185,16 @@ export default function AdminPage() {
             <button type="submit" disabled={signingIn} className={buttonClass}>
               {signingIn ? 'Signing in…' : 'Sign in'}
             </button>
+            {session && (
+              <button
+                type="button"
+                onClick={() => void handleSignOut()}
+                disabled={signingIn}
+                className="text-sm text-[#8888aa] hover:text-[#b9efa3]"
+              >
+                Sign out of this browser
+              </button>
+            )}
           </form>
         </div>
       </main>
@@ -170,14 +206,14 @@ export default function AdminPage() {
       <div className="mx-auto max-w-2xl">
         <div className="mb-8 flex items-center justify-between gap-4">
           <h1 className="font-display text-3xl text-white sm:text-4xl">Admin Panel</h1>
-          <button
-            type="button"
-            onClick={() => void supabase.auth.signOut()}
-            disabled={uploading}
-            className="text-[#8888aa] transition-colors hover:text-[#b9efa3] disabled:opacity-50"
-          >
-            Logout
-          </button>
+          <div className="flex shrink-0 flex-wrap justify-end gap-x-4 gap-y-2 text-sm text-[#8888aa]">
+            <button type="button" onClick={() => setUnlockedUserId(null)} disabled={uploading} className="hover:text-[#b9efa3] disabled:opacity-50">
+              Lock
+            </button>
+            <button type="button" onClick={() => void handleSignOut()} disabled={uploading} className="hover:text-[#b9efa3] disabled:opacity-50">
+              Sign out
+            </button>
+          </div>
         </div>
 
         {session.user.app_metadata.portfolio_admin === true ? (

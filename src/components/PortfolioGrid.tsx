@@ -18,7 +18,6 @@ interface PortfolioGridProps {
   title?: string;
   label?: string;
   showCTA?: boolean;
-  wideVideos?: boolean;
 }
 
 export function PortfolioGrid({
@@ -27,7 +26,6 @@ export function PortfolioGrid({
   title = "Selected Works",
   label = "Portfolio",
   showCTA = false,
-  wideVideos = false,
 }: PortfolioGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeFilter, setActiveFilter] = useState<Category>("All");
@@ -47,9 +45,8 @@ export function PortfolioGrid({
     return { project, isVideoProject, projectLink, legacyVideo, videoUrl };
   });
 
-  if (wideVideos) {
-    cards.sort((a, b) => Number(Boolean(b.videoUrl)) - Number(Boolean(a.videoUrl)));
-  }
+  // Fill complete rows with videos before laying out the image cards in pairs.
+  cards.sort((a, b) => Number(Boolean(b.videoUrl)) - Number(Boolean(a.videoUrl)));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -166,7 +163,7 @@ export function PortfolioGrid({
             );
 
             return (
-              <div key={project.id} className={wideVideos && videoUrl ? 'project-card project-card--wide' : 'project-card'}>
+              <div key={project.id} className={videoUrl ? 'project-card project-card--wide' : 'project-card'}>
                 {videoUrl ? (
                   <ProjectVideo title={title} coverUrl={imageUrl} videoUrl={videoUrl} />
                 ) : (

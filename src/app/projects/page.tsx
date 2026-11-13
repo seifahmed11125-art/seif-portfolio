@@ -9,7 +9,6 @@ export default function Projects() {
         showFilters={true} 
         title="All Projects" 
         label="Projects"
-        wideVideos
       />
     </main>
   )
