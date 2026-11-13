@@ -6,17 +6,18 @@ import { Play } from 'lucide-react'
 interface ProjectVideoProps {
   title: string
   coverUrl?: string | null
-  videoUrl: string
+  videoUrl?: string
+  externalUrl?: string
 }
 
-export default function ProjectVideo({ title, coverUrl, videoUrl }: ProjectVideoProps) {
+export default function ProjectVideo({ title, coverUrl, videoUrl, externalUrl }: ProjectVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasStarted, setHasStarted] = useState(false)
   const [failed, setFailed] = useState(false)
 
   async function play() {
     const video = videoRef.current
-    if (!video) return
+    if (!video || !videoUrl) return
 
     setHasStarted(true)
     setFailed(false)
@@ -31,6 +32,27 @@ export default function ProjectVideo({ title, coverUrl, videoUrl }: ProjectVideo
         setHasStarted(false)
       }
     }
+  }
+
+  const cover = coverUrl && (
+    <>
+      <img className="project-video-backdrop" src={coverUrl} alt="" loading="lazy" decoding="async" />
+      <img className="project-video-cover" src={coverUrl} alt="" loading="lazy" decoding="async" />
+    </>
+  )
+  const playIcon = <span className="project-video-play-icon"><Play aria-hidden="true" size={25} fill="currentColor" /></span>
+
+  if (!videoUrl) {
+    return (
+      <div className="project-image project-video">
+        {externalUrl ? (
+          <a className="project-video-play" href={externalUrl} target="_blank" rel="noopener noreferrer" aria-label={'Watch ' + title + ' on an external site'}>
+            {cover}
+            {playIcon}
+          </a>
+        ) : cover}
+      </div>
+    )
   }
 
   return (
@@ -52,13 +74,8 @@ export default function ProjectVideo({ title, coverUrl, videoUrl }: ProjectVideo
       />
       {!hasStarted && (
         <button className="project-video-play" type="button" onClick={play} aria-label={'Play ' + title}>
-          {coverUrl && (
-            <>
-              <img className="project-video-backdrop" src={coverUrl} alt="" loading="lazy" decoding="async" />
-              <img className="project-video-cover" src={coverUrl} alt="" loading="lazy" decoding="async" />
-            </>
-          )}
-          <span className="project-video-play-icon"><Play aria-hidden="true" size={25} fill="currentColor" /></span>
+          {cover}
+          {playIcon}
         </button>
       )}
       {failed && <p className="project-video-error" role="status">Could not play this video. Try again.</p>}

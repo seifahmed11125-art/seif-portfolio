@@ -876,6 +876,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-video-player {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -897,7 +899,7 @@ h1, h2, h3, h4, h5, h6 {
   outline-offset: -4px;
 }
 
-.project-video-play img {
+.project-video img {
   position: absolute;
   inset: 0;
   width: 100%;

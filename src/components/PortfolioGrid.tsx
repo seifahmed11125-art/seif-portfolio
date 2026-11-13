@@ -42,11 +42,11 @@ export function PortfolioGrid({
     const legacyVideo = isVideoProject && projectLink && /\.(mp4|webm)$/i.test(projectLink.pathname);
     const videoUrl = project.video_url || (legacyVideo ? projectLink.href : undefined);
 
-    return { project, isVideoProject, projectLink, legacyVideo, videoUrl };
+    return { project, isVideoProject, projectLink, legacyVideo, videoUrl, wide: isVideoProject || Boolean(videoUrl) };
   });
 
   // Fill complete rows with videos before laying out the image cards in pairs.
-  cards.sort((a, b) => Number(Boolean(b.videoUrl)) - Number(Boolean(a.videoUrl)));
+  cards.sort((a, b) => Number(Boolean(b.videoUrl)) - Number(Boolean(a.videoUrl)) || Number(b.wide) - Number(a.wide));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -153,7 +153,7 @@ export function PortfolioGrid({
         )}
 
         <div ref={containerRef} className="portfolio-grid" aria-busy={loading}>
-          {!loading && cards.map(({ project, isVideoProject, projectLink, legacyVideo, videoUrl }) => {
+          {!loading && cards.map(({ project, isVideoProject, projectLink, legacyVideo, videoUrl, wide }) => {
             const isBehance = projectLink && /(^|\.)behance\.net$/i.test(projectLink.hostname);
             const title = project.title ?? 'Untitled';
             const imageUrl = project.image && (
@@ -163,9 +163,9 @@ export function PortfolioGrid({
             );
 
             return (
-              <div key={project.id} className={videoUrl ? 'project-card project-card--wide' : 'project-card'}>
-                {videoUrl ? (
-                  <ProjectVideo title={title} coverUrl={imageUrl} videoUrl={videoUrl} />
+              <div key={project.id} className={wide ? 'project-card project-card--wide' : 'project-card'}>
+                {wide ? (
+                  <ProjectVideo title={title} coverUrl={imageUrl} videoUrl={videoUrl} externalUrl={projectLink?.href} />
                 ) : (
                   <div className="project-image">
                     <img
@@ -175,7 +175,7 @@ export function PortfolioGrid({
                       decoding="async"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                     />
-                    {!isVideoProject && projectLink && (
+                    {projectLink && (
                       <div className="project-overlay">
                         <a className="project-view" href={projectLink.href} target="_blank" rel="noopener noreferrer">View Project</a>
                       </div>
