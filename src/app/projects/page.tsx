@@ -8,7 +8,8 @@ export default function Projects() {
       <PortfolioGrid 
         showFilters={true} 
         title="All Projects" 
-        label="Projects" 
+        label="Projects"
+        wideVideos
       />
     </main>
   )

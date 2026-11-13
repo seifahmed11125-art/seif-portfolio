@@ -18,6 +18,7 @@ interface PortfolioGridProps {
   title?: string;
   label?: string;
   showCTA?: boolean;
+  wideVideos?: boolean;
 }
 
 export function PortfolioGrid({
@@ -26,6 +27,7 @@ export function PortfolioGrid({
   title = "Selected Works",
   label = "Portfolio",
   showCTA = false,
+  wideVideos = false,
 }: PortfolioGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeFilter, setActiveFilter] = useState<Category>("All");
@@ -36,6 +38,18 @@ export function PortfolioGrid({
     ? projects
     : projects.filter((project) => project.category === activeFilter);
   const displayProjects = limit ? filteredProjects.slice(0, limit) : filteredProjects;
+  const cards = displayProjects.map((project) => {
+    const isVideoProject = project.category === AI_VIDEOS_CATEGORY;
+    const projectLink = parseProjectLink(project.external_link);
+    const legacyVideo = isVideoProject && projectLink && /\.(mp4|webm)$/i.test(projectLink.pathname);
+    const videoUrl = project.video_url || (legacyVideo ? projectLink.href : undefined);
+
+    return { project, isVideoProject, projectLink, legacyVideo, videoUrl };
+  });
+
+  if (wideVideos) {
+    cards.sort((a, b) => Number(Boolean(b.videoUrl)) - Number(Boolean(a.videoUrl)));
+  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -142,11 +156,7 @@ export function PortfolioGrid({
         )}
 
         <div ref={containerRef} className="portfolio-grid" aria-busy={loading}>
-          {!loading && displayProjects.map((project) => {
-            const isVideoProject = project.category === AI_VIDEOS_CATEGORY;
-            const projectLink = parseProjectLink(project.external_link);
-            const legacyVideo = isVideoProject && projectLink && /\.(mp4|webm)$/i.test(projectLink.pathname);
-            const videoUrl = project.video_url || (legacyVideo ? projectLink?.href : undefined);
+          {!loading && cards.map(({ project, isVideoProject, projectLink, legacyVideo, videoUrl }) => {
             const isBehance = projectLink && /(^|\.)behance\.net$/i.test(projectLink.hostname);
             const title = project.title ?? 'Untitled';
             const imageUrl = project.image && (
@@ -156,7 +166,7 @@ export function PortfolioGrid({
             );
 
             return (
-              <div key={project.id} className="project-card">
+              <div key={project.id} className={wideVideos && videoUrl ? 'project-card project-card--wide' : 'project-card'}>
                 {videoUrl ? (
                   <ProjectVideo title={title} coverUrl={imageUrl} videoUrl={videoUrl} />
                 ) : (

@@ -41,12 +41,26 @@ export default function AdminPage() {
     setLoginError('')
 
     const form = new FormData(event.currentTarget)
+    const username = String(form.get('username') ?? '').trim()
+    const password = String(form.get('password') ?? '')
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: String(form.get('email')).trim(),
-        password: String(form.get('password')),
-      })
-      if (error) setLoginError('Could not sign in. Check your email and password.')
+      if (username.toLowerCase() === 'admin') {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'admin', password }),
+        })
+        const result = await response.json()
+        if (!response.ok) {
+          setLoginError(result.error || 'Could not sign in. Please try again.')
+          return
+        }
+        const { error } = await supabase.auth.setSession(result)
+        if (error) throw error
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email: username, password })
+        if (error) setLoginError('Could not sign in. Check your username and password.')
+      }
     } catch {
       setLoginError('Could not sign in. Please try again.')
     } finally {
@@ -125,8 +139,17 @@ export default function AdminPage() {
           <h1 className="font-display mb-6 text-center text-3xl text-white">Admin Login</h1>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="admin-email" className={labelClass}>Email</label>
-              <input id="admin-email" name="email" type="email" required autoComplete="username" className={inputClass} />
+              <label htmlFor="admin-username" className={labelClass}>Username or email</label>
+              <input
+                id="admin-username"
+                name="username"
+                type="text"
+                required
+                autoComplete="username"
+                autoCapitalize="none"
+                spellCheck={false}
+                className={inputClass}
+              />
             </div>
             <div>
               <label htmlFor="admin-password" className={labelClass}>Password</label>

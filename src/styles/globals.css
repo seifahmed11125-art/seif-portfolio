@@ -858,6 +858,10 @@ h1, h2, h3, h4, h5, h6 {
   will-change: transform, opacity;
 }
 
+.project-card--wide {
+  grid-column: 1 / -1;
+}
+
 .project-image {
   position: relative;
   overflow: visible;
@@ -868,6 +872,14 @@ h1, h2, h3, h4, h5, h6 {
 .project-video {
   aspect-ratio: 16 / 9;
   overflow: hidden;
+}
+
+.project-card--wide .project-video {
+  background: #0d0d18;
+}
+
+.project-card--wide .project-video-play img {
+  object-fit: contain;
 }
 
 .project-video-player {
