@@ -19,5 +19,6 @@ export interface Project {
   description?: string | null
   external_link: string | null
   image?: string | null
+  video_url?: string | null
   created_at?: string | null
 }

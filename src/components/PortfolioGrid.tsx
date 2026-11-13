@@ -7,20 +7,10 @@ import { AI_VIDEOS_CATEGORY, type Category, categories } from "../data/portfolio
 import Link from "next/link";
 import { useProjects } from '@/lib/useProjects'
 import { toPublicSettingsImageUrl } from "@/lib/publicImageUrl";
+import { parseProjectLink } from "@/lib/projectMedia";
+import ProjectVideo from "./ProjectVideo";
 
 gsap.registerPlugin(ScrollTrigger);
-
-function getDirectVideoUrl(link: string | null) {
-  if (!link) return null;
-
-  try {
-    const url = new URL(link);
-    const isWebUrl = url.protocol === 'https:' || url.protocol === 'http:';
-    return isWebUrl && /\.(mp4|webm)$/i.test(url.pathname) ? url.href : null;
-  } catch {
-    return null;
-  }
-}
 
 interface PortfolioGridProps {
   limit?: number;
@@ -154,7 +144,11 @@ export function PortfolioGrid({
         <div ref={containerRef} className="portfolio-grid" aria-busy={loading}>
           {!loading && displayProjects.map((project) => {
             const isVideoProject = project.category === AI_VIDEOS_CATEGORY;
-            const videoUrl = isVideoProject ? getDirectVideoUrl(project.external_link) : null;
+            const projectLink = parseProjectLink(project.external_link);
+            const legacyVideo = isVideoProject && projectLink && /\.(mp4|webm)$/i.test(projectLink.pathname);
+            const videoUrl = project.video_url || (legacyVideo ? projectLink?.href : undefined);
+            const isBehance = projectLink && /(^|\.)behance\.net$/i.test(projectLink.hostname);
+            const title = project.title ?? 'Untitled';
             const imageUrl = project.image && (
               /^https?:\/\//i.test(project.image)
                 ? project.image
@@ -164,36 +158,30 @@ export function PortfolioGrid({
             return (
               <div key={project.id} className="project-card">
                 {videoUrl ? (
-                  <video
-                    className="project-image project-video"
-                    src={videoUrl}
-                    poster={imageUrl || undefined}
-                    controls
-                    playsInline
-                    preload="none"
-                    aria-label={project.title ?? 'AI video'}
-                  />
+                  <ProjectVideo title={title} coverUrl={imageUrl} videoUrl={videoUrl} />
                 ) : (
                   <div className="project-image">
                     <img
                       src={imageUrl || toPublicSettingsImageUrl('projects/placeholder.png')}
                       alt={project.title ?? 'Project'}
+                      loading="lazy"
+                      decoding="async"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                     />
-                    {!isVideoProject && (
+                    {!isVideoProject && projectLink && (
                       <div className="project-overlay">
-                        <a className="project-view" href={project.external_link || '/'} target="_blank" rel="noopener noreferrer">View Project</a>
+                        <a className="project-view" href={projectLink.href} target="_blank" rel="noopener noreferrer">View Project</a>
                       </div>
                     )}
                   </div>
                 )}
                 <div className="project-info">
-                  <h3 className="project-title">{project.title ?? 'Untitled'}</h3>
+                  <h3 className="project-title">{title}</h3>
                   <span className="project-category">{project.category ?? 'Uncategorized'}</span>
                 </div>
-                {isVideoProject && project.external_link && (
-                  <a className="project-video-link" href={project.external_link} target="_blank" rel="noopener noreferrer">
-                    {videoUrl ? 'Open video' : 'View Project'}
+                {isVideoProject && projectLink && (
+                  <a className="project-video-link" href={projectLink.href} target="_blank" rel="noopener noreferrer">
+                    {isBehance ? 'View on Behance' : legacyVideo ? 'Open video' : 'View Project'}
                   </a>
                 )}
               </div>

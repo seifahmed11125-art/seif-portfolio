@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { type Project } from '@/data/portfolio'
+import { PROJECT_VIDEO_BUCKET } from '@/lib/projectMedia'
 
 type DbProject = {
   id: string
@@ -8,6 +9,7 @@ type DbProject = {
   external_link: string | null
   description: string | null
   image: string | null
+  video_path?: string | null
   category: string | null
   created_at: string | null
 }
@@ -42,8 +44,7 @@ export function useProjects() {
 
         if (dbError) throw dbError
 
-        const normalizedProjects = (projectRows ?? []).map((p: any) => {
-          const row = p as DbProject          
+        const normalizedProjects = ((projectRows ?? []) as DbProject[]).map((row) => {
           return {
             id: row.id,
             title: row.title,
@@ -51,6 +52,9 @@ export function useProjects() {
             category: row.category,
             description: row.description ?? null,
             image: row.image ? toProjectsBucketPath(row.image) : null,
+            video_url: row.video_path
+              ? supabase.storage.from(PROJECT_VIDEO_BUCKET).getPublicUrl(row.video_path).data.publicUrl
+              : null,
             created_at: row.created_at ?? null,
           } satisfies Project
         })
