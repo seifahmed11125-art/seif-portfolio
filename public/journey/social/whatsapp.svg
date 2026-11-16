@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="WhatsApp">
+  <defs>
+    <linearGradient id="rim" x1="0" y1="0" x2=".82" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#EDFFCD"/><stop offset=".25" stop-color="#BAEFA4"/><stop offset=".57" stop-color="#537D78"/><stop offset="1" stop-color="#263773"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="4" x2="7" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3FFD4"/><stop offset=".30" stop-color="#D4F8B8"/><stop offset=".56" stop-color="#BAEFA4"/><stop offset="1" stop-color="#89CA9B"/>
+    </linearGradient>
+    <path id="bubble" d="M20 2.4C28.4 2.4 32.3 2.8 35.2 5.8c2.7 2.8 2.9 6.7 2.9 14.1 0 7.7-.3 11.6-3.2 14.5-2.8 2.8-7 3-14.9 3s-12.1-.2-14.9-3C2.2 31.5 1.9 27.6 1.9 19.9c0-7.4.2-11.3 2.9-14.1C7.7 2.8 11.6 2.4 20 2.4Z"/>
+  </defs>
+  <use href="#bubble" transform="translate(0 1)" fill="none" stroke="#090F35" stroke-width="3.1"/>
+  <use href="#bubble" fill="none" stroke="url(#rim)" stroke-width="2.5"/>
+  <path d="M5.45 10.45c1.16-4 4.71-5.97 11.03-6.08" fill="none" stroke="#F2FFD9" stroke-opacity=".72" stroke-width=".8" stroke-linecap="round"/>
+  <g transform="translate(4.8 4.8) scale(.95)" fill="url(#mint)" stroke="url(#mint)" stroke-width=".55" stroke-linejoin="round"><path d="M8.08 23.04 6.5 26l4.66-1.26a11 11 0 1 0-3.08-1.7z" fill="none" stroke="url(#mint)" stroke-width="2.6" stroke-linejoin="round"/><path d="M12.3 10.2c.4-.1.73-.1.93.31l1.13 2.61c.23.52-.32 1-.93 1.62-.2.2-.17.39-.05.59a8.46 8.46 0 0 0 3.54 3.12c.3.14.47.12.64-.08.38-.42.81-1 1.12-1.4.23-.29.44-.32.75-.17l2.41 1.18c.33.16.52.26.54.48.06.53-.26 1.51-.65 1.96-.57.63-1.43 1.01-2.31.93-1.22-.11-2.8-.68-4.42-1.73-2.07-1.35-3.68-3.18-4.3-5.12-.5-1.52-.22-2.76.51-3.6.34-.43.72-.64 1.09-.7z"/></g>
+</svg>

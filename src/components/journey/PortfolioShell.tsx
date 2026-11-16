@@ -6,6 +6,7 @@ import { servicePose } from '@/lib/journey/journey-model.mjs'
 
 const stops = ['Home', 'About', 'Services', 'Portfolio', 'Contact']
 const hashes = ['home', 'about', 'services', 'portfolio', 'contact']
+const socialIcons: Record<string, string> = { Instagram: 'instagram.svg', LinkedIn: 'linkedin.svg', WhatsApp: 'whatsapp.svg', Behance: 'behance.svg' }
 
 function Header() {
   return <header className="site-header">
@@ -31,11 +32,11 @@ function ProjectCard({ project }: { project: JourneyProject }) {
     </div> : <a className="project-open" href={project.external_link || '#'} target="_blank" rel="noopener noreferrer" aria-label={`View Project: ${project.title}`} data-open-project={project.id}>
       <div className="project-media" style={{ '--media-aspect': ai ? '16 / 9' : '4 / 5' } as CSSProperties}>
         <img src={project.cover} alt={project.title} width={ai ? 640 : 400} height={ai ? 360 : 500} loading="lazy" decoding="async" draggable={false} />
-        <span className="project-overlay">View Project <span aria-hidden="true">↗</span></span>
+        <span className="project-overlay">View Project</span>
       </div>
     </a>}
     <div className="project-meta"><h3>{project.title}</h3><span>{project.category}</span></div>
-    {ai && project.external_link && <a className="project-external" href={project.external_link} target="_blank" rel="noopener noreferrer">View on Behance ↗</a>}
+    {ai && project.external_link && <a className="project-external" href={project.external_link} target="_blank" rel="noopener noreferrer">View on Behance</a>}
   </article>
 }
 
@@ -45,14 +46,14 @@ function EmptyProjects({ unavailable, empty, page }: { unavailable: boolean; emp
 
 function Dialog() {
   return <dialog className="project-dialog" aria-labelledby="project-dialog-title"><div className="project-dialog-inner">
-    <button className="dialog-close text-link" type="button">← Back</button><div className="dialog-layout"><div className="dialog-media project-media" /><div className="dialog-copy"><p className="eyebrow dialog-category" /><h2 id="project-dialog-title" /><p className="dialog-description" /><a className="outlined-link dialog-external" target="_blank" rel="noopener noreferrer">View on Behance <span aria-hidden="true">↗</span></a></div></div>
+    <button className="dialog-close text-link" type="button">← Back</button><div className="dialog-layout"><div className="dialog-media project-media" /><div className="dialog-copy"><p className="eyebrow dialog-category" /><h2 id="project-dialog-title" /><p className="dialog-description" /><a className="outlined-link dialog-external" target="_blank" rel="noopener noreferrer">View on Behance</a></div></div>
   </div></dialog>
 }
 
 function JourneyFooter() {
   return <footer className="journey-controls"><button className="journey-back text-link" type="button">← <span>Home</span></button>
     <div className="journey-route" aria-label="Journey progress"><span className="station-number">02</span><div className="journey-route-track"><span className="journey-route-progress" />{stops.map((name, i) => <button key={name} type="button" data-station={i} aria-label={name} aria-current={i === 1 ? 'step' : 'false'}><span /></button>)}</div><span>05</span></div>
-    <button className="journey-next text-link" type="button"><span>Services</span> <span aria-hidden="true">↘</span></button>
+    <button className="journey-next text-link" type="button"><span>Services</span> <span aria-hidden="true">→</span></button>
   </footer>
 }
 
@@ -74,9 +75,9 @@ export default function PortfolioShell({ data, page = 'home', unavailable = fals
         </div></section>
         <section className="station work-station" id="portfolio" data-index="3" aria-labelledby="portfolio-title" aria-hidden="true" inert><div className="work-layout scene-content">
           <div className="work-heading"><div><p className="eyebrow">{data.portfolioLabel}</p><h2 id="portfolio-title">{data.portfolioTitle}</h2></div><div className="gallery-controls"><span className="gallery-count" aria-live="polite">01 / {String(featured.length).padStart(2, '0')}</span><button className="round-button gallery-prev" type="button" aria-label="Previous project">←</button><button className="round-button gallery-next" type="button" aria-label="Next project">→</button></div></div>
-          <Filters data={data} /><div className="gallery-window" aria-label="Selected projects"><div className="gallery-track">{featured.map(project => <ProjectCard key={project.id} project={project} />)}</div></div><EmptyProjects unavailable={unavailable} empty={featured.length === 0} page={page} /><a className="outlined-link view-all" href="/projects">View All Projects <span aria-hidden="true">↗</span></a>
+          <Filters data={data} /><div className="gallery-window" aria-label="Selected projects"><div className="gallery-track">{featured.map(project => <ProjectCard key={project.id} project={project} />)}</div></div><EmptyProjects unavailable={unavailable} empty={featured.length === 0} page={page} /><a className="outlined-link view-all" href="/projects">View All Projects</a>
         </div></section>
-        <section className="station contact-station" id="contact" data-index="4" aria-labelledby="contact-title" aria-hidden="true" inert><div className="contact-layout scene-content"><p className="eyebrow">{data.contactLabel}</p><h2 id="contact-title">Let's Work <span>Together</span></h2><div className="social-links">{data.socials.map(social => <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer">{social.name} <span aria-hidden="true">↗</span></a>)}</div><p className="email-label">Email</p><a className="contact-email" href={`https://mail.google.com/mail/?view=cm&to=${data.email}`} target="_blank" rel="noopener noreferrer">{data.email}</a><p className="copyright">{data.copyright}</p></div></section>
+        <section className="station contact-station" id="contact" data-index="4" aria-labelledby="contact-title" aria-hidden="true" inert><div className="contact-layout scene-content"><p className="eyebrow">{data.contactLabel}</p><h2 id="contact-title">Let's Work <span>Together</span></h2><div className="social-links">{data.socials.map(social => <a key={social.name} className="social-link--bubble" href={social.url} target="_blank" rel="noopener noreferrer">{social.name}{socialIcons[social.name] && <img className="social-bubble-icon" src={`/journey/social/${socialIcons[social.name]}`} width="40" height="40" alt="" aria-hidden="true" decoding="async" draggable={false} />}</a>)}</div><p className="email-label">Email</p><a className="contact-email" href={`https://mail.google.com/mail/?view=cm&to=${data.email}`} target="_blank" rel="noopener noreferrer">{data.email}</a><p className="copyright">{data.copyright}</p></div></section>
       </div><JourneyFooter />
     </div></div></main> : <main className="projects-page"><a className="text-link back-to-portfolio" href="/#portfolio">← Portfolio</a><div className="projects-heading"><div><p className="eyebrow">{data.allProjectsLabel}</p><h1>{data.allProjectsTitle}</h1></div><span className="all-project-count">{allProjects.length} projects</span></div><Filters data={data} selected={selected} /><div className="all-project-grid">{allProjects.map(project => <ProjectCard key={project.id} project={project} />)}</div><EmptyProjects unavailable={unavailable} empty={allProjects.length === 0} page={page} /><p className="copyright">{data.copyright}</p></main>}
     <Dialog /><p className={`sr-only ${home ? 'station-announcement' : 'filter-announcement'}`} aria-live="polite">{home ? 'Home' : 'All Projects'}</p><MotionRuntime data={data} intro={home} />

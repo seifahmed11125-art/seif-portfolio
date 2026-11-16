@@ -64,7 +64,7 @@ export default function HeroMarkup() {
           <p className="reel-role"><span /> DESIGN &amp; VISUALS</p>
           <h1 id="home-title">Seif<br />{' '}El Din</h1>
           <p className="reel-sub hero-role">Graphic Designer &amp; Visual Creator</p>
-          <a href="#portfolio" data-station="3" className="reel-work">View my work <span aria-hidden="true">↗</span></a>
+          <a href="#portfolio" data-station="3" className="reel-work">View my work</a>
         </div>
         <div className="reel-statement" aria-hidden="true">
           <p className="reel-line">Creative<br />{' '}Designer</p>
@@ -74,7 +74,7 @@ export default function HeroMarkup() {
           <div className="reel-timeline" aria-hidden="true">
             <span className="reel-counter">01</span><div className="reel-progress"><i /></div><span>03</span>
           </div>
-          <a href="#about" data-station="1" className="reel-next">About me <span aria-hidden="true">↘</span></a>
+          <a href="#about" data-station="1" className="reel-next">About me</a>
         </div>
       </div>
     </section>

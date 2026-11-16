@@ -120,6 +120,10 @@
 .portfolio-experience .social-links>a{position:relative;z-index:1;pointer-events:auto}
 .portfolio-experience .social-links>a:hover{transform:translateY(-5px);background:#b9efa31b}
 .portfolio-experience .social-links span{color:var(--lime)}
+.portfolio-experience .social-links>a.social-link--bubble{gap:16px;padding:11px 16px}
+.portfolio-experience .social-bubble-icon{display:block;width:30px;height:30px;flex:none;object-fit:contain;pointer-events:none;transition:transform .2s var(--ease)}
+.portfolio-experience .social-link--bubble:active .social-bubble-icon{transform:scale(.96)}
+@media(hover:hover) and (pointer:fine){.portfolio-experience .social-link--bubble:hover .social-bubble-icon{transform:translateY(-1px) scale(1.06)}}
 .portfolio-experience .email-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#a7b2c5;margin-bottom:11px}
 .portfolio-experience .contact-email{font-size:clamp(12px,1.8vw,22px);line-height:1.6;overflow-wrap:anywhere;color:var(--paper);padding:7px 0}
 .portfolio-experience .contact-email:hover{color:var(--lime)}

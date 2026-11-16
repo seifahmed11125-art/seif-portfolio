@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Behance">
+  <defs>
+    <linearGradient id="rim" x1="0" y1="0" x2=".82" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#EDFFCD"/><stop offset=".25" stop-color="#BAEFA4"/><stop offset=".57" stop-color="#537D78"/><stop offset="1" stop-color="#263773"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="4" x2="7" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3FFD4"/><stop offset=".30" stop-color="#D4F8B8"/><stop offset=".56" stop-color="#BAEFA4"/><stop offset="1" stop-color="#89CA9B"/>
+    </linearGradient>
+    <path id="bubble" d="M20 2.4C28.4 2.4 32.3 2.8 35.2 5.8c2.7 2.8 2.9 6.7 2.9 14.1 0 7.7-.3 11.6-3.2 14.5-2.8 2.8-7 3-14.9 3s-12.1-.2-14.9-3C2.2 31.5 1.9 27.6 1.9 19.9c0-7.4.2-11.3 2.9-14.1C7.7 2.8 11.6 2.4 20 2.4Z"/>
+  </defs>
+  <use href="#bubble" transform="translate(0 1)" fill="none" stroke="#090F35" stroke-width="3.1"/>
+  <use href="#bubble" fill="none" stroke="url(#rim)" stroke-width="2.5"/>
+  <path d="M5.45 10.45c1.16-4 4.71-5.97 11.03-6.08" fill="none" stroke="#F2FFD9" stroke-opacity=".72" stroke-width=".8" stroke-linecap="round"/>
+  <g transform="translate(3.2 3.3) scale(1.02)" fill="url(#mint)" stroke="url(#mint)" stroke-width=".55" stroke-linejoin="round"><path fill-rule="evenodd" d="M3.8 7.6h7.66c3.24 0 5.08 1.62 5.08 4.24 0 1.53-.73 2.69-2.09 3.38 1.93.59 2.98 2.18 2.98 4.12 0 3.33-2.59 4.9-5.72 4.9H3.8zm3.75 3v3.68h3.47c1.39 0 1.99-.77 1.99-1.85 0-1.18-.82-1.83-2.2-1.83zm0 6.39v4.25h3.75c1.64 0 2.42-.74 2.42-2.06 0-1.48-.95-2.19-2.37-2.19zM20 8.49h7.03v1.89H20zm3.6 3.43c3.79 0 5.66 2.94 5.46 6.82h-8.06c.11 1.99.98 3.03 2.7 3.03 1.12 0 1.99-.6 2.3-1.43h2.87c-.72 2.78-2.61 4.13-5.28 4.13-3.68 0-5.99-2.51-5.99-6.26 0-3.58 2.43-6.29 6-6.29zm-.11 2.66c-1.33 0-2.23.83-2.46 2.06h4.67c-.16-1.32-.92-2.06-2.21-2.06z"/></g>
+</svg>

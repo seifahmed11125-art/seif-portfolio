@@ -72,7 +72,7 @@ export function mountApp(doc=document,win=window,data){
     external.href=safeUrl(project.external_link)??'#';
     external.hidden=!safeUrl(project.external_link);
     const onBehance=external.href.includes('behance.net');
-    external.textContent=onBehance?'View on Behance ↗':'View Project ↗';
+    external.textContent=onBehance?'View on Behance':'View Project';
     lastFocused=doc.activeElement;
     doc.documentElement.style.overflow='hidden';
     if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
@@ -108,7 +108,7 @@ export function mountApp(doc=document,win=window,data){
     media.className='project-media';media.style.setProperty('--media-aspect',projectAspect(project));
     const image=doc.createElement('img');image.src=project.cover;image.alt=project.title;
     image.loading='lazy';image.decoding='async';image.draggable=false;image.width=ai?640:400;image.height=ai?360:500;media.append(image);
-    const overlay=doc.createElement('span');overlay.className='project-overlay';overlay.textContent='View Project ↗';media.append(overlay);
+    const overlay=doc.createElement('span');overlay.className='project-overlay';overlay.textContent='View Project';media.append(overlay);
     link.append(media);
     article.append(link);
     }
@@ -119,7 +119,7 @@ export function mountApp(doc=document,win=window,data){
     if(ai&&safeUrl(project.external_link)){
       const external=doc.createElement('a');external.className='project-external';
       external.href=safeUrl(project.external_link)??'#';external.target='_blank';external.rel='noopener noreferrer';
-      external.textContent='View on Behance ↗';article.append(external);
+      external.textContent='View on Behance';article.append(external);
     }
     return article;
   }

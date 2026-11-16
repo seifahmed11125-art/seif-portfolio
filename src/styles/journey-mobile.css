@@ -303,4 +303,6 @@
   @media (prefers-reduced-motion: reduce) {
     html .portfolio-experience .director-reel[data-ready] { height: 100svh; }
   }
+  html .portfolio-experience .social-links > a.social-link--bubble { min-height: 44px; padding: 10px 12px; gap: 10px; transform: none; }
+  html .portfolio-experience .social-bubble-icon { width: 24px; height: 24px; }
 }

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="LinkedIn">
+  <defs>
+    <linearGradient id="rim" x1="0" y1="0" x2=".82" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#EDFFCD"/><stop offset=".25" stop-color="#BAEFA4"/><stop offset=".57" stop-color="#537D78"/><stop offset="1" stop-color="#263773"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="4" x2="7" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3FFD4"/><stop offset=".30" stop-color="#D4F8B8"/><stop offset=".56" stop-color="#BAEFA4"/><stop offset="1" stop-color="#89CA9B"/>
+    </linearGradient>
+    <path id="bubble" d="M20 2.4C28.4 2.4 32.3 2.8 35.2 5.8c2.7 2.8 2.9 6.7 2.9 14.1 0 7.7-.3 11.6-3.2 14.5-2.8 2.8-7 3-14.9 3s-12.1-.2-14.9-3C2.2 31.5 1.9 27.6 1.9 19.9c0-7.4.2-11.3 2.9-14.1C7.7 2.8 11.6 2.4 20 2.4Z"/>
+  </defs>
+  <use href="#bubble" transform="translate(0 1)" fill="none" stroke="#090F35" stroke-width="3.1"/>
+  <use href="#bubble" fill="none" stroke="url(#rim)" stroke-width="2.5"/>
+  <path d="M5.45 10.45c1.16-4 4.71-5.97 11.03-6.08" fill="none" stroke="#F2FFD9" stroke-opacity=".72" stroke-width=".8" stroke-linecap="round"/>
+  <g transform="translate(3.25 3.25) scale(1.03)" fill="url(#mint)" stroke="url(#mint)" stroke-width=".55" stroke-linejoin="round"><circle cx="7.8" cy="7.4" r="2.65" stroke-width=".25"/><path d="M7.8 13.1v10.6m6.25 0V13.1m.05 4.15c.45-2.45 2.03-4.54 4.88-4.54 3.37 0 5.25 2.11 5.25 5.68v5.31" fill="none" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>
