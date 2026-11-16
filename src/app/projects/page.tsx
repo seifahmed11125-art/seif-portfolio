@@ -1,15 +1,12 @@
-'use client'
+import PortfolioShell from '@/components/journey/PortfolioShell'
+import copy from '@/lib/journey/copy.json'
+import { loadPortfolioProjects } from '@/lib/journey/loadProjects'
+import '@/styles/journey.css'
 
-import PortfolioGrid from '@/components/PortfolioGrid'
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'All Projects — Seif El-Din' }
 
-export default function Projects() {
-  return (
-    <main className="pt-32">
-      <PortfolioGrid 
-        showFilters={true} 
-        title="All Projects" 
-        label="Projects"
-      />
-    </main>
-  )
+export default async function Projects({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+  const [{ projects, unavailable }, params] = await Promise.all([loadPortfolioProjects(), searchParams])
+  return <PortfolioShell data={{ ...copy, projects }} page="projects" unavailable={unavailable} category={params.category} />
 }

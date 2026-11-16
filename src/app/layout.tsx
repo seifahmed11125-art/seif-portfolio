@@ -1,18 +1,12 @@
 import type { Metadata } from 'next'
-import { DM_Sans } from 'next/font/google'
 import Providers from './providers'
-
-const dmSans = DM_Sans({ 
-  subsets: ['latin'],
-  weight: ['400', '500', '700']
-})
 
 export const metadata: Metadata = {
   title: 'Seif El-Din Ahmed — Portfolio',
-  description: 'Portfolio of Seif El-Din - Creative Designer specializing in brand identity, social media design, and visual storytelling.',
+  description: 'Seif El-Din — Graphic Designer & Visual Creator. Brand identity, social media designs, motion graphics and AI videos.',
   icons: {
-    icon: '/icon.png',
-    shortcut: '/icon.png',
+    icon: '/journey/logo.webp',
+    shortcut: '/journey/logo.webp',
   },
 }
 
@@ -22,13 +16,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={dmSans.className}>
+    <html lang="en">
       <head>
         <link
           rel="preload"
-          href="/fonts/MochiBoomDEMO.ttf"
+          href="/fonts/mochi.woff"
           as="font"
-          type="font/ttf"
+          type="font/woff"
           crossOrigin="anonymous"
         />
       </head>

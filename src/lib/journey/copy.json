@@ -1,0 +1,74 @@
+{
+  "name": "Seif El-Din",
+  "role": "Graphic Designer & Visual Creator",
+  "heroLabel": "DESIGN & MOTION",
+  "statement": "Design in motion.",
+  "aboutTitle": "about me",
+  "about": [
+    "With a deep focus on storytelling through design, I help brands build unique personalities that resonate with their audience.",
+    "My approach combines strategic thinking with bold aesthetics, ensuring that every project\u2014from a single social media post to a full brand identity\u2014delivers impact and value."
+  ],
+  "categories": [
+    "All",
+    "Brand Identity",
+    "Social Media Designs",
+    "Motion Graphics",
+    "AI Videos",
+    "Print Designs",
+    "Presentation Designs"
+  ],
+  "serviceLabel": "What I Do",
+  "serviceTitle": "Services",
+  "services": [
+    {
+      "name": "Brand Identity",
+      "description": "Defining unique brand personalities through strategic visual storytelling, bespoke typography, and cohesive color systems."
+    },
+    {
+      "name": "Social Media Designs",
+      "description": "Designing high-engagement digital content and scroll-stopping visuals that amplify brand presence across social ecosystems."
+    },
+    {
+      "name": "Motion Graphics",
+      "description": "Transforming static concepts into dynamic narratives through fluid animation and high-impact cinematic transitions."
+    },
+    {
+      "name": "AI Videos",
+      "description": "Creating AI-generated videos for brands, from product showcases and social ads to short cinematic stories."
+    },
+    {
+      "name": "Print Designs",
+      "description": "Delivering precision-crafted physical collateral, from luxury packaging to editorial layouts, that leave a lasting tactile impression."
+    },
+    {
+      "name": "Presentation Designs",
+      "description": "Elevating data and vision into persuasive, authority-driven pitch decks that ensure clarity and strategic impact."
+    }
+  ],
+  "portfolioTitle": "Selected Works",
+  "portfolioLabel": "Portfolio",
+  "allProjectsTitle": "All Projects",
+  "allProjectsLabel": "Projects",
+  "contactLabel": "Get In Touch",
+  "contactTitle": "Let's Work Together",
+  "email": "seifeldinahmed11125@gmail.com",
+  "socials": [
+    {
+      "name": "Instagram",
+      "url": "https://www.instagram.com/seif_eldin0/"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/seif-ahmed-a62b3a212/"
+    },
+    {
+      "name": "Behance",
+      "url": "https://www.behance.net/seifahmed11125"
+    },
+    {
+      "name": "WhatsApp",
+      "url": "https://wa.me/201126862871"
+    }
+  ],
+  "copyright": "\u00a9 2026 Seif El-Din. All rights reserved."
+}

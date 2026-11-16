@@ -1,16 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @font-face {
   font-family: 'Mochi Boom';
-  src: url('/fonts/MochiBoomDEMO.ttf') format('truetype');
+  src: url('/fonts/mochi.woff') format('woff');
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1cY2Tr4HNYRKj_T5AbA.woff2') format('woff2');
+  src: url('/fonts/montserrat.woff') format('woff');
   font-weight: 300 700;
   font-display: swap;
 }
