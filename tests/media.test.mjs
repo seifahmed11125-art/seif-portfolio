@@ -103,5 +103,26 @@ test('the restored intro is present in initial home markup and the branding is c
   assert.equal(doc.querySelector('.logo-intro img').getAttribute('src'), '/journey/logo.webp')
   assert.equal(doc.querySelector('.reel-role').textContent.trim(), 'DESIGN & VISUALS')
   assert.equal(doc.querySelector('.brand small').textContent, 'DESIGN & VISUALS')
+  assert.equal(doc.querySelector('#home-title').textContent.replace(/\s+/g,' ').trim(), 'Seif El Din')
+  assert.equal(doc.querySelector('.brand-name').textContent, 'Seif El Din')
+  assert.equal(doc.querySelector('.reel-line').textContent.replace(/\s+/g,' ').trim(), 'Creative Designer')
+  assert.equal(doc.querySelector('.signature').textContent, 'Creative Designer')
+  assert.ok(!doc.querySelector('.about-copy').textContent.includes('—'))
+  assert.equal(doc.querySelector('.about-portrait').getAttribute('width'), '1080')
+  assert.ok(doc.querySelector('.about-portrait').getAttribute('src').includes('portrait-hq.webp'))
   home.window.close()
+})
+
+test('the hero title is revealed once after loading and does not restart on resize', async()=>{
+  const f=fixture('home'),hero=f.doc.querySelector('#home')
+  try{
+    assert.equal(hero.dataset.entered,undefined)
+    let changes=0;const observer=new f.win.MutationObserver(records=>{changes+=records.filter(r=>r.attributeName==='data-entered').length})
+    observer.observe(hero,{attributes:true})
+    f.app.revealIntro();await Promise.resolve()
+    assert.equal(hero.dataset.entered,'true');assert.equal(changes,1)
+    f.app.resize();f.app.revealIntro();await Promise.resolve()
+    assert.equal(changes,1)
+    observer.disconnect()
+  }finally{f.close()}
 })

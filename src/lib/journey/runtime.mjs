@@ -46,7 +46,7 @@ export function mountApp(doc=document,win=window,data){
   }
   async function selectService(index){
     const next=(index+data.services.length)%data.services.length;
-    if(serviceFlipping){queuedService=next;return;}
+    if(serviceFlipping){queuedService=index;return;}
     if(next===serviceIndex)return;
     const deck=$('.service-deck'),outgoing=deck.querySelector('.service-current');
     const direction=index>serviceIndex?1:-1;
@@ -59,7 +59,7 @@ export function mountApp(doc=document,win=window,data){
     }
     deck.replaceChildren(outgoing,incoming,bottom);
     serviceFlipping=true;deck.setAttribute('aria-busy','true');
-    const frames=deckFrames(),options={duration:720,easing:'cubic-bezier(.22,.75,.22,1)',fill:'forwards'};
+    const frames=deckFrames(direction),options={duration:720,easing:'cubic-bezier(.22,.75,.22,1)',fill:'forwards'};
     // Three separate cards change places; the outgoing card keeps its own text.
     serviceAnimations=[outgoing.animate(frames.outgoing,options),incoming.animate(frames.incoming,options),bottom.animate(frames.bottom,options)];
     try{await Promise.all(serviceAnimations.map(animation=>animation.finished));}catch{}
@@ -383,6 +383,7 @@ export function mountApp(doc=document,win=window,data){
     openProject,
     closeProject,
     resize,
+    revealIntro:()=>heroScene?.revealIntro?.(),
     snapshot:()=>({station:activeStation,progress:controller.progress,target:controller.target,service:serviceIndex,flipping:serviceFlipping,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
     destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceAnimations.forEach(animation=>animation.cancel());if(dialog.open)closeProject();}
   };

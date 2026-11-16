@@ -47,7 +47,21 @@ export function stationOffset(index,height){return (clamp(index,1,4)-1)*1.2*heig
 export function galleryOffset(viewport,content,left,cardWidth){
   return clamp(viewport/2-left-cardWidth/2,Math.min(0,viewport-content),0);
 }
-export function deckFrames(){
+export function deckFrames(direction=1){
+  if(direction<0)return {
+    outgoing:[
+      {transform:'translate3d(0,0,2px) rotateZ(0deg)',offset:0},
+      {transform:'translate3d(20px,4px,-36px) rotateZ(2deg)',offset:.48},
+      {transform:'translate3d(32px,-24px,-64px) rotateZ(3deg)',offset:1}
+    ],
+    incoming:[
+      {transform:'translate3d(16px,-12px,-28px) rotateZ(1.5deg)',offset:0},
+      {transform:'translate3d(106%,-12%,-70px) rotateZ(6deg) rotateY(-10deg)',offset:.34},
+      {transform:'translate3d(106%,-5%,75px) rotateZ(7deg) rotateY(-12deg)',offset:.6},
+      {transform:'translate3d(0,0,2px) rotateZ(0deg)',offset:1}
+    ],
+    bottom:[{transform:'translate3d(32px,-24px,-64px) rotateZ(3deg)'},{transform:'translate3d(16px,-12px,-28px) rotateZ(1.5deg)'}]
+  };
   return {
     outgoing:[
       {transform:'translate3d(0,0,2px) rotateZ(0deg)',offset:0},

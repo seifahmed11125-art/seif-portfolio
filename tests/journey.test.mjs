@@ -48,7 +48,7 @@ test('gallery translation never exposes empty space before or after the cards', 
 test('previous and next services both shuffle to the right of the text', () => {
   for (const direction of [-1, 1]) {
     const frames = deckFrames(direction)
-    assert.ok(frames.outgoing[1].transform.includes('%'))
+    assert.ok([...frames.outgoing, ...frames.incoming].some(f=>f.transform.includes('106%')))
     assert.notDeepEqual(frames.outgoing, frames.incoming)
     assert.ok(![...frames.outgoing, ...frames.incoming].some(f => /180deg|360deg/.test(f.transform)))
     for (const frame of [...frames.outgoing, ...frames.incoming, ...frames.bottom]) {
@@ -56,6 +56,9 @@ test('previous and next services both shuffle to the right of the text', () => {
       assert.ok(x >= 0, 'A card must never move into the copy on the left')
     }
   }
+  assert.notDeepEqual(deckFrames(1), deckFrames(-1))
+  assert.ok(deckFrames(-1).incoming[1].transform.includes('-70px'))
+  assert.ok(deckFrames(-1).incoming[2].transform.includes('75px'))
 })
 
 test('AI videos stay landscape while design covers stay portrait', () => {

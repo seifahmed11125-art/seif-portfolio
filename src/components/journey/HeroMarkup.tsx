@@ -35,12 +35,12 @@ export default function HeroMarkup() {
         <div className="reel-guides" aria-hidden="true"><span /><span /><span /><span /></div>
         <div className="reel-intro">
           <p className="reel-role"><span /> DESIGN &amp; VISUALS</p>
-          <h1 id="home-title">Seif<br />{' '}El-Din<span>.</span></h1>
+          <h1 id="home-title">Seif<br />{' '}El Din</h1>
           <p className="reel-sub hero-role">Graphic Designer &amp; Visual Creator</p>
           <a href="#portfolio" data-station="3" className="reel-work">View my work <span aria-hidden="true">↗</span></a>
         </div>
         <div className="reel-statement" aria-hidden="true">
-          <p className="reel-line">Design in<br />{' '}motion<span>.</span></p>
+          <p className="reel-line">Creative<br />{' '}Designer</p>
         </div>
         <div className="reel-controls">
           <button type="button" className="reel-cue"><span className="reel-cue-arrow" aria-hidden="true">↓</span> <span className="reel-cue-text">Scroll to assemble</span></button>

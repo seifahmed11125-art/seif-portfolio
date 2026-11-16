@@ -28,6 +28,7 @@
 .portfolio-experience .brand{display:flex;align-items:center;gap:12px;min-height:44px}
 .portfolio-experience .brand img{width:30px;height:39px;object-fit:contain;filter:drop-shadow(0 0 12px #b9efa31f)}
 .portfolio-experience .brand>span{display:flex;flex-direction:column;gap:5px;font-size:12px}
+.portfolio-experience .brand-name{font:400 21px/1 Mochi,Arial,sans-serif;letter-spacing:-.02em}
 .portfolio-experience .brand small{font-size:8px;letter-spacing:.18em;color:var(--muted)}
 .portfolio-experience .site-header nav{display:flex;align-items:center;gap:18px}
 .portfolio-experience .site-header nav a{min-height:44px;display:flex;align-items:center;font-size:11px;padding:6px 7px;position:relative;color:#c6ceda9c;transition:color .3s}
@@ -55,7 +56,7 @@
 .portfolio-experience .about-copy p:not(.signature){font-size:clamp(13px,1.45vw,16px);line-height:1.9;color:#ccd2ddd9;margin-bottom:18px}
 .portfolio-experience .about-copy .signature{font:400 27px/1.2 Mochi,Arial,sans-serif;color:var(--lime);margin-top:25px}
 .portfolio-experience .content-scroll{overflow-y:auto;overscroll-behavior:contain}
-.portfolio-experience .about-portrait{position:absolute;right:-4%;top:-5%;width:57%;height:113%;object-fit:cover;object-position:center 20%;mask-image:radial-gradient(ellipse at 50% 49%,#000 25%,transparent 72%);opacity:.87;filter:saturate(.88);pointer-events:none}
+.portfolio-experience .about-portrait{position:absolute;right:-4%;top:50%;width:min(57%,720px);height:auto;aspect-ratio:1;transform:translateY(-50%);object-fit:contain;object-position:center;mask-image:radial-gradient(ellipse at 50% 49%,#000 43%,transparent 76%);opacity:1;pointer-events:none}
 .portfolio-experience .services-layout{display:grid;grid-template-columns:44% 51%;align-items:center;gap:5%;perspective:1200px}
 .portfolio-experience .services-index h2{margin:9px 0 26px}
 .portfolio-experience .service-list{display:grid;gap:1px}
@@ -159,20 +160,25 @@
 .portfolio-experience .dialog-description{font-size:13px;line-height:1.9;color:#bfc9d8;margin-bottom:28px;white-space:pre-line}
 .portfolio-experience .dialog-copy .outlined-link{margin-bottom:15px}
 .portfolio-experience .dialog-video-help{font-size:12px;color:var(--muted);margin-top:10px}
-.portfolio-experience .logo-intro{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:#0a0a0f;animation:logo-intro-exit .9s cubic-bezier(.76,0,.24,1) 2.2s both}
-.portfolio-experience .logo-intro-entry{width:clamp(150px,25vw,350px);animation:logo-intro-enter 1.2s cubic-bezier(.16,1,.3,1) both}
-.portfolio-experience .logo-intro-pulse{animation:logo-intro-pulse 2s ease-in-out infinite alternate}
-.portfolio-experience .logo-intro img{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 60px #b9efa34d);animation:logo-intro-turn 20s linear infinite}
-.portfolio-experience .logo-intro-track{position:relative;width:120px;height:1px;overflow:hidden;background:#b9efa326}
-.portfolio-experience .logo-intro-track>span{display:block;height:100%;background:#b9efa3;transform-origin:left;animation:logo-intro-progress 1.8s ease-in-out .3s both}
-@keyframes logo-intro-enter{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
-@keyframes logo-intro-pulse{from{transform:translateY(0) scale(1)}to{transform:translateY(-10px) scale(1.05)}}
-@keyframes logo-intro-turn{to{transform:rotate(360deg)}}
+ .portfolio-experience .logo-intro{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:#0a0a0f}
+.portfolio-experience .logo-intro[data-exiting=true]{animation:logo-intro-exit .65s cubic-bezier(.76,0,.24,1) both;pointer-events:none}
+.portfolio-experience .logo-intro-entry{position:relative;display:grid;place-items:center;width:clamp(112px,15vw,142px);aspect-ratio:1;animation:logo-intro-enter .7s cubic-bezier(.16,1,.3,1) both}
+.portfolio-experience .logo-intro-halo{position:absolute;inset:-45%;background:radial-gradient(circle,#b9efa31b,transparent 65%);pointer-events:none;animation:logo-intro-halo 1.35s ease-in-out both}
+.portfolio-experience .logo-intro-ring{position:absolute;inset:0;width:100%;height:100%;color:#b9efa3;overflow:visible}
+.portfolio-experience .logo-intro-ring circle{stroke:currentColor;stroke-opacity:.5;stroke-width:.6;stroke-dasharray:384;animation:logo-intro-draw 1.3s cubic-bezier(.4,0,.2,1) both;transform-origin:center;transform:rotate(-90deg)}
+.portfolio-experience .logo-intro-ring path{stroke:currentColor;stroke-opacity:.6;stroke-width:1;stroke-dasharray:256;animation:logo-intro-draw 1.15s .12s ease-out both}
+.portfolio-experience .logo-intro-mark{width:54%;animation:logo-intro-mark 1.35s cubic-bezier(.16,1,.3,1) both}
+.portfolio-experience .logo-intro img{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 15px #b9efa32b)}
+.portfolio-experience .logo-intro-track{position:relative;width:96px;height:2px;overflow:hidden;background:#b9efa31f}
+.portfolio-experience .logo-intro-track>span{display:block;height:100%;background:#b9efa3;transform-origin:left;animation:logo-intro-progress 1.35s cubic-bezier(.4,0,.2,1) both}
+@keyframes logo-intro-enter{from{opacity:0;transform:scale(.86) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes logo-intro-mark{0%{opacity:0;transform:translateY(8px) scale(.7) rotate(-8deg)}70%{opacity:1;transform:translateY(-2px) scale(1.035) rotate(1deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0deg)}}
+@keyframes logo-intro-draw{from{stroke-dashoffset:384;opacity:0}to{stroke-dashoffset:0;opacity:1}}
+@keyframes logo-intro-halo{0%{opacity:0;transform:scale(.7)}65%{opacity:1;transform:scale(1.12)}100%{opacity:.65;transform:scale(1)}}
 @keyframes logo-intro-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@keyframes logo-intro-exit{from{transform:translateY(0);visibility:visible}to{transform:translateY(-100%);visibility:hidden}}
+@keyframes logo-intro-exit{from{opacity:1;transform:translateY(0);visibility:visible}to{opacity:0;transform:translateY(-18px);visibility:hidden}}
 @media(prefers-reduced-motion:reduce){
- .portfolio-experience .logo-intro{animation-delay:.25s}
- .portfolio-experience .logo-intro-entry,.portfolio-experience .logo-intro-pulse,.portfolio-experience .logo-intro img{animation:none!important}
+ .portfolio-experience .logo-intro-entry,.portfolio-experience .logo-intro-mark,.portfolio-experience .logo-intro-ring circle,.portfolio-experience .logo-intro-ring path,.portfolio-experience .logo-intro-halo{animation:none!important}
  .portfolio-experience .logo-intro-track>span{animation:none!important;transform:scaleX(1)}
 }
 @media(max-width:900px){
@@ -297,7 +303,7 @@
  .portfolio-experience .about-copy{height:auto;max-height:none}
  .portfolio-experience .about-copy h2{margin-bottom:18px}
  .portfolio-experience .about-copy p:not(.signature){font-size:12px;line-height:1.75}
- .portfolio-experience .about-portrait{height:100%;top:0}
+ .portfolio-experience .about-portrait{height:100%;top:0;transform:none}
  .portfolio-experience .services-layout{overflow-x:clip;overflow-y:auto}
  .portfolio-experience .contact-layout{justify-content:flex-start}
  .portfolio-experience .contact-layout h2{font-size:44px;margin:15px 0 20px}

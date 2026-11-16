@@ -8,7 +8,7 @@ const hashes = ['home', 'about', 'services', 'portfolio', 'contact']
 
 function Header() {
   return <header className="site-header">
-    <a className="brand" href="/#home" data-station="0" aria-label="Seif El-Din — Home"><img src="/journey/logo.webp" alt="Seif El-Din Logo" width="30" height="39" /><span>Seif El-Din<small>DESIGN &amp; VISUALS</small></span></a>
+    <a className="brand" href="/#home" data-station="0" aria-label="Seif El Din Home"><img src="/journey/logo.webp" alt="Seif El Din Logo" width="30" height="39" /><span><span className="brand-name">Seif El Din</span><small>DESIGN &amp; VISUALS</small></span></a>
     <nav aria-label="Main navigation">{stops.map((name, i) => <a key={name} href={`/#${hashes[i]}`} data-station={i}>{name}</a>)}</nav>
   </header>
 }
@@ -64,7 +64,7 @@ export default function PortfolioShell({ data, page = 'home', unavailable = fals
       <div className="atmosphere" aria-hidden="true" /><canvas className="world" aria-hidden="true" /><div className="vignette" aria-hidden="true" />
       <div className="world-content" aria-label="Portfolio journey">
         <section className="station about-station" id="about" data-index="1" aria-labelledby="about-title"><div className="about-layout scene-content">
-          <img className="about-portrait" src="/journey/portrait.jpg" alt="Seif El-Din" width="548" height="1000" loading="lazy" decoding="async" />
+          <img className="about-portrait" src="/_next/image?url=%2Fjourney%2Fportrait-hq.webp&amp;w=1080&amp;q=95" srcSet={[640, 750, 1080].map(width => `/_next/image?url=%2Fjourney%2Fportrait-hq.webp&w=${width}&q=95 ${width}w`).join(', ')} sizes="(max-width: 560px) 260px, (max-width: 900px) 54vw, (max-width: 1440px) 52vw, 720px" alt="Seif El Din" width="1080" height="1080" loading="lazy" decoding="async" />
           <div className="about-copy content-scroll"><h2 id="about-title">{data.aboutTitle}</h2>{data.about.map(text => <p key={text}>{text}</p>)}<p className="signature">{data.statement}</p></div>
         </div></section>
         <section className="station services-station" id="services" data-index="2" aria-labelledby="services-title" aria-hidden="true" inert><div className="services-layout scene-content">

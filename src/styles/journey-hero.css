@@ -196,8 +196,9 @@
   color: var(--reel-mint);
 }
 
-.portfolio-experience .director-reel[data-ready] .reel-intro h1 {
-  animation: reel-type-in .85s cubic-bezier(.16,1,.3,1) both;
+.portfolio-experience .reel-intro h1 {opacity:0;transform:translate3d(0,18px,0)}
+.portfolio-experience .director-reel[data-entered=true] .reel-intro h1 {
+  animation: reel-type-in .7s cubic-bezier(.16,1,.3,1) both;
 }
 
 .portfolio-experience .reel-sub {
@@ -302,12 +303,12 @@
 
 @keyframes reel-type-in {
   from {
-  clip-path: inset(100% -8px 0);
-  transform: translateY(17px);
+  opacity:0;
+  transform: translate3d(0,18px,0);
   }
   to {
-  clip-path: inset(-8px);
-  transform: none;
+  opacity:1;
+  transform:translate3d(0,0,0);
   }
 }
 
@@ -391,8 +392,8 @@
   .portfolio-experience .reel-stage {
   position: relative;
   }
-  .portfolio-experience .director-reel[data-ready] .reel-intro h1 {
-  animation: none;
+  .portfolio-experience .director-reel[data-entered=true] .reel-intro h1 {
+  animation: none;opacity:1;transform:none;
   }
   .portfolio-experience .reel-cue,.portfolio-experience .reel-timeline {
   visibility: hidden;

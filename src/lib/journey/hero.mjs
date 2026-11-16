@@ -60,7 +60,11 @@ export function mountHeroScene(hero,doc=document,win=window){
   doc.addEventListener('visibilitychange',queue);
   reduced.addEventListener?.('change',measure);compact.addEventListener?.('change',measure);
   measure();
-  return {measure,destroy(){
+  function revealIntro(){
+    if(hero.dataset.entered==='true')return;
+    hero.dataset.entered='true';
+  }
+  return {measure,revealIntro,destroy(){
     win.cancelAnimationFrame(pending);observer?.disconnect();cue.removeEventListener('click',jump);
     win.removeEventListener('scroll',queue);win.removeEventListener('resize',measure);
     doc.removeEventListener('visibilitychange',queue);reduced.removeEventListener?.('change',measure);compact.removeEventListener?.('change',measure);
