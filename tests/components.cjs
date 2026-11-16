@@ -15,7 +15,9 @@ exports.component = function component(name) {
   } }).outputText
   const mod = new Module(filename, module)
   mod.filename = filename
-  mod.require = specifier => specifier.startsWith('./')
+  mod.require = specifier => specifier.startsWith('@/')
+    ? require(path.resolve(__dirname, '../src', specifier.slice(2)))
+    : specifier.startsWith('./')
     ? { default: component(specifier.slice(2)), __esModule: true }
     : require(specifier)
   mod._compile(compiled, filename)

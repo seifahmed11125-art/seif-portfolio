@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export default function LogoIntro({ onComplete, ready = true }: { onComplete: () => void; ready?: boolean }) {
+export default function LogoIntro({ onComplete, onExitStart, ready = true }: { onComplete: () => void; onExitStart?: () => void; ready?: boolean }) {
   const completed = useRef(false)
+  const exitStarted = useRef(false)
   const [minimumElapsed, setMinimumElapsed] = useState(false)
   const [exiting, setExiting] = useState(false)
   const finish = useCallback(() => {
@@ -25,9 +26,13 @@ export default function LogoIntro({ onComplete, ready = true }: { onComplete: ()
   useEffect(() => {
     if (!ready || !minimumElapsed) return
     setExiting(true)
+    if (!exitStarted.current) {
+      exitStarted.current = true
+      onExitStart?.()
+    }
     const fallback = window.setTimeout(finish, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 180 : 750)
     return () => window.clearTimeout(fallback)
-  }, [ready, minimumElapsed, finish])
+  }, [ready, minimumElapsed, finish, onExitStart])
 
   return <div className="logo-intro" data-exiting={exiting} role="status" aria-label="Loading portfolio" onAnimationEnd={event => {
     if (exiting && event.target === event.currentTarget) finish()

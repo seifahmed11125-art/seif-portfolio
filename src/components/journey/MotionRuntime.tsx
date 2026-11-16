@@ -9,6 +9,7 @@ export default function MotionRuntime({ data, intro = false }: { data: JourneyDa
   const [runtimeReady, setRuntimeReady] = useState(false)
   const appRef = useRef<{ destroy(): void; revealIntro(): void } | null>(null)
   const finishIntro = useCallback(() => setShowIntro(false), [])
+  const revealIntro = useCallback(() => appRef.current?.revealIntro(), [])
   useEffect(() => {
     let cancelled = false
     let app: { destroy(): void; revealIntro(): void } | undefined
@@ -24,5 +25,5 @@ export default function MotionRuntime({ data, intro = false }: { data: JourneyDa
   useEffect(() => {
     if (runtimeReady && !showIntro) appRef.current?.revealIntro()
   }, [runtimeReady, showIntro])
-  return showIntro ? <LogoIntro ready={runtimeReady} onComplete={finishIntro} /> : null
+  return showIntro ? <LogoIntro ready={runtimeReady} onExitStart={revealIntro} onComplete={finishIntro} /> : null
 }

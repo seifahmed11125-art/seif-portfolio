@@ -110,6 +110,7 @@ test('the restored intro is present in initial home markup and the branding is c
   assert.ok(!doc.querySelector('.about-copy').textContent.includes('—'))
   assert.equal(doc.querySelector('.about-portrait').getAttribute('width'), '1080')
   assert.ok(doc.querySelector('.about-portrait').getAttribute('src').includes('portrait-hq.webp'))
+  assert.deepEqual([...doc.querySelectorAll('.service-card')].map(card=>Number(card.dataset.serviceId)),copy.services.map((_,index)=>index))
   home.window.close()
 })
 

@@ -47,6 +47,8 @@ export function stationOffset(index,height){return (clamp(index,1,4)-1)*1.2*heig
 export function galleryOffset(viewport,content,left,cardWidth){
   return clamp(viewport/2-left-cardWidth/2,Math.min(0,viewport-content),0);
 }
+export function serviceStackOrder(active,count){return Array.from({length:count},(_,slot)=>(active+slot)%count);}
+export function servicePose(slot){return 'translate3d('+(slot*10)+'px,'+(-slot*6)+'px,'+(2-slot*30)+'px) rotateZ('+(slot*.8)+'deg)';}
 export function deckFrames(direction=1){
   if(direction<0)return {
     outgoing:[

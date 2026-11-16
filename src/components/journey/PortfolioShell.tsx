@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import HeroMarkup from './HeroMarkup'
 import MotionRuntime from './MotionRuntime'
 import type { JourneyData, JourneyProject } from '@/lib/journey/types'
+import { servicePose } from '@/lib/journey/journey-model.mjs'
 
 const stops = ['Home', 'About', 'Services', 'Portfolio', 'Contact']
 const hashes = ['home', 'about', 'services', 'portfolio', 'contact']
@@ -69,7 +70,7 @@ export default function PortfolioShell({ data, page = 'home', unavailable = fals
         </div></section>
         <section className="station services-station" id="services" data-index="2" aria-labelledby="services-title" aria-hidden="true" inert><div className="services-layout scene-content">
           <div className="services-index"><p className="eyebrow">{data.serviceLabel}</p><h2 id="services-title">{data.serviceTitle}</h2><div className="service-list" aria-label="Specialties">{data.services.map((service, i) => <button key={service.name} className="service-tab" type="button" data-service={i} aria-pressed={i === 0}><span>0{i + 1}</span>{service.name}</button>)}</div></div>
-          <div className="deck-space" aria-label="Service cards"><div className="deck-shadow" aria-hidden="true" /><div className="service-deck" aria-live="polite">{data.services.slice(0, 3).map((service, i) => <article key={service.name} className={`service-card service-${['current', 'under', 'bottom'][i]}`} data-service-id={i} aria-hidden={i !== 0}><span className="service-number">0{i + 1} / 06</span><h3>{service.name}</h3><p>{service.description}</p></article>)}</div><div className="deck-controls"><button className="round-button service-prev" type="button" aria-label="Previous service">←</button><button className="round-button service-next" type="button" aria-label="Next service">→</button></div></div>
+          <div className="deck-space" aria-label="Service cards"><div className="deck-shadow" aria-hidden="true" /><div className="service-deck" aria-live="polite">{data.services.map((service, i) => <article key={service.name} className={`service-card service-${i === 0 ? 'current' : i === 1 ? 'under' : 'bottom'}`} data-service-id={i} data-service-slot={i} style={{ transform: servicePose(i) }} aria-hidden={i !== 0}><span className="service-number">0{i + 1} / 06</span><h3>{service.name}</h3><p>{service.description}</p></article>)}</div><div className="deck-controls"><button className="round-button service-prev" type="button" aria-label="Previous service">←</button><button className="round-button service-next" type="button" aria-label="Next service">→</button></div></div>
         </div></section>
         <section className="station work-station" id="portfolio" data-index="3" aria-labelledby="portfolio-title" aria-hidden="true" inert><div className="work-layout scene-content">
           <div className="work-heading"><div><p className="eyebrow">{data.portfolioLabel}</p><h2 id="portfolio-title">{data.portfolioTitle}</h2></div><div className="gallery-controls"><span className="gallery-count" aria-live="polite">01 / {String(featured.length).padStart(2, '0')}</span><button className="round-button gallery-prev" type="button" aria-label="Previous project">←</button><button className="round-button gallery-next" type="button" aria-label="Next project">→</button></div></div>

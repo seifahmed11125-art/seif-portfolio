@@ -9,7 +9,7 @@ for (const reduced of [false, true]) test(`logo intro completes once and release
   const dom = new JSDOM('<div id="test-root"></div>', { pretendToBeVisual: true })
   const oldWindow = globalThis.window, oldDocument = globalThis.document, oldAct = globalThis.IS_REACT_ACT_ENVIRONMENT
   globalThis.window = dom.window; globalThis.document = dom.window.document; globalThis.IS_REACT_ACT_ENVIRONMENT = true
-  const timers = new Map(); let sequence = 0, completed = 0
+  const timers = new Map(); let sequence = 0, completed = 0, revealed = 0
   dom.window.matchMedia = () => ({ matches: reduced })
   dom.window.setTimeout = (fn, delay) => { timers.set(++sequence, { fn, delay }); return sequence }
   dom.window.clearTimeout = id => timers.delete(id)
@@ -18,21 +18,25 @@ for (const reduced of [false, true]) test(`logo intro completes once and release
   document.documentElement.style.overflow = 'scroll'
   try {
     await act(async () => root.render(React.createElement(React.StrictMode, null,
-      React.createElement(component('LogoIntro'), { onComplete: () => { completed++ } }))))
+      React.createElement(component('LogoIntro'), { onComplete: () => { completed++ }, onExitStart: () => { revealed++ } }))))
     assert.equal(document.documentElement.style.overflow, 'hidden')
     assert.equal(timers.size, 1, 'Strict Mode must not leave duplicate completion timers')
     const minimum = [...timers.entries()][0]
     assert.ok(reduced ? minimum[1].delay <= 250 : minimum[1].delay < 1800)
     await act(async () => document.querySelector('.logo-intro img').dispatchEvent(new dom.window.Event('animationend', { bubbles: true })))
     assert.equal(completed, 0, 'Finishing the logo entrance must not dismiss the whole intro')
+    assert.equal(revealed, 0)
     await act(async () => { timers.delete(minimum[0]); minimum[1].fn() })
     assert.equal(document.querySelector('.logo-intro').dataset.exiting, 'true')
+    assert.equal(revealed, 1, 'The name must start appearing as the overlay begins fading')
+    assert.equal(completed, 0, 'The name must appear before the overlay finishes fading')
     const fallback = [...timers.values()][0]
     if (reduced) await act(async () => fallback.fn())
     else await act(async () => document.querySelector('.logo-intro').dispatchEvent(new dom.window.Event('animationend', { bubbles: true })))
     assert.equal(completed, 1)
     await act(async () => fallback.fn())
     assert.equal(completed, 1, 'Animation end and fallback must not complete twice')
+    assert.equal(revealed, 1)
   } finally {
     await act(async () => root.unmount())
     assert.equal(document.documentElement.style.overflow, 'scroll')
@@ -46,18 +50,21 @@ test('intro waits for the prepared runtime before dismissing', async () => {
   const old = { window: globalThis.window, document: globalThis.document, act: globalThis.IS_REACT_ACT_ENVIRONMENT }
   globalThis.window=dom.window;globalThis.document=dom.window.document;globalThis.IS_REACT_ACT_ENVIRONMENT=true
   dom.window.matchMedia=()=>({matches:false})
-  const timers=new Map();let sequence=0,completed=0
+  const timers=new Map();let sequence=0,completed=0,revealed=0
   dom.window.setTimeout=(fn,delay)=>{timers.set(++sequence,{fn,delay});return sequence}
   dom.window.clearTimeout=id=>timers.delete(id)
   const {createRoot}=require('react-dom/client'),{act}=React,root=createRoot(document.querySelector('#root'))
-  const render=ready=>React.createElement(component('LogoIntro'),{ready,onComplete:()=>{completed++}})
+  const render=ready=>React.createElement(component('LogoIntro'),{ready,onComplete:()=>{completed++},onExitStart:()=>{revealed++}})
   try{
     await act(async()=>root.render(render(false)))
     const [id,minimum]=[...timers.entries()][0]
     await act(async()=>{timers.delete(id);minimum.fn()})
-    assert.equal(document.querySelector('.logo-intro').dataset.exiting,'false');assert.equal(completed,0)
+    assert.equal(document.querySelector('.logo-intro').dataset.exiting,'false');assert.equal(completed,0);assert.equal(revealed,0)
     await act(async()=>root.render(render(true)))
     assert.equal(document.querySelector('.logo-intro').dataset.exiting,'true')
+    assert.equal(revealed,1);assert.equal(completed,0)
+    await act(async()=>root.render(render(true)))
+    assert.equal(revealed,1,'A rerender must not restart the hero reveal')
     await act(async()=>document.querySelector('.logo-intro').dispatchEvent(new dom.window.Event('animationend',{bubbles:true})))
     assert.equal(completed,1)
   }finally{

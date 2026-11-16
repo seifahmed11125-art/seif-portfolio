@@ -1,6 +1,7 @@
-import {JourneyController,cameraAt,stationPose,clamp,projectAspect,filterProjects,deckFrames,galleryOffset,journeyAtOffset,stationOffset} from './journey-model.mjs';
+import {JourneyController,cameraAt,stationPose,clamp,projectAspect,filterProjects,galleryOffset,journeyAtOffset,stationOffset} from './journey-model.mjs';
 import {mountHeroScene} from './hero.mjs';
 import {createInlinePlayers,createVideoMarkup} from './inline-video.mjs';
+import {createServiceDeck} from './service-deck.mjs';
 
 export function mountApp(doc=document,win=window,data){
   const root=doc.querySelector('.portfolio-experience')||doc;
@@ -21,60 +22,21 @@ export function mountApp(doc=document,win=window,data){
   const travel=$('.journey-scroll');
   const dialog=$('.project-dialog');
   const inlinePlayers=createInlinePlayers(root);
-  let activeStation=-1,serviceIndex=0,serviceFlipping=false,queuedService=null;
-  let serviceAnimations=[],galleryActive=0,galleryFilter='All',galleryProjects=filterProjects(data.projects,'All',4);
+  let activeStation=-1;
+  let galleryActive=0,galleryFilter='All',galleryProjects=filterProjects(data.projects,'All',4);
   let drag=null,suppressProjectClick=false,lastFocused=null,disposed=false;
   let width=win.innerWidth,height=win.innerHeight,previousFrame=0,lastPaint=0,frameId=0;
   let travelTop=0,travelBottom=0,journeyVisible=false,renderedProgress=-1,lastPointerX=-1,lastPointerY=-1,forcePaint=true,resizeObserver=null;
   const pointer={x:0,y:0,tx:0,ty:0};
   const safeUrl=value=>{try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password?u.href:null;}catch{return null;}};
   const setText=(element,value)=>{if(element)element.textContent=value??'';};
-  function selectServiceState(index){
-    serviceIndex=index;
+  const serviceDeck=createServiceDeck($('.service-deck'),data.services,{reduced,onSelect:index=>{
     $$('.service-tab').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
-  }
-  function serviceCard(index,position){
-    const face=doc.createElement('article');face.className='service-card service-'+position;
-    face.dataset.serviceId=String(index);face.setAttribute('aria-hidden',String(position!=='current'));
-    const number=doc.createElement('span');number.className='service-number';
-    face.append(number,doc.createElement('h3'),doc.createElement('p'));
-    const service=data.services[index];
-    setText(face.querySelector('.service-number'),String(index+1).padStart(2,'0')+' / '+String(data.services.length).padStart(2,'0'));
-    setText(face.querySelector('h3'),service.name);
-    setText(face.querySelector('p'),service.description);
-    return face;
-  }
-  async function selectService(index){
-    const next=(index+data.services.length)%data.services.length;
-    if(serviceFlipping){queuedService=index;return;}
-    if(next===serviceIndex)return;
-    const deck=$('.service-deck'),outgoing=deck.querySelector('.service-current');
-    const direction=index>serviceIndex?1:-1;
-    const incoming=serviceCard(next,'under');
-    const bottom=serviceCard((next+direction+data.services.length)%data.services.length,'bottom');
-    selectServiceState(next);
-    if(reduced||typeof outgoing.animate!=='function'){
-      incoming.className='service-card service-current';incoming.setAttribute('aria-hidden','false');
-      deck.replaceChildren(incoming,serviceCard((next+1)%data.services.length,'under'),serviceCard((next+2)%data.services.length,'bottom'));return;
-    }
-    deck.replaceChildren(outgoing,incoming,bottom);
-    serviceFlipping=true;deck.setAttribute('aria-busy','true');
-    const frames=deckFrames(direction),options={duration:720,easing:'cubic-bezier(.22,.75,.22,1)',fill:'forwards'};
-    // Three separate cards change places; the outgoing card keeps its own text.
-    serviceAnimations=[outgoing.animate(frames.outgoing,options),incoming.animate(frames.incoming,options),bottom.animate(frames.bottom,options)];
-    try{await Promise.all(serviceAnimations.map(animation=>animation.finished));}catch{}
-    if(disposed)return;
-    incoming.className='service-card service-current';incoming.setAttribute('aria-hidden','false');
-    bottom.className='service-card service-under';
-    outgoing.className='service-card service-bottom';outgoing.setAttribute('aria-hidden','true');
-    serviceAnimations.forEach(animation=>animation.cancel());serviceAnimations=[];
-    deck.replaceChildren(incoming,bottom,outgoing);
-    serviceFlipping=false;deck.removeAttribute('aria-busy');
-    if(queuedService!==null){const queued=queuedService;queuedService=null;if(queued!==serviceIndex)selectService(queued);}
-  }
+  }});
+  const selectService=index=>serviceDeck.select(index);
   $$('.service-tab').forEach(button=>listen(button,'click',()=>selectService(Number(button.dataset.service))));
-  listen($('.service-prev'),'click',()=>selectService(serviceIndex-1));
-  listen($('.service-next'),'click',()=>selectService(serviceIndex+1));
+  listen($('.service-prev'),'click',()=>serviceDeck.move(-1));
+  listen($('.service-next'),'click',()=>serviceDeck.move(1));
 
   function closeProject(){
     doc.documentElement.style.overflow='';
@@ -300,7 +262,7 @@ export function mountApp(doc=document,win=window,data){
     if(!isHome||event.ctrlKey||event.metaKey||event.altKey||/INPUT|TEXTAREA|SELECT|VIDEO/.test(event.target.tagName))return;
     if(event.key==='Home'){event.preventDefault();goTo(0);}
     if(event.key==='End'){event.preventDefault();goTo(4);}
-    if(activeStation===2&&['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();selectService(serviceIndex+(event.key==='ArrowRight'?1:-1));}
+    if(activeStation===2&&['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();serviceDeck.move(event.key==='ArrowRight'?1:-1);}
     if(activeStation===3&&['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();galleryActive=clamp(galleryActive+(event.key==='ArrowRight'?1:-1),0,Math.max(galleryProjects.length-1,0));positionGallery();}
   });
 
@@ -384,8 +346,8 @@ export function mountApp(doc=document,win=window,data){
     closeProject,
     resize,
     revealIntro:()=>heroScene?.revealIntro?.(),
-    snapshot:()=>({station:activeStation,progress:controller.progress,target:controller.target,service:serviceIndex,flipping:serviceFlipping,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
-    destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceAnimations.forEach(animation=>animation.cancel());if(dialog.open)closeProject();}
+    snapshot:()=>({station:activeStation,progress:controller.progress,target:controller.target,service:serviceDeck.snapshot().target,flipping:serviceDeck.snapshot().running,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
+    destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceDeck.destroy();if(dialog.open)closeProject();}
   };
   return api;
 }
