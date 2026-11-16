@@ -2,11 +2,14 @@ import {JourneyController,cameraAt,stationPose,clamp,projectAspect,filterProject
 import {mountHeroScene} from './hero.mjs';
 import {createInlinePlayers,createVideoMarkup} from './inline-video.mjs';
 import {createServiceDeck} from './service-deck.mjs';
+import {MOBILE_LAYOUT_QUERY,nativeStationAt,nativeGalleryOffset,nativeGalleryIndex} from './responsive.mjs';
 
 export function mountApp(doc=document,win=window,data){
   const root=doc.querySelector('.portfolio-experience')||doc;
   const isHome=(root.dataset?.page||doc.body.dataset.page)==='home';
   const reduced=win.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false;
+  const mobileMedia=win.matchMedia(MOBILE_LAYOUT_QUERY);
+  let mobileLayout=mobileMedia.matches,nativeOffsets=[],headerHeight=0;
   const $=selector=>root.querySelector(selector);
   const $$=selector=>Array.from(root.querySelectorAll(selector));
   const listeners=[];
@@ -117,7 +120,7 @@ export function mountApp(doc=document,win=window,data){
     return article;
   }
 
-  function positionGallery(){
+  function positionGallery(scroll=true){
     const track=$('.gallery-track'),viewport=$('.gallery-window');
     if(!track||!viewport)return;
     const cards=Array.from(track.children);
@@ -126,7 +129,12 @@ export function mountApp(doc=document,win=window,data){
     const last=cards.at(-1),contentWidth=last?last.offsetLeft+last.offsetWidth:0;
     const offset=active?galleryOffset(viewport.clientWidth,contentWidth,active.offsetLeft,active.offsetWidth):0;
     track.dataset.offset=String(offset);
-    track.style.transform='translate3d('+offset+'px,0,0)';
+    track.style.transform=mobileLayout?'none':'translate3d('+offset+'px,0,0)';
+    if(mobileLayout&&scroll){
+      const left=nativeGalleryOffset(active?.offsetLeft??0,viewport.clientWidth,contentWidth);
+      if(typeof viewport.scrollTo==='function')viewport.scrollTo({left,behavior:reduced?'instant':'smooth'});
+      else viewport.scrollLeft=left;
+    }
     cards.forEach((card,i)=>{
       card.style.transform='none';
       card.style.opacity='1';
@@ -160,8 +168,14 @@ export function mountApp(doc=document,win=window,data){
   listen($('.gallery-next'),'click',()=>{galleryActive=Math.min(galleryProjects.length-1,galleryActive+1);positionGallery();});
   if(isHome){
     const viewport=$('.gallery-window'),track=$('.gallery-track');
+    listen(viewport,'scroll',()=>{
+      if(!mobileLayout)return;
+      const cards=Array.from(track.children),last=cards.at(-1);
+      galleryActive=nativeGalleryIndex(viewport.scrollLeft,viewport.clientWidth,last?last.offsetLeft+last.offsetWidth:0,cards,galleryActive);
+      positionGallery(false);
+    },{passive:true});
     listen(viewport,'pointerdown',event=>{
-      if(event.button!==0||event.target.closest('video'))return;
+      if(mobileLayout||event.button!==0||event.target.closest('video'))return;
       drag={startX:event.clientX,startY:event.clientY,lastX:event.clientX,offset:Number(track.dataset.offset??0),moved:false,pointerId:event.pointerId};
     });
     listen(win,'pointermove',event=>{
@@ -200,6 +214,16 @@ export function mountApp(doc=document,win=window,data){
     setText($('.station-announcement'),names[index]);
   }
   function updateJourney(force=false){
+    if(mobileLayout){
+      const selected=nativeStationAt(win.scrollY,nativeOffsets,height);
+      if(selected!==activeStation)stations.forEach(station=>station.classList.toggle('is-current',Number(station.dataset.index)===selected));
+      enterStation(selected);
+      controller.progress=controller.target=selected;controller.velocity=0;
+      shell.dataset.direction=controller.direction>0?'forward':'backward';
+      shell.dataset.progress=String(selected);
+      $('.journey-route-progress').style.transform='scaleX('+selected/4+')';
+      return;
+    }
     const progress=controller.progress;
     const selected=win.scrollY<travelTop-height*.45?0:clamp(Math.round(progress),1,4);
     const selectedChanged=selected!==activeStation;
@@ -224,17 +248,19 @@ export function mountApp(doc=document,win=window,data){
     if(!isHome||dialog.open)return;
     const selected=clamp(index,0,4);
     if(hash)win.history.replaceState({},'','#'+hashes[selected]);
-    win.scrollTo({top:selected===0?0:travelTop+stationOffset(selected,height),behavior:reduced||instant?'instant':'smooth'});
+    const top=selected===0?0:mobileLayout?Math.max(0,nativeOffsets[selected]-headerHeight-12):travelTop+stationOffset(selected,height);
+    win.scrollTo({top,behavior:reduced||instant?'instant':'smooth'});
     syncScroll();
   }
-  function requestFrame(){if(isHome&&!disposed&&!frameId&&!doc.hidden)frameId=win.requestAnimationFrame(frame);}
+  function requestFrame(){if(isHome&&!mobileLayout&&!disposed&&!frameId&&!doc.hidden)frameId=win.requestAnimationFrame(frame);}
   let previousScroll=win.scrollY;
   function syncScroll(){
     if(!isHome)return;
     const y=win.scrollY,delta=y-previousScroll;previousScroll=y;
+    if(delta)controller.direction=Math.sign(delta);
+    if(mobileLayout){updateJourney();return;}
     journeyVisible=y+height>travelTop&&y<travelBottom;
     controller.goTo(journeyAtOffset(y-travelTop,height));
-    if(delta)controller.direction=Math.sign(delta);
     if(reduced||!journeyVisible){controller.progress=controller.target;controller.velocity=0;renderedProgress=-1;}
     if(y<travelTop-height*.45)enterStation(0);
     if(journeyVisible)requestFrame();
@@ -272,17 +298,36 @@ export function mountApp(doc=document,win=window,data){
   const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   const field=isHome?Array.from({length:1500},()=>({x:(random()-.5)*130,z:random()*405-35,seed:random()})):[];
   function resize(){
-    width=shell?.clientWidth||win.innerWidth;height=shell?.clientHeight||win.innerHeight;
+    const changed=mobileLayout!==mobileMedia.matches;
+    mobileLayout=mobileMedia.matches;
+    root.dataset.layout=mobileLayout?'mobile':'desktop';
+    width=shell?.clientWidth||win.innerWidth;height=mobileLayout?win.innerHeight:shell?.clientHeight||win.innerHeight;
     dpr=Math.min(win.devicePixelRatio||1,1.25);
-    if(canvas){canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);}
+    if(canvas){canvas.width=mobileLayout?1:Math.round(width*dpr);canvas.height=mobileLayout?1:Math.round(height*dpr);}
+    if(changed){drag=null;suppressProjectClick=false;$('.gallery-track')?.classList.remove('is-dragging');}
     positionGallery();
     if(isHome){
+      headerHeight=$('.site-header').offsetHeight;
       travelTop=win.scrollY+travel.getBoundingClientRect().top;
       travelBottom=travelTop+travel.offsetHeight;
+      if(mobileLayout){
+        win.cancelAnimationFrame(frameId);frameId=0;previousFrame=0;
+        stations.forEach(station=>{
+          station.style.visibility='visible';station.style.opacity='1';station.style.transform='none';
+          station.inert=false;station.setAttribute('aria-hidden','false');
+        });
+      }else if(changed){controller.progress=controller.target=journeyAtOffset(win.scrollY-travelTop,height);controller.velocity=0;}
+      nativeOffsets=[0,...stations.map(station=>win.scrollY+station.getBoundingClientRect().top)];
+      if(changed&&activeStation>=0){
+        goTo(activeStation,false,true);
+        if(!mobileLayout){controller.progress=controller.target;controller.velocity=0;}
+      }
       forcePaint=true;syncScroll();updateJourney(true);
     }
   }
   listen(win,'resize',resize);
+  mobileMedia.addEventListener?.('change',resize);
+  listeners.push(()=>mobileMedia.removeEventListener?.('change',resize));
   function paintField(time){
     const camera=cameraAt(controller.progress),focal=width*.81,center=height*.49;
     const drift=reduced?0:time*.25;
@@ -306,7 +351,7 @@ export function mountApp(doc=document,win=window,data){
   }
   function frame(now){
     frameId=0;
-    if(disposed||doc.hidden||!journeyVisible||dialog.open){previousFrame=0;return;}
+    if(disposed||mobileLayout||doc.hidden||!journeyVisible||dialog.open){previousFrame=0;return;}
     const dt=previousFrame?Math.min((now-previousFrame)/1000,.032):.016;
     previousFrame=now;
     if(!reduced)controller.advance(dt);
@@ -346,7 +391,7 @@ export function mountApp(doc=document,win=window,data){
     closeProject,
     resize,
     revealIntro:()=>heroScene?.revealIntro?.(),
-    snapshot:()=>({station:activeStation,progress:controller.progress,target:controller.target,service:serviceDeck.snapshot().target,flipping:serviceDeck.snapshot().running,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
+    snapshot:()=>({layout:mobileLayout?'mobile':'desktop',station:activeStation,progress:controller.progress,target:controller.target,service:serviceDeck.snapshot().target,flipping:serviceDeck.snapshot().running,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
     destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceDeck.destroy();if(dialog.open)closeProject();}
   };
   return api;

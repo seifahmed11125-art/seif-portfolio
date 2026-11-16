@@ -1,9 +1,12 @@
 import PortfolioShell from '@/components/journey/PortfolioShell'
+import type { Viewport } from 'next'
 import copy from '@/lib/journey/copy.json'
 import { loadPortfolioProjects } from '@/lib/journey/loadProjects'
 import '@/styles/journey.css'
+import '@/styles/journey-mobile.css'
 
 export const dynamic = 'force-dynamic'
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover' }
 export const metadata = { title: 'All Projects — Seif El Din' }
 
 export default async function Projects({ searchParams }: { searchParams: Promise<{ category?: string }> }) {

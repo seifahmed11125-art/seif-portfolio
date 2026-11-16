@@ -10,11 +10,17 @@ The About portrait uses the original 1080px source encoded losslessly, with resp
 
 AI videos start inline on the first play-button activation. They do not open a dialog, and the separate Behance link remains below each player. No video source is assigned until playback is requested. Starting another video pauses the previous player, including when using native controls; leaving Portfolio, filtering or unmounting pauses/releases playback. A failed request offers an inline retry.
 
+## Mobile layout
+
+Phones up to 900px and touch tablets up to 1100px use native document flow for the journey sections. All content stays visible and accessible; section heights follow their content rather than a pinned screen or nested vertical scrollers. The original hero assembly remains scroll-driven, with separate portrait and short-landscape compositions. Header navigation targets measured section positions and accounts for its own height. Resizing across the desktop/mobile breakpoint retains the current section.
+
+The mobile project strip uses native horizontal scrolling and snap positions, synchronized with its arrow buttons and counter. Design media remains 4:5 and AI video remains 16:9, including All Projects. The desktop camera sequence and canvas remain on desktop; the mobile canvas stays idle. Touch targets, readable type, dialog scrolling, safe-area padding, portrait image sizing and tablet project columns have dedicated responsive rules.
+
 ## Validation
 
-- `npm test`: 25 engine, native-scroll, branding, inline-video, service-order and logo-intro regression checks, including initial markup, first-click play, native controls, failure/retry and Strict Mode cleanup.
+- `npm test`: 44 engine, responsive, native-scroll, branding, inline-video, service-order and logo-intro regression checks, including initial markup, first-click play, native controls, failure/retry and Strict Mode cleanup. Responsive checks cover 12 portrait/landscape viewport configurations from 320px phones to 1024px touch tablets, native navigation and swiping, last-card selection, rotation and desktop restoration. Supplied DOM geometry and CSS cascade checks do not measure pixel layout.
 - `npm run build`: production compilation and TypeScript validation pass on Next 15.5.15. The build reports 103 kB first-load JavaScript for each public route, plus the small motion runtime loaded after hydration.
-- 42 additional DOM/model interaction checks passed against the actual React-rendered shell, including simulated desktop/mobile contexts, service swaps, galleries, dialogs, native scroll, social anchors, idle rendering and mount cleanup.
+- 42 additional DOM/model interaction checks passed against the actual React-rendered shell, in desktop contexts, including service swaps, galleries, dialogs, native scroll, social anchors, idle rendering and mount cleanup.
 - A read using the existing public database key returned all 14 projects and both AI video URLs. No database rows or storage objects were changed during verification.
 - Browser layout, mobile device behavior and actual frame rate were not measured because managed browser control was unavailable. Model/DOM tests do not establish visual smoothness on every device.
 

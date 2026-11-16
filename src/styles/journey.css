@@ -181,121 +181,11 @@
  .portfolio-experience .logo-intro-entry,.portfolio-experience .logo-intro-mark,.portfolio-experience .logo-intro-ring circle,.portfolio-experience .logo-intro-ring path,.portfolio-experience .logo-intro-halo{animation:none!important}
  .portfolio-experience .logo-intro-track>span{animation:none!important;transform:scaleX(1)}
 }
-@media(max-width:900px){
- .portfolio-experience .site-header{padding:19px 25px}.portfolio-experience .site-header nav{gap:7px}
- .portfolio-experience .scene-content{inset:110px 5% 112px}.portfolio-experience .about-copy{width:51%}
- .portfolio-experience .about-copy p:not(.signature){font-size:13px}
- .portfolio-experience .about-portrait{right:-9%;width:60%}
- .portfolio-experience .services-layout{grid-template-columns:43% 53%;gap:4%}
- .portfolio-experience .service-card{padding:25px}.portfolio-experience .service-card p{font-size:12px}
- .portfolio-experience .deck-space{height:330px}.portfolio-experience .service-card h3{font-size:35px}
- .portfolio-experience .service-tab{font-size:11px;gap:9px}
- .portfolio-experience .work-layout{inset:110px 4.5% 107px}
- .portfolio-experience .contact-layout h2{font-size:clamp(60px,9vw,84px)}
- .portfolio-experience .social-links>a{padding:13px 15px;gap:12px}
- .portfolio-experience .journey-controls{left:25px;right:25px}
- .portfolio-experience .project-meta{display:block}.portfolio-experience .project-meta>span{display:block;text-align:left;max-width:none;margin-top:3px}
- .portfolio-experience .project-meta h3{font-size:11px}
- .portfolio-experience .project-dialog{width:calc(100vw - 40px)}.portfolio-experience .dialog-layout{gap:25px}
-}
-@media(max-width:560px){
- .portfolio-experience{--portrait-width:clamp(134px,min(54vw,calc((100svh - 455px)*.8)),220px)}
- .portfolio-experience .site-header{padding:14px 16px;gap:6px}
- .portfolio-experience .brand{gap:0}.portfolio-experience .brand img{width:24px;height:32px}.portfolio-experience .brand>span{display:none}
- .portfolio-experience .site-header nav{gap:0;flex:1;max-width:360px;justify-content:space-between}
- .portfolio-experience .site-header nav a{font-size:11px;min-width:43px;padding:6px 3px;justify-content:center}
- .portfolio-experience .site-header nav a:after{left:4px;right:4px}
- .portfolio-experience .outlined-link{min-height:43px;font-size:11px;padding:11px 17px}
- .portfolio-experience .scene-content{inset:91px 23px 100px}
- .portfolio-experience .about-layout{display:block}.portfolio-experience .about-copy{width:100%;height:100%;padding:8px 1px 5px}
- .portfolio-experience .about-copy h2{font-size:46px;line-height:1;margin-bottom:151px}
- .portfolio-experience .about-copy p:not(.signature){font-size:12px;line-height:1.85;margin-bottom:14px}
- .portfolio-experience .about-copy .signature{font-size:24px;margin-top:18px}
- .portfolio-experience .about-portrait{right:-36px;top:6px;width:260px;height:275px;object-position:center 14%;opacity:.85}
- .portfolio-experience .services-layout{display:flex;flex-direction:column;align-items:stretch;gap:0;inset:94px 23px 114px;overflow-y:auto;scrollbar-width:none}
- .portfolio-experience .services-index h2{font-size:44px;margin:6px 0 17px}
- .portfolio-experience .services-index>.eyebrow{font-size:10px}
- .portfolio-experience .service-list{grid-template-columns:1fr 1fr;gap:2px 12px;margin-bottom:29px}
- .portfolio-experience .service-tab{font-size:10px;min-height:31px;padding:4px 0;gap:6px}
- .portfolio-experience .service-tab>span{font-size:8px;min-width:15px}
- .portfolio-experience .service-tab[aria-pressed=true]{transform:translateX(3px)}
- .portfolio-experience .deck-space{height:235px;min-height:235px;width:calc(100% - 17px);margin-left:2px;transform:rotateY(-7deg) rotateX(2deg);margin-bottom:50px}
- .portfolio-experience .service-card{padding:21px}.portfolio-experience .service-number{font-size:9px;margin-bottom:19px}
- .portfolio-experience .service-card h3{font-size:30px;line-height:1.1;margin-bottom:13px}
- .portfolio-experience .service-card p{font-size:11px;line-height:1.8}
- .portfolio-experience .deck-controls{bottom:-48px}
- .portfolio-experience .work-layout{inset:96px 20px 96px;gap:12px}
- .portfolio-experience .work-heading{gap:10px}
- .portfolio-experience .work-heading h2{font-size:37px;max-width:220px;line-height:1}
- .portfolio-experience .work-heading .eyebrow{font-size:10px}
- .portfolio-experience .gallery-controls{gap:5px;flex-wrap:wrap;max-width:77px}
- .portfolio-experience .gallery-count{flex:1 0 100%;text-align:right;font-size:9px;margin:0}
- .portfolio-experience .round-button{width:33px;height:35px}
- .portfolio-experience .category-filters{flex-wrap:nowrap;gap:18px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
- .portfolio-experience .category-filter{font-size:10px;min-height:35px}
- .portfolio-experience .gallery-track{gap:20px}
- .portfolio-experience .project-meta h3{font-size:10px}.portfolio-experience .project-meta>span{font-size:9px}
- .portfolio-experience .project-external{font-size:9px}
- .portfolio-experience .project-play{width:36px;height:36px;font-size:12px}
- .portfolio-experience .view-all{font-size:10px}
- .portfolio-experience .contact-layout{inset:104px 24px 100px}
- .portfolio-experience .contact-layout>.eyebrow{font-size:10px}
- .portfolio-experience .contact-layout h2{font-size:clamp(49px,13vw,73px);margin:23px 0 30px}
- .portfolio-experience .social-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(100%,320px);margin-bottom:25px}
- .portfolio-experience .social-links>a{transform:none!important;padding:13px 15px;min-height:50px;font-size:10px}
- .portfolio-experience .email-label{font-size:9px;margin-bottom:6px}
- .portfolio-experience .contact-email{font-size:11px}
- .portfolio-experience .contact-layout .copyright{margin-top:29px;font-size:9px}
- .portfolio-experience .journey-controls{left:20px;right:20px;height:81px}
- .portfolio-experience .journey-controls>.text-link{font-size:10px;gap:8px}
- .portfolio-experience .journey-route{gap:6px;font-size:9px}
- .portfolio-experience .journey-route-track{width:105px}
- .portfolio-experience .journey-back>span{max-width:75px}
- .portfolio-experience .journey-next>span:first-child{max-width:72px;text-align:right}
- .portfolio-experience .projects-page{padding:110px 21px 35px}
- .portfolio-experience .projects-heading{gap:14px;align-items:flex-end}
- .portfolio-experience .projects-heading h1{font-size:46px;max-width:210px}
- .portfolio-experience .projects-heading .eyebrow{font-size:10px}
- .portfolio-experience .all-project-count{font-size:10px}
- .portfolio-experience .back-to-portfolio{font-size:11px;margin-bottom:18px}
- .portfolio-experience .all-project-grid{grid-template-columns:minmax(0,1fr);gap:32px}
- .portfolio-experience .all-project-grid>.project-card--video{grid-column:auto}
- .portfolio-experience .all-project-grid .project-meta h3{font-size:15px}
- .portfolio-experience .all-project-grid .project-meta>span{font-size:11px}
- .portfolio-experience .all-project-grid .project-external{font-size:11px}
- .portfolio-experience .projects-page>.category-filters{margin-bottom:25px}
- .portfolio-experience .project-dialog{width:calc(100vw - 28px);max-height:calc(100svh - 28px)}
- .portfolio-experience .project-dialog-inner{padding:18px}
- .portfolio-experience .dialog-close{margin-bottom:12px}
- .portfolio-experience .dialog-layout{display:flex;flex-direction:column;gap:22px;align-items:stretch}
- .portfolio-experience .dialog-media{width:100%;max-width:min(100%,calc(62svh * var(--media-aspect)))}
- .portfolio-experience .dialog-media img,.portfolio-experience .dialog-media video{max-height:62svh;aspect-ratio:var(--media-aspect)}
- .portfolio-experience .dialog-copy h2{font-size:32px;margin:11px 0 17px}
- .portfolio-experience .dialog-description{font-size:12px;line-height:1.85;margin-bottom:22px}
- .portfolio-experience .dialog-category{font-size:10px}
-}
-@media(max-height:700px) and (max-width:560px){
- .portfolio-experience .about-copy h2{margin-bottom:143px;font-size:43px}
- .portfolio-experience .about-copy p:not(.signature){font-size:11.5px;line-height:1.8}
- .portfolio-experience .about-copy .signature{font-size:22px;margin-top:12px}
- .portfolio-experience .about-portrait{height:252px;top:-5px}
- .portfolio-experience .services-layout{inset:86px 23px 95px}
- .portfolio-experience .service-list{margin-bottom:23px}
- .portfolio-experience .service-tab{min-height:28px;font-size:9px}
- .portfolio-experience .services-index h2{font-size:39px;margin-bottom:12px}
- .portfolio-experience .deck-space{height:214px;min-height:214px}
- .portfolio-experience .service-card{padding:18px}.portfolio-experience .service-number{margin-bottom:13px}
- .portfolio-experience .service-card h3{font-size:27px;margin-bottom:10px}
- .portfolio-experience .service-card p{font-size:10.5px;line-height:1.75}
- .portfolio-experience .contact-layout h2{font-size:47px;margin:18px 0 22px}
- .portfolio-experience .social-links{margin-bottom:17px}
- .portfolio-experience .contact-layout .copyright{margin-top:19px}
-}
 @media(prefers-reduced-motion:reduce){
  .portfolio-experience *,.portfolio-experience *:before,.portfolio-experience *:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
 
-@media(max-height:560px){
+@media(max-height:560px) and (min-width:901px) and (pointer:fine){
  .portfolio-experience .journey-shell{min-height:0}
  .portfolio-experience .site-header{padding-top:8px;padding-bottom:8px}
  .portfolio-experience .journey-controls{height:62px}
@@ -309,7 +199,7 @@
  .portfolio-experience .contact-layout h2{font-size:44px;margin:15px 0 20px}
  .portfolio-experience .contact-layout .copyright{margin-top:18px}
 }
-@media(max-height:560px) and (min-width:561px){
+@media(max-height:560px) and (min-width:901px) and (pointer:fine){
  .portfolio-experience .services-layout{grid-template-columns:43% 52%}
  .portfolio-experience .deck-space{height:270px;margin-bottom:60px}
  .portfolio-experience .service-card{padding:20px}
