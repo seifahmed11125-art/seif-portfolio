@@ -43,43 +43,23 @@ export default function AdminPage() {
     setLoginError('')
 
     const form = new FormData(event.currentTarget)
-    const username = String(form.get('username') ?? '').trim()
+    const username = String(form.get('username') ?? '').trim().toLowerCase()
     const password = String(form.get('password') ?? '')
     try {
-      // The public legacy password can only unlock an existing, verified admin session.
-      if (username.toLowerCase() === 'admin' && password === 'admin') {
-        if (session) {
-          const { data, error } = await supabase.auth.getUser()
-          if (!error && data.user?.id === session.user.id
-            && data.user.app_metadata.portfolio_admin === true
-            && data.user.app_metadata.portfolio_username === 'admin') {
-            setUnlockedUserId(data.user.id)
-            return
-          }
-        }
-        setLoginError('Sign in with your account password to enable quick unlock on this browser.')
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        setLoginError(result.error || 'Could not sign in. Please try again.')
         return
       }
 
-      if (username.toLowerCase() === 'admin') {
-        const response = await fetch('/api/admin/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: 'admin', password }),
-        })
-        const result = await response.json()
-        if (!response.ok) {
-          setLoginError(result.error || 'Could not sign in. Please try again.')
-          return
-        }
-        const { data, error } = await supabase.auth.setSession(result)
-        if (error) throw error
-        setUnlockedUserId(data.session?.user.id ?? null)
-      } else {
-        const { data, error } = await supabase.auth.signInWithPassword({ email: username, password })
-        if (error) setLoginError('Could not sign in. Check your username and password.')
-        else setUnlockedUserId(data.session?.user.id ?? null)
-      }
+      const { data, error } = await supabase.auth.setSession(result)
+      if (error || !data.session) throw new Error('Could not establish the admin session.')
+      setUnlockedUserId(data.session.user.id)
     } catch {
       setLoginError('Could not sign in. Please try again.')
     } finally {
@@ -165,7 +145,7 @@ export default function AdminPage() {
           <h1 className="font-display mb-6 text-center text-3xl text-white">Admin Login</h1>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="admin-username" className={labelClass}>Username or email</label>
+              <label htmlFor="admin-username" className={labelClass}>Username</label>
               <input
                 id="admin-username"
                 name="username"
