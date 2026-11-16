@@ -47,18 +47,17 @@ export function stationOffset(index,height){return (clamp(index,1,4)-1)*1.2*heig
 export function galleryOffset(viewport,content,left,cardWidth){
   return clamp(viewport/2-left-cardWidth/2,Math.min(0,viewport-content),0);
 }
-export function deckFrames(direction=1){
-  const d=direction<0?-1:1;
+export function deckFrames(){
   return {
     outgoing:[
       {transform:'translate3d(0,0,2px) rotateZ(0deg)',offset:0},
-      {transform:'translate3d('+(d*106)+'%,-9%,65px) rotateZ('+(d*9)+'deg) rotateY('+(-d*12)+'deg)',offset:.43},
-      {transform:'translate3d('+(d*106)+'%,-5%,-65px) rotateZ('+(d*6)+'deg)',offset:.65},
+      {transform:'translate3d(106%,-9%,65px) rotateZ(9deg) rotateY(-12deg)',offset:.43},
+      {transform:'translate3d(106%,-5%,-65px) rotateZ(6deg)',offset:.65},
       {transform:'translate3d(32px,-24px,-64px) rotateZ(3deg)',offset:1}
     ],
     incoming:[
       {transform:'translate3d(16px,-12px,-28px) rotateZ(1.5deg)',offset:0},
-      {transform:'translate3d(-2px,3px,8px) rotateZ(-.5deg)',offset:.72},
+      {transform:'translate3d(2px,3px,8px) rotateZ(.5deg)',offset:.72},
       {transform:'translate3d(0,0,2px) rotateZ(0deg)',offset:1}
     ],
     bottom:[{transform:'translate3d(32px,-24px,-64px) rotateZ(3deg)'},{transform:'translate3d(16px,-12px,-28px) rotateZ(1.5deg)'}]

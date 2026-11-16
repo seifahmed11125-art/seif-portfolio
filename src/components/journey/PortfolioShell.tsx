@@ -8,7 +8,7 @@ const hashes = ['home', 'about', 'services', 'portfolio', 'contact']
 
 function Header() {
   return <header className="site-header">
-    <a className="brand" href="/#home" data-station="0" aria-label="Seif El-Din — Home"><img src="/journey/logo.webp" alt="Seif El-Din Logo" width="30" height="39" /><span>Seif El-Din<small>DESIGN &amp; MOTION</small></span></a>
+    <a className="brand" href="/#home" data-station="0" aria-label="Seif El-Din — Home"><img src="/journey/logo.webp" alt="Seif El-Din Logo" width="30" height="39" /><span>Seif El-Din<small>DESIGN &amp; VISUALS</small></span></a>
     <nav aria-label="Main navigation">{stops.map((name, i) => <a key={name} href={`/#${hashes[i]}`} data-station={i}>{name}</a>)}</nav>
   </header>
 }
@@ -20,12 +20,19 @@ function Filters({ data, selected = 'All' }: { data: JourneyData; selected?: str
 function ProjectCard({ project }: { project: JourneyProject }) {
   const ai = project.category === 'AI Videos'
   return <article className={`project-card project-card--${ai ? 'video' : 'design'}`} data-project-id={project.id}>
-    <a className="project-open" href={project.external_link || '#'} target="_blank" rel="noopener noreferrer" aria-label={`View Project: ${project.title}`} data-open-project={project.id}>
+    {ai ? <div className="project-media inline-video" data-video-project={project.id} style={{ '--media-aspect': '16 / 9' } as CSSProperties}>
+      <video className="inline-video-player" data-inline-player="" poster={project.cover} playsInline preload="none" aria-label={project.title} hidden />
+      <button className="inline-video-trigger" type="button" data-play-video={project.id} aria-label={`Play ${project.title}`}>
+        <img src={project.cover} alt={project.title} width="640" height="360" loading="lazy" decoding="async" draggable={false} />
+        <span className="project-play" aria-hidden="true">▶</span>
+      </button>
+      <p className="inline-video-error" role="status" hidden>Could not play this video. Try again.</p>
+    </div> : <a className="project-open" href={project.external_link || '#'} target="_blank" rel="noopener noreferrer" aria-label={`View Project: ${project.title}`} data-open-project={project.id}>
       <div className="project-media" style={{ '--media-aspect': ai ? '16 / 9' : '4 / 5' } as CSSProperties}>
         <img src={project.cover} alt={project.title} width={ai ? 640 : 400} height={ai ? 360 : 500} loading="lazy" decoding="async" draggable={false} />
-        {ai && <span className="project-play" aria-hidden="true">▶</span>}<span className="project-overlay">View Project <span aria-hidden="true">↗</span></span>
+        <span className="project-overlay">View Project <span aria-hidden="true">↗</span></span>
       </div>
-    </a>
+    </a>}
     <div className="project-meta"><h3>{project.title}</h3><span>{project.category}</span></div>
     {ai && project.external_link && <a className="project-external" href={project.external_link} target="_blank" rel="noopener noreferrer">View on Behance ↗</a>}
   </article>
@@ -71,6 +78,6 @@ export default function PortfolioShell({ data, page = 'home', unavailable = fals
         <section className="station contact-station" id="contact" data-index="4" aria-labelledby="contact-title" aria-hidden="true" inert><div className="contact-layout scene-content"><p className="eyebrow">{data.contactLabel}</p><h2 id="contact-title">Let's Work <span>Together</span></h2><div className="social-links">{data.socials.map(social => <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer">{social.name} <span aria-hidden="true">↗</span></a>)}</div><p className="email-label">Email</p><a className="contact-email" href={`https://mail.google.com/mail/?view=cm&to=${data.email}`} target="_blank" rel="noopener noreferrer">{data.email}</a><p className="copyright">{data.copyright}</p></div></section>
       </div><JourneyFooter />
     </div></div></main> : <main className="projects-page"><a className="text-link back-to-portfolio" href="/#portfolio">← Portfolio</a><div className="projects-heading"><div><p className="eyebrow">{data.allProjectsLabel}</p><h1>{data.allProjectsTitle}</h1></div><span className="all-project-count">{allProjects.length} projects</span></div><Filters data={data} selected={selected} /><div className="all-project-grid">{allProjects.map(project => <ProjectCard key={project.id} project={project} />)}</div><EmptyProjects unavailable={unavailable} empty={allProjects.length === 0} page={page} /><p className="copyright">{data.copyright}</p></main>}
-    <Dialog /><p className={`sr-only ${home ? 'station-announcement' : 'filter-announcement'}`} aria-live="polite">{home ? 'Home' : 'All Projects'}</p><MotionRuntime data={data} />
+    <Dialog /><p className={`sr-only ${home ? 'station-announcement' : 'filter-announcement'}`} aria-live="polite">{home ? 'Home' : 'All Projects'}</p><MotionRuntime data={data} intro={home} />
   </div>
 }

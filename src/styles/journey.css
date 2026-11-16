@@ -99,6 +99,11 @@
 .portfolio-experience .project-overlay{position:absolute;inset:auto 13px 13px;display:flex;align-items:center;justify-content:space-between;padding:11px 13px;background:#080f1bea;border:1px solid #b9efa335;backdrop-filter:blur(10px);font-size:11px;color:var(--lime);opacity:0;transform:translateY(8px);transition:opacity .35s,transform .5s var(--ease)}
 .portfolio-experience .project-open:hover .project-overlay,.portfolio-experience .project-open:focus-visible .project-overlay{opacity:1;transform:none}
 .portfolio-experience .project-play{display:grid;place-items:center;position:absolute;left:50%;top:50%;width:45px;height:45px;border:1px solid #b9efa388;border-radius:50%;background:#0c162b9e;color:var(--lime);transform:translate(-50%,-50%);font:400 16px/1 Arial,sans-serif}
+.portfolio-experience .inline-video-player{position:absolute;inset:0;background:#000}
+.portfolio-experience .inline-video-trigger{position:absolute;inset:0;width:100%;height:100%;padding:0;text-align:inherit}
+.portfolio-experience .inline-video-trigger .project-play{pointer-events:none;transition:background .2s,scale .2s}
+.portfolio-experience .inline-video-trigger:hover .project-play{background:#161f6ecc;scale:1.05}
+.portfolio-experience .inline-video-error{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;padding:8px 10px;background:#080b16ed;color:var(--paper);font-size:11px;line-height:1.5;pointer-events:none}
 .portfolio-experience .project-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;margin-top:13px}
 .portfolio-experience .project-meta h3{font-family:Montserrat,Arial,sans-serif;font-size:12px;line-height:1.5;font-weight:400;min-width:0}
 .portfolio-experience .project-meta>span{font-size:9px;line-height:1.6;color:#b9efa3b6;max-width:45%;text-align:right}
@@ -142,7 +147,7 @@
 .portfolio-experience .all-project-grid .project-meta>span{font-size:11px}
 .portfolio-experience .all-project-grid .project-external{font-size:12px}
 .portfolio-experience .projects-page>.copyright{border-top:1px solid var(--line);padding-top:33px;margin-top:65px;text-align:center}
-.portfolio-experience .project-dialog{width:min(1100px,calc(100vw - 60px));max-height:calc(100svh - 60px);border:1px solid #b9efa344;background:#0b1221;color:var(--paper);padding:0;box-shadow:0 30px 100px #0008}
+.portfolio-experience .project-dialog{width:min(1100px,calc(100vw - 60px));max-height:calc(100svh - 60px);margin:auto;border:1px solid #b9efa344;background:#0b1221;color:var(--paper);padding:0;box-shadow:0 30px 100px #0008}
 .portfolio-experience .project-dialog::backdrop{background:#040812b8;backdrop-filter:blur(16px)}
 .portfolio-experience .project-dialog-inner{padding:28px}
 .portfolio-experience .dialog-close{margin-bottom:20px}
@@ -154,6 +159,22 @@
 .portfolio-experience .dialog-description{font-size:13px;line-height:1.9;color:#bfc9d8;margin-bottom:28px;white-space:pre-line}
 .portfolio-experience .dialog-copy .outlined-link{margin-bottom:15px}
 .portfolio-experience .dialog-video-help{font-size:12px;color:var(--muted);margin-top:10px}
+.portfolio-experience .logo-intro{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:#0a0a0f;animation:logo-intro-exit .9s cubic-bezier(.76,0,.24,1) 2.2s both}
+.portfolio-experience .logo-intro-entry{width:clamp(150px,25vw,350px);animation:logo-intro-enter 1.2s cubic-bezier(.16,1,.3,1) both}
+.portfolio-experience .logo-intro-pulse{animation:logo-intro-pulse 2s ease-in-out infinite alternate}
+.portfolio-experience .logo-intro img{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 0 60px #b9efa34d);animation:logo-intro-turn 20s linear infinite}
+.portfolio-experience .logo-intro-track{position:relative;width:120px;height:1px;overflow:hidden;background:#b9efa326}
+.portfolio-experience .logo-intro-track>span{display:block;height:100%;background:#b9efa3;transform-origin:left;animation:logo-intro-progress 1.8s ease-in-out .3s both}
+@keyframes logo-intro-enter{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes logo-intro-pulse{from{transform:translateY(0) scale(1)}to{transform:translateY(-10px) scale(1.05)}}
+@keyframes logo-intro-turn{to{transform:rotate(360deg)}}
+@keyframes logo-intro-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes logo-intro-exit{from{transform:translateY(0);visibility:visible}to{transform:translateY(-100%);visibility:hidden}}
+@media(prefers-reduced-motion:reduce){
+ .portfolio-experience .logo-intro{animation-delay:.25s}
+ .portfolio-experience .logo-intro-entry,.portfolio-experience .logo-intro-pulse,.portfolio-experience .logo-intro img{animation:none!important}
+ .portfolio-experience .logo-intro-track>span{animation:none!important;transform:scaleX(1)}
+}
 @media(max-width:900px){
  .portfolio-experience .site-header{padding:19px 25px}.portfolio-experience .site-header nav{gap:7px}
  .portfolio-experience .scene-content{inset:110px 5% 112px}.portfolio-experience .about-copy{width:51%}

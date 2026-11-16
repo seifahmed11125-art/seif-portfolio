@@ -45,12 +45,16 @@ test('gallery translation never exposes empty space before or after the cards', 
   }
 })
 
-test('a service-card shuffle moves separate faces without spinning them over', () => {
+test('previous and next services both shuffle to the right of the text', () => {
   for (const direction of [-1, 1]) {
     const frames = deckFrames(direction)
     assert.ok(frames.outgoing[1].transform.includes('%'))
     assert.notDeepEqual(frames.outgoing, frames.incoming)
     assert.ok(![...frames.outgoing, ...frames.incoming].some(f => /180deg|360deg/.test(f.transform)))
+    for (const frame of [...frames.outgoing, ...frames.incoming, ...frames.bottom]) {
+      const x = Number.parseFloat(frame.transform.match(/translate3d\(([^,]+)/)[1])
+      assert.ok(x >= 0, 'A card must never move into the copy on the left')
+    }
   }
 })
 

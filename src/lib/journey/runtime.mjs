@@ -1,5 +1,6 @@
 import {JourneyController,cameraAt,stationPose,clamp,projectAspect,filterProjects,deckFrames,galleryOffset,journeyAtOffset,stationOffset} from './journey-model.mjs';
 import {mountHeroScene} from './hero.mjs';
+import {createInlinePlayers,createVideoMarkup} from './inline-video.mjs';
 
 export function mountApp(doc=document,win=window,data){
   const root=doc.querySelector('.portfolio-experience')||doc;
@@ -19,6 +20,7 @@ export function mountApp(doc=document,win=window,data){
   const shell=$('.journey-shell');
   const travel=$('.journey-scroll');
   const dialog=$('.project-dialog');
+  const inlinePlayers=createInlinePlayers(root);
   let activeStation=-1,serviceIndex=0,serviceFlipping=false,queuedService=null;
   let serviceAnimations=[],galleryActive=0,galleryFilter='All',galleryProjects=filterProjects(data.projects,'All',4);
   let drag=null,suppressProjectClick=false,lastFocused=null,disposed=false;
@@ -57,7 +59,7 @@ export function mountApp(doc=document,win=window,data){
     }
     deck.replaceChildren(outgoing,incoming,bottom);
     serviceFlipping=true;deck.setAttribute('aria-busy','true');
-    const frames=deckFrames(direction),options={duration:720,easing:'cubic-bezier(.22,.75,.22,1)',fill:'forwards'};
+    const frames=deckFrames(),options={duration:720,easing:'cubic-bezier(.22,.75,.22,1)',fill:'forwards'};
     // Three separate cards change places; the outgoing card keeps its own text.
     serviceAnimations=[outgoing.animate(frames.outgoing,options),incoming.animate(frames.incoming,options),bottom.animate(frames.bottom,options)];
     try{await Promise.all(serviceAnimations.map(animation=>animation.finished));}catch{}
@@ -86,18 +88,14 @@ export function mountApp(doc=document,win=window,data){
   listen(dialog,'cancel',event=>{event.preventDefault();closeProject();});
   listen(dialog,'click',event=>{if(event.target===dialog)closeProject();});
   function openProject(project){
+    if(project.category==='AI Videos'){
+      const container=$$('[data-video-project]').find(element=>element.dataset.videoProject===project.id);
+      return inlinePlayers.play(container,safeUrl(project.video_url));
+    }
     const media=$('.dialog-media');
     media.replaceChildren();media.style.setProperty('--media-aspect',projectAspect(project));
-    const videoUrl=project.category==='AI Videos'?safeUrl(project.video_url):null;
-    if(videoUrl){
-      const video=doc.createElement('video');
-      video.controls=true;video.playsInline=true;video.preload='none';video.poster=project.cover;
-      video.src=videoUrl;video.setAttribute('aria-label',project.title);
-      media.append(video);
-    }else{
-      const image=doc.createElement('img');
-      image.src=project.cover;image.alt=project.title;media.append(image);
-    }
+    const image=doc.createElement('img');
+    image.src=project.cover;image.alt=project.title;media.append(image);
     setText($('.dialog-category'),project.category);
     setText($('#project-dialog-title'),project.title);
     setText($('.dialog-description'),(project.description??'').replace(/\\r\\n/g,'\n'));
@@ -112,6 +110,13 @@ export function mountApp(doc=document,win=window,data){
     $('.dialog-close').focus({preventScroll:true});
   }
   listen(root,'click',event=>{
+    const play=event.target.closest?.('[data-play-video]');
+    if(play&&root.contains(play)){
+      event.preventDefault();if(suppressProjectClick)return;
+      const project=data.projects.find(project=>project.id===play.dataset.playVideo);
+      if(project)inlinePlayers.play(play.closest('[data-video-project]'),safeUrl(project.video_url));
+      return;
+    }
     const link=event.target.closest?.('[data-open-project]');
     if(!link||!root.contains(link)||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
     event.preventDefault();
@@ -124,6 +129,8 @@ export function mountApp(doc=document,win=window,data){
     const article=doc.createElement('article');
     article.className='project-card project-card--'+(ai?'video':'design');
     article.dataset.projectId=project.id;
+    if(ai)article.append(createVideoMarkup(doc,project));
+    else {
     const link=doc.createElement('a');
     link.className='project-open';link.href=safeUrl(project.external_link)??'#';
     link.target='_blank';link.rel='noopener noreferrer';link.dataset.openProject=project.id;
@@ -132,14 +139,15 @@ export function mountApp(doc=document,win=window,data){
     media.className='project-media';media.style.setProperty('--media-aspect',projectAspect(project));
     const image=doc.createElement('img');image.src=project.cover;image.alt=project.title;
     image.loading='lazy';image.decoding='async';image.draggable=false;image.width=ai?640:400;image.height=ai?360:500;media.append(image);
-    if(ai){const play=doc.createElement('span');play.className='project-play';play.textContent='▶';play.setAttribute('aria-hidden','true');media.append(play);}
     const overlay=doc.createElement('span');overlay.className='project-overlay';overlay.textContent='View Project ↗';media.append(overlay);
     link.append(media);
+    article.append(link);
+    }
     const meta=doc.createElement('div');meta.className='project-meta';
     const title=doc.createElement('h3');title.textContent=project.title;
     const category=doc.createElement('span');category.textContent=project.category;
-    meta.append(title,category);article.append(link,meta);
-    if(ai){
+    meta.append(title,category);article.append(meta);
+    if(ai&&safeUrl(project.external_link)){
       const external=doc.createElement('a');external.className='project-external';
       external.href=safeUrl(project.external_link)??'#';external.target='_blank';external.rel='noopener noreferrer';
       external.textContent='View on Behance ↗';article.append(external);
@@ -167,6 +175,7 @@ export function mountApp(doc=document,win=window,data){
     if($('.gallery-next'))$('.gallery-next').disabled=galleryActive>=cards.length-1;
   }
   function updateFilter(category){
+    inlinePlayers.releaseAll();
     galleryFilter=data.categories.includes(category)?category:'All';
     $$('.category-filter').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.category===galleryFilter)));
     const selected=filterProjects(data.projects,galleryFilter,isHome?4:undefined);
@@ -190,7 +199,7 @@ export function mountApp(doc=document,win=window,data){
   if(isHome){
     const viewport=$('.gallery-window'),track=$('.gallery-track');
     listen(viewport,'pointerdown',event=>{
-      if(event.button!==0)return;
+      if(event.button!==0||event.target.closest('video'))return;
       drag={startX:event.clientX,startY:event.clientY,lastX:event.clientX,offset:Number(track.dataset.offset??0),moved:false,pointerId:event.pointerId};
     });
     listen(win,'pointermove',event=>{
@@ -213,6 +222,7 @@ export function mountApp(doc=document,win=window,data){
 
   function enterStation(index){
     if(index===activeStation)return;
+    if(index!==3)inlinePlayers.pauseAll();
     activeStation=index;
     $$('.site-header [data-station]').forEach(link=>{
       if(Number(link.dataset.station)===index)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');
@@ -374,7 +384,7 @@ export function mountApp(doc=document,win=window,data){
     closeProject,
     resize,
     snapshot:()=>({station:activeStation,progress:controller.progress,target:controller.target,service:serviceIndex,flipping:serviceFlipping,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
-    destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();serviceAnimations.forEach(animation=>animation.cancel());if(dialog.open)closeProject();}
+    destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceAnimations.forEach(animation=>animation.cancel());if(dialog.open)closeProject();}
   };
   return api;
 }

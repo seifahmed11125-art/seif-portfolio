@@ -34,7 +34,7 @@ export default function HeroMarkup() {
         </div>
         <div className="reel-guides" aria-hidden="true"><span /><span /><span /><span /></div>
         <div className="reel-intro">
-          <p className="reel-role"><span /> DESIGN &amp; MOTION</p>
+          <p className="reel-role"><span /> DESIGN &amp; VISUALS</p>
           <h1 id="home-title">Seif<br />{' '}El-Din<span>.</span></h1>
           <p className="reel-sub hero-role">Graphic Designer &amp; Visual Creator</p>
           <a href="#portfolio" data-station="3" className="reel-work">View my work <span aria-hidden="true">↗</span></a>
