@@ -7,11 +7,11 @@ export function createMobileTimeline(contentHeights,height,headerHeight,footerHe
   let cursor=0;
   const chapters=contentHeights.map((contentHeight,index)=>{
     const overflow=Math.max(0,contentHeight-available),start=cursor;
-    const readStart=start+height*.18,readEnd=readStart+overflow,leave=readEnd+height*.16;
-    const end=leave+(index<contentHeights.length-1?height*.95:0);
+    const readStart=start+height*.12,readEnd=readStart+overflow,leave=readEnd+height*.08;
+    const end=leave+(index<contentHeights.length-1?height*.82:0);
     cursor=end;
     return {index:index+1,start,readStart,readEnd,leave,end,overflow,
-      anchor:start+height*.09,top:headerHeight+20+Math.max(0,(available-contentHeight)/2)};
+      anchor:start+height*.06,top:headerHeight+20};
   });
   return {chapters,available,distance:cursor,scrollHeight:cursor+height,
     signature:[height,headerHeight,footerHeight,...contentHeights].join(':')};

@@ -84,20 +84,62 @@ export function fixture(width, height, { coarse = true, reduced = false, page = 
   }
 }
 
-const styles = ['journey.css', 'journey-hero.css', 'journey-mobile.css'].map(file => postcss.parse(fs.readFileSync(new URL('../../src/styles/' + file, import.meta.url))))
+export const sourceStyles = ['journey.css', 'journey-hero.css', 'journey-mobile.css'].map(file => postcss.parse(fs.readFileSync(new URL('../../src/styles/' + file, import.meta.url))))
+
+function specificity(selector) {
+  let score = 0, rest = selector
+  while (rest) {
+    const attribute = rest.match(/^\[(?:[^\]"']|"[^"]*"|'[^']*')*\]/)
+    const name = rest.match(/^[\w-]+/)
+    if (attribute) { score += 100; rest = rest.slice(attribute[0].length) }
+    else if (/^[.#]/.test(rest)) { const token = rest.match(/^[.#][\w-]+/); if (!token) break; score += rest[0] === '#' ? 10000 : 100; rest = rest.slice(token[0].length) }
+    else if (rest.startsWith(':')) {
+      const token = rest.match(/^:{1,2}[\w-]+/); if (!token) break
+      const pseudo = token[0]; rest = rest.slice(pseudo.length)
+      if (rest[0] === '(') {
+        let depth = 1, end = 1
+        for (; end < rest.length && depth; end++) { if (rest[end] === '(') depth++; if (rest[end] === ')') depth-- }
+        const inner = rest.slice(1, end - 1); rest = rest.slice(end)
+        if ([':is', ':not', ':has'].includes(pseudo)) score += Math.max(...postcss.list.comma(inner).map(specificity))
+        else if (pseudo !== ':where') score += 100
+      } else score += pseudo.startsWith('::') ? 1 : 100
+    } else if (name) { score++; rest = rest.slice(name[0].length) }
+    else rest = rest.slice(1)
+  }
+  return score
+}
+
+function declarations(node) {
+  const values = [[node.prop, node.value]]
+  if (['inset', 'padding', 'margin'].includes(node.prop)) {
+    const parts = postcss.list.space(node.value), sides = [parts[0], parts[1] ?? parts[0], parts[2] ?? parts[0], parts[3] ?? parts[1] ?? parts[0]]
+    for (const [index, side] of ['top', 'right', 'bottom', 'left'].entries()) values.push([node.prop === 'inset' ? side : node.prop + '-' + side, sides[index]])
+  }
+  if (node.prop === 'overflow') { const parts = postcss.list.space(node.value); values.push(['overflow-x', parts[0]], ['overflow-y', parts[1] ?? parts[0]]) }
+  if (node.prop === 'font') {
+    const size = postcss.list.space(node.value).find(value => /^(?:[\d.]+(?:px|rem|em|vw)|clamp\(|min\(|max\(|calc\()/.test(value))
+    if (size) values.push(['font-size', size.split('/')[0]])
+  }
+  return values
+}
+
 // Check responsive cascade contracts against the real selectors and markup.
 // This deliberately does not simulate font measurement, painting or pixel layout.
-export function effectiveStyle(element, dimensions) {
+export function effectiveStyle(element, dimensions, sheets = sourceStyles) {
   const result = {}, priorities = {}
-  for (const sheet of styles) sheet.walkRules(rule => {
+  for (const sheet of sheets) sheet.walkRules(rule => {
     for (let parent = rule.parent; parent; parent = parent.parent) {
       if (parent.type === 'atrule' && parent.name === 'media' && !matchesQuery(parent.params, dimensions)) return
       if (parent.type === 'atrule' && parent.name.includes('keyframes')) return
     }
     const matching = rule.selectors.filter(selector => { try { return element.matches(selector) } catch { return false } })
     if (!matching.length) return
-    const weight = Math.max(...matching.map(selector => (selector.match(/#[\w-]+/g) || []).length * 100 + (selector.match(/\.[\w-]+|\[[^\]]+\]/g) || []).length * 10))
-    rule.nodes.forEach(node => { if (node.type === 'decl' && weight >= (priorities[node.prop] ?? -1)) { result[node.prop] = node.value; priorities[node.prop] = weight } })
+    const weight = Math.max(...matching.map(specificity))
+    rule.nodes.forEach(node => {
+      if (node.type !== 'decl') return
+      const priority = weight + (node.important ? 1000000 : 0)
+      for (const [property, value] of declarations(node)) if (priority >= (priorities[property] ?? -1)) { result[property] = value; priorities[property] = priority }
+    })
   })
   return result
 }

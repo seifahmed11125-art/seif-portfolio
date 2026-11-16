@@ -25,6 +25,7 @@ export default function RootLayout({
           type="font/woff"
           crossOrigin="anonymous"
         />
+        <link rel="preload" href="/fonts/montserrat.woff" as="font" type="font/woff" crossOrigin="anonymous" />
       </head>
       <body>
         <Providers>

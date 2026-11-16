@@ -1,0 +1,4 @@
+/* One shared entry keeps route navigation from reordering responsive styles. */
+@import './journey.css';
+@import './journey-hero.css';
+@import './journey-mobile.css';

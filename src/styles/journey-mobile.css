@@ -1,6 +1,6 @@
-/* Responsive reading layout plus the same scroll-driven camera on mobile. */
+/* The html scope gives mobile rules priority even if a later route loads desktop CSS. */
 @media (max-width: 900px), (max-width: 1100px) and (pointer: coarse) {
-  .portfolio-experience {
+  html .portfolio-experience {
     --mobile-gutter: max(clamp(20px, 5vw, 40px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
     --portrait-width: min(76vw, 320px);
     min-width: 0;
@@ -9,22 +9,22 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
-  .portfolio-experience .site-header {
+  html .portfolio-experience .site-header {
     padding: calc(12px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));
     gap: 16px;
     background: #080b16f5;
     border-bottom: 1px solid var(--line);
   }
-  .portfolio-experience .brand { flex-shrink: 0; gap: 9px; }
-  .portfolio-experience .brand-name { font-size: 20px; }
-  .portfolio-experience .brand small { font-size: 7px; }
-  .portfolio-experience .site-header nav { flex: 1; min-width: 0; max-width: 420px; justify-content: space-between; gap: 0; }
-  .portfolio-experience .site-header nav a { min-height: 44px; padding: 6px; justify-content: center; font-size: 11px; }
-  .portfolio-experience .journey-scroll { height: auto; }
-  .portfolio-experience .journey-shell { position: relative; top: auto; height: auto; min-height: 0; overflow: visible; perspective: none; }
-  .portfolio-experience .world, .portfolio-experience .vignette { display: none; }
-  .portfolio-experience .world-content { position: relative; inset: auto; perspective: none; transform-style: flat; pointer-events: auto; }
-  .portfolio-experience .station {
+  html .portfolio-experience .brand { flex-shrink: 0; gap: 9px; }
+  html .portfolio-experience .brand-name { font-size: 20px; }
+  html .portfolio-experience .brand small { font-size: 7px; }
+  html .portfolio-experience .site-header nav { flex: 1; min-width: 0; max-width: 420px; justify-content: space-between; gap: 0; }
+  html .portfolio-experience .site-header nav a { min-height: 44px; padding: 6px; justify-content: center; font-size: 11px; }
+  html .portfolio-experience .journey-scroll { height: auto; }
+  html .portfolio-experience .journey-shell { position: relative; top: auto; height: auto; min-height: 0; overflow: visible; perspective: none; }
+  html .portfolio-experience .world, html .portfolio-experience .vignette { display: none; }
+  html .portfolio-experience .world-content { position: relative; inset: auto; perspective: none; transform-style: flat; pointer-events: auto; }
+  html .portfolio-experience .station {
     position: relative;
     inset: auto;
     padding: clamp(64px, 10svh, 100px) var(--mobile-gutter);
@@ -35,183 +35,188 @@
     border-top: 1px solid var(--line);
     scroll-margin-top: calc(80px + env(safe-area-inset-top, 0px));
   }
-  .portfolio-experience .scene-content { position: relative; inset: auto; min-width: 0; overflow: visible; }
-  .portfolio-experience .eyebrow { font-size: 11px; }
-  .portfolio-experience .about-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .portfolio-experience .about-portrait {
+  html .portfolio-experience .scene-content { position: relative; inset: auto; min-width: 0; overflow: visible; }
+  html .portfolio-experience .eyebrow { font-size: 11px; }
+  html .portfolio-experience .about-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  html .portfolio-experience .about-portrait {
     position: relative; inset: auto; transform: none; justify-self: center;
-    width: min(100%, 360px); height: auto; aspect-ratio: 1;
+    grid-row: 2; width: min(100%, 360px); height: auto; aspect-ratio: 1;
     object-fit: contain; object-position: center; opacity: 1;
   }
-  .portfolio-experience .about-copy { width: 100%; height: auto; max-height: none; padding: 0; overflow: visible; }
-  .portfolio-experience .about-copy h2 { font-size: clamp(44px, 9vw, 66px); margin-bottom: 24px; }
-  .portfolio-experience .about-copy p:not(.signature) { font-size: 15px; line-height: 1.85; margin-bottom: 18px; }
-  .portfolio-experience .about-copy .signature { font-size: 29px; margin-top: 24px; }
-  .portfolio-experience .services-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; perspective: none; }
-  .portfolio-experience .services-index { min-width: 0; }
-  .portfolio-experience .services-index h2 { font-size: clamp(44px, 9vw, 66px); margin: 8px 0 24px; }
-  .portfolio-experience .service-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 0; }
-  .portfolio-experience .service-tab { min-width: 0; min-height: 48px; font-size: 12px; gap: 8px; padding: 8px 0; }
-  .portfolio-experience .service-tab > span { min-width: 17px; font-size: 10px; }
-  .portfolio-experience .service-tab[aria-pressed=true] { transform: translateX(3px); }
-  .portfolio-experience .deck-space {
+  html .portfolio-experience .about-copy { display: contents; width: 100%; height: auto; max-height: none; padding: 0; overflow: visible; }
+  html .portfolio-experience .about-copy h2 { grid-row: 1; font-size: clamp(44px, 9vw, 66px); margin: 0; }
+  html .portfolio-experience .about-copy p:not(.signature) { font-size: 15px; line-height: 1.85; margin: 0; }
+  html .portfolio-experience .about-copy .signature { font-size: 29px; margin-top: 4px; }
+  html .portfolio-experience .services-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; perspective: none; }
+  html .portfolio-experience .services-index { min-width: 0; }
+  html .portfolio-experience .services-index h2 { font-size: clamp(44px, 9vw, 66px); margin: 8px 0 24px; }
+  html .portfolio-experience .service-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 0; }
+  html .portfolio-experience .service-tab { min-width: 0; min-height: 48px; font-size: 12px; gap: 8px; padding: 8px 0; }
+  html .portfolio-experience .service-tab > span { min-width: 17px; font-size: 10px; }
+  html .portfolio-experience .service-tab[aria-pressed=true] { transform: translateX(3px); }
+  html .portfolio-experience .deck-space {
     width: calc(100% - 36px); max-width: 480px; height: 320px; min-height: 320px;
     justify-self: center; margin: 8px 36px 60px 0;
     transform: rotateY(-5deg) rotateX(2deg);
   }
-  .portfolio-experience .deck-shadow { filter: blur(18px); opacity: .65; }
-  .portfolio-experience .service-card { padding: 24px; box-shadow: 0 14px 28px #0004, inset 1px 1px 0 #b9efa311; }
-  .portfolio-experience .service-number { font-size: 10px; margin-bottom: 22px; }
-  .portfolio-experience .service-card h3 { font-size: clamp(28px, 6.5vw, 40px); line-height: 1.14; margin-bottom: 16px; overflow-wrap: anywhere; }
-  .portfolio-experience .service-card p { font-size: 13px; line-height: 1.75; }
-  .portfolio-experience .deck-controls { bottom: -56px; }
-  .portfolio-experience .round-button { width: 44px; height: 44px; }
-  .portfolio-experience .work-layout { display: flex; gap: 22px; }
-  .portfolio-experience .work-heading { align-items: flex-end; gap: 12px; }
-  .portfolio-experience .work-heading > div:first-child { min-width: 0; }
-  .portfolio-experience .work-heading h2 { font-size: clamp(38px, 8vw, 60px); line-height: 1.06; margin-top: 10px; }
-  .portfolio-experience .gallery-controls { gap: 6px; flex-wrap: wrap; max-width: 94px; padding: 0; }
-  .portfolio-experience .gallery-count { flex: 1 0 100%; margin: 0 0 4px; text-align: right; }
-  .portfolio-experience .category-filters {
+  html .portfolio-experience .deck-shadow { filter: blur(18px); opacity: .65; }
+  html .portfolio-experience .service-card { padding: 24px; box-shadow: 0 14px 28px #0004, inset 1px 1px 0 #b9efa311; }
+  html .portfolio-experience .service-number { font-size: 10px; margin-bottom: 22px; }
+  html .portfolio-experience .service-card h3 { font-size: clamp(28px, 6.5vw, 40px); line-height: 1.14; margin-bottom: 16px; overflow-wrap: anywhere; }
+  html .portfolio-experience .service-card p { font-size: 13px; line-height: 1.75; }
+  html .portfolio-experience .deck-controls { bottom: -56px; }
+  html .portfolio-experience .round-button { width: 44px; height: 44px; }
+  html .portfolio-experience .work-layout { display: flex; gap: 22px; }
+  html .portfolio-experience .work-heading { align-items: flex-end; gap: 12px; }
+  html .portfolio-experience .work-heading > div:first-child { min-width: 0; }
+  html .portfolio-experience .work-heading h2 { font-size: clamp(38px, 8vw, 60px); line-height: 1.06; margin-top: 10px; }
+  html .portfolio-experience .gallery-controls { gap: 6px; flex-wrap: wrap; max-width: 94px; padding: 0; }
+  html .portfolio-experience .gallery-count { flex: 1 0 100%; margin: 0 0 4px; text-align: right; }
+  html .portfolio-experience .category-filters {
     min-width: 0; max-width: 100%; flex-wrap: nowrap; flex-shrink: 0; gap: 20px;
     overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
   }
-  .portfolio-experience .category-filter { flex-shrink: 0; min-height: 44px; font-size: 12px; }
-  .portfolio-experience .gallery-window {
+  html .portfolio-experience .category-filter { flex-shrink: 0; min-height: 44px; font-size: 12px; }
+  html .portfolio-experience .gallery-window {
     flex: none; min-height: 0; overflow-x: auto; overflow-y: hidden; pointer-events: auto;
     touch-action: pan-x pan-y pinch-zoom; overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory; scrollbar-width: none;
   }
-  .portfolio-experience .gallery-track {
+  html .portfolio-experience .gallery-track {
     height: auto; gap: 18px; align-items: flex-start; pointer-events: auto;
     transition: none; transform: none;
   }
-  .portfolio-experience .gallery-track .project-card { scroll-snap-align: start; }
-  .portfolio-experience .gallery-track .project-card--video { width: min(calc(100vw - 2 * var(--mobile-gutter)), 580px); }
-  .portfolio-experience .project-meta { display: block; margin-top: 14px; }
-  .portfolio-experience .project-meta h3 { font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
-  .portfolio-experience .project-meta > span { display: block; max-width: none; margin-top: 4px; text-align: left; font-size: 11px; }
-  .portfolio-experience .project-external { min-height: 44px; padding: 12px 0; font-size: 12px; }
-  .portfolio-experience .view-all { margin-top: 8px; }
-  .portfolio-experience .project-overlay { display: none; }
-  .portfolio-experience .contact-layout { display: flex; align-items: center; text-align: center; }
-  .portfolio-experience .contact-layout h2 { font-size: clamp(44px, 11vw, 82px); line-height: 1.08; margin: 24px 0 32px; }
-  .portfolio-experience .social-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(100%, 420px); gap: 12px; margin-bottom: 28px; }
-  .portfolio-experience .social-links > a { min-width: 0; min-height: 52px; padding: 15px; font-size: 12px; gap: 10px; transform: none; }
-  .portfolio-experience .email-label { font-size: 10px; }
-  .portfolio-experience .contact-email { max-width: 100%; font-size: clamp(12px, 3.2vw, 18px); margin: 0; }
-  .portfolio-experience .contact-layout .copyright { font-size: 10px; margin-top: 30px; }
-  .portfolio-experience .journey-controls {
+  html .portfolio-experience .gallery-track .project-card { scroll-snap-align: start; }
+  html .portfolio-experience .gallery-track .project-card--video { width: min(calc(100vw - 2 * var(--mobile-gutter)), 580px); }
+  html .portfolio-experience .project-meta { display: block; margin-top: 14px; }
+  html .portfolio-experience .project-meta h3 { font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+  html .portfolio-experience .project-meta > span { display: block; max-width: none; margin-top: 4px; text-align: left; font-size: 11px; }
+  html .portfolio-experience .project-external { min-height: 44px; padding: 12px 0; font-size: 12px; }
+  html .portfolio-experience .view-all { margin-top: 8px; }
+  html .portfolio-experience .project-overlay { display: none; }
+  html .portfolio-experience .contact-layout { display: flex; align-items: center; text-align: center; }
+  html .portfolio-experience .contact-layout h2 { font-size: clamp(44px, 11vw, 82px); line-height: 1.08; margin: 24px 0 32px; }
+  html .portfolio-experience .social-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(100%, 420px); gap: 12px; margin-bottom: 28px; }
+  html .portfolio-experience .social-links > a { min-width: 0; min-height: 52px; padding: 15px; font-size: 12px; gap: 10px; transform: none; }
+  html .portfolio-experience .email-label { font-size: 10px; }
+  html .portfolio-experience .contact-email { max-width: 100%; font-size: clamp(12px, 3.2vw, 18px); margin: 0; }
+  html .portfolio-experience .contact-layout .copyright { font-size: 10px; margin-top: 30px; }
+  html .portfolio-experience .journey-controls {
     position: relative; inset: auto; height: auto; min-height: 84px;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px;
     padding: 12px var(--mobile-gutter) max(16px, env(safe-area-inset-bottom, 0px));
   }
-  .portfolio-experience .journey-controls > .text-link { min-width: 0; font-size: 11px; gap: 6px; }
-  .portfolio-experience .journey-route { gap: 6px; font-size: 9px; }
-  .portfolio-experience .journey-route-track { width: 100px; }
-  .portfolio-experience .projects-page {
+  html .portfolio-experience .journey-controls > .text-link { min-width: 0; font-size: 11px; gap: 6px; }
+  html .portfolio-experience .journey-route { gap: 6px; font-size: 9px; }
+  html .portfolio-experience .journey-route-track { width: 100px; }
+  html .portfolio-experience .projects-page {
     padding: calc(112px + env(safe-area-inset-top, 0px)) var(--mobile-gutter) max(40px, env(safe-area-inset-bottom, 0px));
   }
-  .portfolio-experience .back-to-portfolio { margin-bottom: 24px; }
-  .portfolio-experience .projects-heading { gap: 16px; align-items: flex-end; }
-  .portfolio-experience .projects-heading > div { min-width: 0; }
-  .portfolio-experience .projects-heading h1 { font-size: clamp(42px, 9vw, 72px); line-height: 1.06; overflow-wrap: anywhere; }
-  .portfolio-experience .all-project-count { font-size: 11px; }
-  .portfolio-experience .all-project-grid { grid-template-columns: minmax(0, 1fr); gap: 38px; }
-  .portfolio-experience .all-project-grid > .project-card--video { grid-column: auto; }
-  .portfolio-experience .all-project-grid .project-meta h3 { font-size: 16px; }
-  .portfolio-experience .all-project-grid .project-meta > span { font-size: 12px; }
-  .portfolio-experience .project-dialog { width: calc(100vw - 2 * max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))); max-height: calc(100dvh - max(16px, env(safe-area-inset-top, 0px)) - max(16px, env(safe-area-inset-bottom, 0px))); overflow: auto; overscroll-behavior: contain; }
-  .portfolio-experience .project-dialog-inner { padding: 20px; }
-  .portfolio-experience .dialog-close { min-height: 44px; margin-bottom: 16px; }
-  .portfolio-experience .dialog-layout { display: flex; flex-direction: column; gap: 24px; align-items: stretch; }
-  .portfolio-experience .dialog-media { max-width: min(100%, calc(62svh * var(--media-aspect))); align-self: center; }
-  .portfolio-experience .dialog-media img { max-height: 62svh; }
-  .portfolio-experience .dialog-copy h2 { font-size: 32px; overflow-wrap: anywhere; }
-  .portfolio-experience .dialog-description { font-size: 13px; }
+  html .portfolio-experience .back-to-portfolio { margin-bottom: 24px; }
+  html .portfolio-experience .projects-heading { gap: 16px; align-items: flex-end; }
+  html .portfolio-experience .projects-heading > div { min-width: 0; }
+  html .portfolio-experience .projects-heading h1 { font-size: clamp(42px, 9vw, 72px); line-height: 1.06; overflow-wrap: anywhere; }
+  html .portfolio-experience .all-project-count { font-size: 11px; }
+  html .portfolio-experience .all-project-grid { grid-template-columns: minmax(0, 1fr); gap: 38px; }
+  html .portfolio-experience .all-project-grid > .project-card--video { grid-column: auto; }
+  html .portfolio-experience .all-project-grid .project-meta h3 { font-size: 16px; }
+  html .portfolio-experience .all-project-grid .project-meta > span { font-size: 12px; }
+  html .portfolio-experience .project-dialog { width: calc(100vw - 2 * max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))); max-height: calc(100dvh - max(16px, env(safe-area-inset-top, 0px)) - max(16px, env(safe-area-inset-bottom, 0px))); overflow: auto; overscroll-behavior: contain; }
+  html .portfolio-experience .project-dialog-inner { padding: 20px; }
+  html .portfolio-experience .dialog-close { min-height: 44px; margin-bottom: 16px; }
+  html .portfolio-experience .dialog-layout { display: flex; flex-direction: column; gap: 24px; align-items: stretch; }
+  html .portfolio-experience .dialog-media { max-width: min(100%, calc(62svh * var(--media-aspect))); align-self: center; }
+  html .portfolio-experience .dialog-media img { max-height: 62svh; }
+  html .portfolio-experience .dialog-copy h2 { font-size: 32px; overflow-wrap: anywhere; }
+  html .portfolio-experience .dialog-description { font-size: 13px; }
 
   /* Same pinned camera as desktop, with native reading distance for tall content. */
-  .portfolio-experience[data-mobile-motion=true] .journey-scroll { height: var(--mobile-travel-height, 600svh); }
-  .portfolio-experience[data-mobile-motion=true] .journey-shell { position: sticky; top: 0; height: 100svh; overflow: clip; perspective: 1400px; }
-  .portfolio-experience[data-mobile-motion=true] .world-content { position: absolute; inset: 0; perspective: 1400px; transform-style: preserve-3d; pointer-events: none; }
-  .portfolio-experience[data-mobile-motion=true] .station { position: absolute; inset: 0; padding: 0; border: 0; opacity: 0; visibility: hidden; pointer-events: none; transform-style: preserve-3d; }
-  .portfolio-experience[data-mobile-motion=true] .station.is-current { pointer-events: auto; }
-  .portfolio-experience[data-mobile-motion=true] .scene-content { position: absolute; left: var(--mobile-gutter); right: var(--mobile-gutter); bottom: auto; }
-  .portfolio-experience[data-mobile-motion=true] .journey-controls { position: absolute; left: 0; right: 0; bottom: 0; min-height: 64px; padding-top: 4px; padding-bottom: max(6px, env(safe-area-inset-bottom, 0px)); background: #080b16f5; }
-  .portfolio-experience[data-mobile-motion=true] .journey-controls > .text-link { padding-block: 4px; }
+  html .portfolio-experience[data-mobile-motion=true] .journey-scroll { height: var(--mobile-travel-height, 600svh); }
+  html .portfolio-experience[data-mobile-motion=true] .journey-shell { position: sticky; top: 0; height: 100svh; overflow: clip; perspective: 1400px; }
+  html .portfolio-experience[data-mobile-motion=true] .world-content { position: absolute; inset: 0; perspective: 1400px; transform-style: preserve-3d; pointer-events: none; }
+  html .portfolio-experience[data-mobile-motion=true] .station { position: absolute; inset: 0; padding: 0; border: 0; opacity: 0; visibility: hidden; pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  html .portfolio-experience[data-mobile-motion=true] .station.is-current { pointer-events: auto; }
+  html .portfolio-experience[data-mobile-motion=true] .scene-content { position: absolute; left: var(--mobile-gutter); right: var(--mobile-gutter); bottom: auto; }
+  html .portfolio-experience[data-mobile-motion=true] .journey-controls { position: absolute; left: 0; right: 0; bottom: 0; min-height: 64px; padding-top: 4px; padding-bottom: max(6px, env(safe-area-inset-bottom, 0px)); background: #080b16f5; }
+  html .portfolio-experience[data-mobile-motion=true] .journey-controls > .text-link { padding-block: 4px; }
 
   /* Text and artwork occupy different grid cells throughout the entire scrub. */
-  .portfolio-experience .director-reel[data-ready] { height: 200svh; }
-  .portfolio-experience .reel-stage {
+  html .portfolio-experience .director-reel[data-ready] { height: 200svh; }
+  html .portfolio-experience .reel-stage {
     display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
     gap: clamp(12px, 2svh, 20px); min-height: 0; height: 100svh;
     padding: calc(var(--site-header-height, 68px) + 16px) var(--mobile-gutter) max(12px, env(safe-area-inset-bottom, 0px));
   }
-  .portfolio-experience .reel-grid { inset: calc(var(--site-header-height, 68px) + 8px) var(--mobile-gutter) 64px; }
-  .portfolio-experience .reel-intro, .portfolio-experience .reel-statement { position: relative; inset: auto; grid-area: 1 / 1; min-width: 0; }
-  .portfolio-experience .reel-intro { transform: translate3d(0, var(--intro-offset, 0px), 0); align-self: start; }
-  .portfolio-experience .reel-intro h1 { font-size: clamp(38px, 11.2vw, 88px); line-height: 1; white-space: normal; }
-  .portfolio-experience .reel-intro h1 br, .portfolio-experience .reel-desktop { display: none; }
-  .portfolio-experience .reel-role { font-size: 10px; letter-spacing: .18em; margin-bottom: 10px; }
-  .portfolio-experience .reel-sub { margin-top: 10px; font-size: clamp(12px, 2.8vw, 16px); line-height: 1.5; }
-  .portfolio-experience .reel-work { min-height: 44px; margin-top: 6px; font-size: 12px; }
-  .portfolio-experience .reel-statement { align-self: center; transform: translate3d(0, var(--end-offset, 18px), 0); }
-  .portfolio-experience .reel-line { font-size: clamp(30px, 8.8vw, 64px); line-height: 1.1; }
-  .portfolio-experience .reel-line br { display: none; }
-  .portfolio-experience .reel-media, .portfolio-experience .reel-guides { position: relative; inset: auto; grid-area: 2 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; transform: scale(var(--mobile-board-scale, .96)); }
-  .portfolio-experience .reel-mark { position: relative; inset: auto; width: 100%; height: 100%; max-width: 480px; max-height: 100%; aspect-ratio: auto; transform: scale(var(--mark-size, .94)); }
-  .portfolio-experience .reel-controls { position: relative; inset: auto; grid-area: 3 / 1; height: auto; min-height: 52px; grid-template-columns: minmax(0, 1fr) minmax(48px, 20%) auto; gap: 10px; }
-  .portfolio-experience .reel-controls :is(a, button) { min-height: 44px; font-size: 10px; gap: 5px; white-space: normal; }
-  .portfolio-experience .reel-timeline { gap: 5px; font-size: 9px; }
+  html .portfolio-experience .reel-grid { inset: calc(var(--site-header-height, 68px) + 8px) var(--mobile-gutter) 64px; }
+  html .portfolio-experience .reel-intro, html .portfolio-experience .reel-statement { position: relative; inset: auto; grid-area: 1 / 1; min-width: 0; }
+  html .portfolio-experience .reel-intro { transform: translate3d(0, var(--intro-offset, 0px), 0); align-self: start; }
+  html .portfolio-experience .reel-intro h1 { font-size: clamp(38px, 11.2vw, 88px); line-height: 1; white-space: normal; }
+  html .portfolio-experience .reel-intro h1 br, html .portfolio-experience .reel-desktop { display: none; }
+  html .portfolio-experience .reel-role { font-size: 10px; letter-spacing: .18em; margin-bottom: 10px; }
+  html .portfolio-experience .reel-sub { margin-top: 10px; font-size: clamp(12px, 2.8vw, 16px); line-height: 1.5; }
+  html .portfolio-experience .reel-work { min-height: 44px; margin-top: 6px; font-size: 12px; }
+  html .portfolio-experience .reel-statement { align-self: center; transform: translate3d(0, var(--end-offset, 18px), 0); }
+  html .portfolio-experience .reel-line { font-size: clamp(30px, 8.8vw, 64px); line-height: 1.1; }
+  html .portfolio-experience .reel-line br { display: none; }
+  html .portfolio-experience .reel-media, html .portfolio-experience .reel-guides { position: relative; inset: auto; grid-area: 2 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; transform: scale(var(--mobile-board-scale, .96)); }
+  html .portfolio-experience .reel-mark { position: relative; inset: auto; width: 100%; height: 100%; max-width: 480px; max-height: 100%; aspect-ratio: auto; transform: scale(var(--mark-size, .94)); }
+  html .portfolio-experience .reel-controls { position: relative; inset: auto; grid-area: 3 / 1; height: auto; min-height: 52px; grid-template-columns: minmax(0, 1fr) minmax(48px, 20%) auto; gap: 10px; }
+  html .portfolio-experience .reel-controls :is(a, button) { min-height: 44px; font-size: 10px; gap: 5px; white-space: normal; }
+  html .portfolio-experience .reel-timeline { gap: 5px; font-size: 9px; }
 
   @media (max-width: 600px) {
-    .portfolio-experience .site-header { gap: 8px; }
-    .portfolio-experience .brand img { width: 26px; height: 34px; }
-    .portfolio-experience .brand > span { display: none; }
-    .portfolio-experience .site-header nav { max-width: none; }
-    .portfolio-experience .site-header nav a { flex: 1; min-width: 0; padding: 6px 3px; font-size: 10px; }
+    html .portfolio-experience .site-header { gap: 8px; }
+    html .portfolio-experience .brand img { width: 26px; height: 34px; }
+    html .portfolio-experience .brand > span { display: none; }
+    html .portfolio-experience .site-header nav { max-width: none; }
+    html .portfolio-experience .site-header nav a { flex: 1; min-width: 0; padding: 6px 3px; font-size: 10px; }
   }
   @media (max-width: 360px) {
-    .portfolio-experience .service-tab { font-size: 11px; gap: 6px; }
-    .portfolio-experience .service-card { padding: 20px; }
-    .portfolio-experience .service-card h3 { font-size: 27px; }
-    .portfolio-experience .service-card p { font-size: 12px; }
-    .portfolio-experience .journey-route-track { width: 80px; }
-    .portfolio-experience .journey-controls > .text-link { font-size: 10px; }
-    .portfolio-experience .all-project-count { font-size: 10px; }
+    html .portfolio-experience .service-tab { font-size: 11px; gap: 6px; }
+    html .portfolio-experience .service-card { padding: 20px; }
+    html .portfolio-experience .service-card h3 { font-size: 27px; }
+    html .portfolio-experience .service-card p { font-size: 12px; }
+    html .portfolio-experience .journey-route-track { width: 80px; }
+    html .portfolio-experience .journey-controls > .text-link { font-size: 10px; }
+    html .portfolio-experience .all-project-count { font-size: 10px; }
   }
   @media (min-width: 700px) {
-    .portfolio-experience .all-project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .portfolio-experience .all-project-grid > .project-card--video { grid-column: 1 / -1; }
+    html .portfolio-experience .all-project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    html .portfolio-experience .all-project-grid > .project-card--video { grid-column: 1 / -1; }
   }
   @media (max-height: 600px) and (orientation: portrait) {
-    .portfolio-experience .reel-stage { gap: 10px; padding-top: calc(var(--site-header-height, 68px) + 10px); }
-    .portfolio-experience .reel-role { font-size: 9px; margin-bottom: 6px; }
-    .portfolio-experience .reel-intro h1 { font-size: clamp(32px, 10vw, 48px); }
-    .portfolio-experience .reel-sub { margin-top: 6px; font-size: 11.5px; }
-    .portfolio-experience .reel-work { min-height: 40px; margin-top: 0; }
+    html .portfolio-experience .reel-stage { gap: 10px; padding-top: calc(var(--site-header-height, 68px) + 10px); }
+    html .portfolio-experience .reel-role { font-size: 9px; margin-bottom: 6px; }
+    html .portfolio-experience .reel-intro h1 { font-size: clamp(32px, 10vw, 48px); }
+    html .portfolio-experience .reel-sub { margin-top: 6px; font-size: 11.5px; }
+    html .portfolio-experience .reel-work { min-height: 40px; margin-top: 0; }
   }
   @media (max-height: 560px) and (orientation: landscape) {
-    .portfolio-experience .reel-stage { grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 12px 20px; padding-top: calc(var(--site-header-height, 68px) + 12px); }
-    .portfolio-experience .reel-intro { align-self: center; }
-    .portfolio-experience .reel-intro h1 { font-size: clamp(30px, 6vw, 56px); line-height: .95; }
-    .portfolio-experience .reel-intro h1 br, .portfolio-experience .reel-line br { display: initial; }
-    .portfolio-experience .reel-role { font-size: 9px; margin-bottom: 7px; }
-    .portfolio-experience .reel-sub { font-size: 11px; margin-top: 7px; }
-    .portfolio-experience .reel-work { font-size: 11px; min-height: 40px; margin-top: 0; }
-    .portfolio-experience .reel-line { font-size: clamp(30px, 5.5vw, 54px); line-height: 1; }
-    .portfolio-experience .reel-media, .portfolio-experience .reel-guides { grid-area: 1 / 2; }
-    .portfolio-experience .reel-controls { grid-area: 2 / 1 / 3 / -1; min-height: 44px; }
-    .portfolio-experience .about-layout { grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); align-items: center; gap: 32px; }
+    html .portfolio-experience .reel-stage { grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 12px 20px; padding-top: calc(var(--site-header-height, 68px) + 12px); }
+    html .portfolio-experience .reel-intro { align-self: center; }
+    html .portfolio-experience .reel-intro h1 { font-size: clamp(30px, 6vw, 56px); line-height: .95; }
+    html .portfolio-experience .reel-intro h1 br, html .portfolio-experience .reel-line br { display: initial; }
+    html .portfolio-experience .reel-role { font-size: 9px; margin-bottom: 7px; }
+    html .portfolio-experience .reel-sub { font-size: 11px; margin-top: 7px; }
+    html .portfolio-experience .reel-work { font-size: 11px; min-height: 40px; margin-top: 0; }
+    html .portfolio-experience .reel-line { font-size: clamp(30px, 5.5vw, 54px); line-height: 1; }
+    html .portfolio-experience .reel-media, html .portfolio-experience .reel-guides { grid-area: 1 / 2; }
+    html .portfolio-experience .reel-controls { grid-area: 2 / 1 / 3 / -1; min-height: 44px; }
+    html .portfolio-experience .about-layout { grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); align-items: start; gap: 24px; }
+    html .portfolio-experience .about-portrait { grid-row: auto; }
+    html .portfolio-experience .about-copy { display: block; }
+    html .portfolio-experience .about-copy h2 { margin-bottom: 20px; }
+    html .portfolio-experience .about-copy p:not(.signature) { margin-bottom: 14px; }
+    html .portfolio-experience .about-copy .signature { margin-top: 18px; }
   }
   @media (max-height: 360px) and (orientation: landscape) {
-    .portfolio-experience .reel-stage { gap: 8px 16px; padding-top: calc(var(--site-header-height, 68px) + 8px); }
-    .portfolio-experience .reel-intro h1 { font-size: 28px; }
-    .portfolio-experience .reel-role { margin-bottom: 5px; }
-    .portfolio-experience .reel-sub { margin-top: 5px; font-size: 10px; }
-    .portfolio-experience .reel-work { min-height: 32px; }
+    html .portfolio-experience .reel-stage { gap: 8px 16px; padding-top: calc(var(--site-header-height, 68px) + 8px); }
+    html .portfolio-experience .reel-intro h1 { font-size: 28px; }
+    html .portfolio-experience .reel-role { margin-bottom: 5px; }
+    html .portfolio-experience .reel-sub { margin-top: 5px; font-size: 10px; }
+    html .portfolio-experience .reel-work { min-height: 32px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .portfolio-experience .director-reel[data-ready] { height: 100svh; }
+    html .portfolio-experience .director-reel[data-ready] { height: 100svh; }
   }
 }
