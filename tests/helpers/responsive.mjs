@@ -79,7 +79,7 @@ export function fixture(width, height, { coarse = true, reduced = false, page = 
   const app = mountApp(doc, win, data)
   return { dom, win, doc, app, paints, offsets, targets, timeline, heroHeight, contentHeights, pendingFrames: () => raf.size,
     tick(frames = 200) { for (let i = 0; i < frames; i++) { now += 1000 / 60; const callbacks = [...raf.values()]; raf.clear(); callbacks.forEach(fn => fn(now)) } },
-    setViewport(width, height, coarse = true) { dimensions = { ...dimensions, width, height, coarse }; win.dispatchEvent(new win.Event('resize')); media.forEach(value => value.listeners.forEach(fn => fn())) },
+    setViewport(width, height, coarse = true) { dimensions = { ...dimensions, width, height, coarse }; win.dispatchEvent(new win.Event('resize')); media.forEach(value => value.listeners.forEach(fn => fn())); this.tick(3) },
     close() { app.destroy(); win.close() },
   }
 }

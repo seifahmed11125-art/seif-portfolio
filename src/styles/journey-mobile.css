@@ -130,15 +130,46 @@
   html .portfolio-experience .dialog-copy h2 { font-size: 32px; overflow-wrap: anywhere; }
   html .portfolio-experience .dialog-description { font-size: 13px; }
 
-  /* Same pinned camera as desktop, with native reading distance for tall content. */
+  /* Same pinned camera as desktop, with each complete chapter fitted to view. */
   html .portfolio-experience[data-mobile-motion=true] .journey-scroll { height: var(--mobile-travel-height, 600svh); }
   html .portfolio-experience[data-mobile-motion=true] .journey-shell { position: sticky; top: 0; height: 100svh; overflow: clip; perspective: 1400px; }
   html .portfolio-experience[data-mobile-motion=true] .world-content { position: absolute; inset: 0; perspective: 1400px; transform-style: preserve-3d; pointer-events: none; }
-  html .portfolio-experience[data-mobile-motion=true] .station { position: absolute; inset: 0; padding: 0; border: 0; opacity: 0; visibility: hidden; pointer-events: none; transform-style: preserve-3d; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  html .portfolio-experience[data-mobile-motion=true] .station { position: absolute; inset: calc(var(--site-header-height, 68px) + 20px) 0 calc(var(--mobile-footer-height, 64px) + 20px); padding: 0; border: 0; opacity: 0; visibility: hidden; pointer-events: none; overflow: clip; transform-style: preserve-3d; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
   html .portfolio-experience[data-mobile-motion=true] .station.is-current { pointer-events: auto; }
-  html .portfolio-experience[data-mobile-motion=true] .scene-content { position: absolute; left: var(--mobile-gutter); right: var(--mobile-gutter); bottom: auto; }
+  html .portfolio-experience[data-mobile-motion=true] .scene-content { position: absolute; left: var(--mobile-gutter); right: var(--mobile-gutter); bottom: auto; padding-bottom: 10px; transform-origin: 50% 0; }
   html .portfolio-experience[data-mobile-motion=true] .journey-controls { position: absolute; left: 0; right: 0; bottom: 0; min-height: 64px; padding-top: 4px; padding-bottom: max(6px, env(safe-area-inset-bottom, 0px)); background: #080b16f5; }
   html .portfolio-experience[data-mobile-motion=true] .journey-controls > .text-link { padding-block: 4px; }
+
+  /* Size content for the actual reading window rather than the whole screen. */
+  html .portfolio-experience[data-mobile-motion=true] { --portrait-width: clamp(124px, calc((var(--mobile-content-height, 500px) - 264px) * .8), 290px); }
+  html .portfolio-experience[data-mobile-motion=true] .about-layout { gap: 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .about-portrait { width: clamp(100px, calc(var(--mobile-content-height, 500px) * .32), 230px); }
+  html .portfolio-experience[data-mobile-motion=true] .about-copy h2 { font-size: 42px; }
+  html .portfolio-experience[data-mobile-motion=true] .about-copy p:not(.signature) { font-size: 13px; line-height: 1.65; }
+  html .portfolio-experience[data-mobile-motion=true] .about-copy .signature { font-size: 26px; margin-top: 2px; }
+  html .portfolio-experience[data-mobile-motion=true] .services-layout { gap: 18px; }
+  html .portfolio-experience[data-mobile-motion=true] .services-index h2 { font-size: 40px; margin: 6px 0 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .service-list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  html .portfolio-experience[data-mobile-motion=true] .service-tab { flex: none; min-height: 44px; padding: 8px 10px; font-size: 11px; border: 1px solid var(--line); }
+  html .portfolio-experience[data-mobile-motion=true] .service-tab[aria-pressed=true] { transform: none; border-color: var(--lime); }
+  html .portfolio-experience[data-mobile-motion=true] .deck-space { height: clamp(250px, calc(var(--mobile-content-height, 500px) - 220px), 320px); min-height: 250px; }
+  html .portfolio-experience[data-mobile-motion=true] .deck-shadow { display: none; }
+  html .portfolio-experience[data-mobile-motion=true] .service-card { padding: 20px; box-shadow: inset 1px 1px 0 #b9efa311; }
+  html .portfolio-experience[data-mobile-motion=true] .service-number { margin-bottom: 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .service-card h3 { font-size: 28px; margin-bottom: 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .service-card p { font-size: 12.5px; line-height: 1.65; }
+  html .portfolio-experience[data-mobile-motion=true] .work-layout { gap: 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .work-heading h2 { font-size: 36px; }
+  html .portfolio-experience[data-mobile-motion=true] .category-filter { min-height: 40px; font-size: 11px; }
+  html .portfolio-experience[data-mobile-motion=true] .gallery-track .project-card--video { width: min(calc(100vw - 2 * var(--mobile-gutter)), max(220px, calc((var(--mobile-content-height, 500px) - 310px) * 1.77778))); }
+  html .portfolio-experience[data-mobile-motion=true] .project-meta { margin-top: 8px; }
+  html .portfolio-experience[data-mobile-motion=true] .project-meta h3 { font-size: 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .project-meta > span { font-size: 10px; }
+  html .portfolio-experience[data-mobile-motion=true] .contact-layout h2 { font-size: 44px; margin: 18px 0 20px; }
+  html .portfolio-experience[data-mobile-motion=true] .social-links { gap: 10px; margin-bottom: 18px; }
+  html .portfolio-experience[data-mobile-motion=true] .social-links > a { min-height: 48px; padding-block: 12px; }
+  html .portfolio-experience[data-mobile-motion=true] .email-label { margin-bottom: 6px; }
+  html .portfolio-experience[data-mobile-motion=true] .contact-layout .copyright { margin-top: 18px; }
 
   /* Text and artwork occupy different grid cells throughout the entire scrub. */
   html .portfolio-experience .director-reel[data-ready] { height: 200svh; }
@@ -158,8 +189,13 @@
   html .portfolio-experience .reel-statement { align-self: center; transform: translate3d(0, var(--end-offset, 18px), 0); }
   html .portfolio-experience .reel-line { font-size: clamp(30px, 8.8vw, 64px); line-height: 1.1; }
   html .portfolio-experience .reel-line br { display: none; }
-  html .portfolio-experience .reel-media, html .portfolio-experience .reel-guides { position: relative; inset: auto; grid-area: 2 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; transform: scale(var(--mobile-board-scale, .96)); }
-  html .portfolio-experience .reel-mark { position: relative; inset: auto; width: 100%; height: 100%; max-width: 480px; max-height: 100%; aspect-ratio: auto; transform: scale(var(--mark-size, .94)); }
+  html .portfolio-experience .reel-media, html .portfolio-experience .reel-guides { position: relative; inset: auto; grid-area: 2 / 1; min-width: 0; min-height: 0; width: 100%; height: 100%; transform: none; }
+  html .portfolio-experience .reel-mark { display: none; position: relative; inset: auto; }
+  html .portfolio-experience .reel-mobile-art { display: block; position: relative; width: 100%; height: 100%; max-width: 100%; max-height: 100%; color: var(--reel-mint); }
+  html .portfolio-experience .reel-mobile-grid, html .portfolio-experience .reel-mobile-piece { position: absolute; inset: 0; width: 100%; height: 100%; }
+  html .portfolio-experience .reel-mobile-grid { opacity: .65; }
+  html .portfolio-experience .reel-mobile-piece { transform-origin: 50% 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  html .portfolio-experience .reel-mobile-piece svg { display: block; width: 100%; height: 100%; }
   html .portfolio-experience .reel-controls { position: relative; inset: auto; grid-area: 3 / 1; height: auto; min-height: 52px; grid-template-columns: minmax(0, 1fr) minmax(48px, 20%) auto; gap: 10px; }
   html .portfolio-experience .reel-controls :is(a, button) { min-height: 44px; font-size: 10px; gap: 5px; white-space: normal; }
   html .portfolio-experience .reel-timeline { gap: 5px; font-size: 9px; }
@@ -185,6 +221,25 @@
     html .portfolio-experience .all-project-grid > .project-card--video { grid-column: 1 / -1; }
   }
   @media (max-height: 600px) and (orientation: portrait) {
+    html .portfolio-experience[data-mobile-motion=true] .scene-content { padding-bottom: 6px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-layout { gap: 8px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-portrait { width: 64px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-copy h2 { font-size: 36px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-copy p:not(.signature) { font-size: 12px; line-height: 1.55; }
+    html .portfolio-experience[data-mobile-motion=true] .about-copy .signature { font-size: 22px; }
+    html .portfolio-experience[data-mobile-motion=true] .services-layout { gap: 10px; }
+    html .portfolio-experience[data-mobile-motion=true] .services-index > .eyebrow, html .portfolio-experience[data-mobile-motion=true] .service-list { display: none; }
+    html .portfolio-experience[data-mobile-motion=true] .services-index h2 { font-size: 32px; margin: 0; }
+    html .portfolio-experience[data-mobile-motion=true] .deck-space { height: 210px; min-height: 210px; margin-top: 4px; margin-bottom: 50px; }
+    html .portfolio-experience[data-mobile-motion=true] .deck-controls { bottom: -50px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-number { display: none; }
+    html .portfolio-experience[data-mobile-motion=true] .service-card { padding: 14px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-card h3 { font-size: 24px; margin-bottom: 8px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-card p { font-size: 12px; line-height: 1.5; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-layout h2 { font-size: 36px; margin: 12px 0 16px; }
+    html .portfolio-experience[data-mobile-motion=true] .social-links { gap: 8px; margin-bottom: 12px; }
+    html .portfolio-experience[data-mobile-motion=true] .social-links > a { min-height: 44px; padding: 10px 12px; font-size: 11px; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-layout .copyright { margin-top: 12px; font-size: 9px; }
     html .portfolio-experience .reel-stage { gap: 10px; padding-top: calc(var(--site-header-height, 68px) + 10px); }
     html .portfolio-experience .reel-role { font-size: 9px; margin-bottom: 6px; }
     html .portfolio-experience .reel-intro h1 { font-size: clamp(32px, 10vw, 48px); }
@@ -192,6 +247,35 @@
     html .portfolio-experience .reel-work { min-height: 40px; margin-top: 0; }
   }
   @media (max-height: 560px) and (orientation: landscape) {
+    html .portfolio-experience[data-mobile-motion=true] .about-layout { grid-template-columns: minmax(0, .25fr) minmax(0, .75fr); gap: 16px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-portrait { width: 96px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-copy h2 { font-size: 36px; margin-bottom: 12px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-copy p:not(.signature) { font-size: 12px; line-height: 1.5; margin-bottom: 10px; }
+    html .portfolio-experience[data-mobile-motion=true] .about-copy .signature { font-size: 22px; margin-top: 10px; }
+    html .portfolio-experience[data-mobile-motion=true] .services-layout { grid-template-columns: minmax(0, .38fr) minmax(0, .62fr); gap: 16px; }
+    html .portfolio-experience[data-mobile-motion=true] .services-index h2 { font-size: 32px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-list { display: none; }
+    html .portfolio-experience[data-mobile-motion=true] .deck-space { width: calc(100% - 24px); height: clamp(160px, calc(var(--mobile-content-height, 220px) - 54px), 240px); min-height: 160px; margin: 0 24px 50px 0; }
+    html .portfolio-experience[data-mobile-motion=true] .deck-controls { bottom: -50px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-number { display: none; }
+    html .portfolio-experience[data-mobile-motion=true] .service-card { padding: 14px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-card h3 { font-size: 24px; margin-bottom: 8px; }
+    html .portfolio-experience[data-mobile-motion=true] .service-card p { font-size: 12px; line-height: 1.5; }
+    html .portfolio-experience[data-mobile-motion=true] .work-layout { display: grid; grid-template-columns: minmax(0, .35fr) minmax(0, .65fr); grid-template-rows: auto auto 1fr; gap: 8px 16px; }
+    html .portfolio-experience[data-mobile-motion=true] .work-heading { grid-area: 1 / 1; }
+    html .portfolio-experience[data-mobile-motion=true] .work-heading h2 { font-size: 32px; }
+    html .portfolio-experience[data-mobile-motion=true] .gallery-controls { display: none; }
+    html .portfolio-experience[data-mobile-motion=true] .work-layout > .category-filters { grid-area: 2 / 1; }
+    html .portfolio-experience[data-mobile-motion=true] .gallery-window { grid-area: 1 / 2 / 4 / 3; align-self: center; }
+    html .portfolio-experience[data-mobile-motion=true] .view-all { grid-area: 3 / 1; justify-self: start; align-self: start; margin: 0; padding-inline: 12px; gap: 12px; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-layout { display: grid; grid-template-columns: minmax(0, .42fr) minmax(0, .58fr); gap: 8px 16px; text-align: left; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-layout > .eyebrow { grid-area: 1 / 1; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-layout h2 { grid-area: 2 / 1; font-size: 36px; margin: 0; }
+    html .portfolio-experience[data-mobile-motion=true] .social-links { grid-area: 1 / 2 / 3 / 3; margin: 0; gap: 8px; }
+    html .portfolio-experience[data-mobile-motion=true] .social-links > a { min-height: 44px; padding: 10px 12px; font-size: 11px; }
+    html .portfolio-experience[data-mobile-motion=true] .email-label { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-email { grid-area: 3 / 1 / 4 / 3; font-size: 12px; }
+    html .portfolio-experience[data-mobile-motion=true] .contact-layout .copyright { grid-area: 4 / 1 / 5 / 3; font-size: 9px; margin-top: 6px; }
     html .portfolio-experience .reel-stage { grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 12px 20px; padding-top: calc(var(--site-header-height, 68px) + 12px); }
     html .portfolio-experience .reel-intro { align-self: center; }
     html .portfolio-experience .reel-intro h1 { font-size: clamp(30px, 6vw, 56px); line-height: .95; }

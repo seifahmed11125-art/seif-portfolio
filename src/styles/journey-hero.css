@@ -79,6 +79,8 @@
   overflow: visible;
 }
 
+.portfolio-experience .reel-mobile-art { display: none; }
+
 .portfolio-experience .reel-drawing {
   opacity: var(--grid-alpha,1);
 }

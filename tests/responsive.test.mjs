@@ -173,15 +173,18 @@ test('mobile flights use the same desktop camera poses and reverse directly with
   } finally { f.close() }
 })
 
-test('long mobile chapters expose their bottom before the camera leaves', () => {
+test('long mobile chapters stay complete without panning from top to bottom', () => {
   const f = fixture(320, 480)
   try {
     const chapter = f.timeline().chapters[1]
-    f.win.scrollTo({ top: f.heroHeight() + chapter.readEnd }); f.tick(2)
+    f.win.scrollTo({ top: f.heroHeight() + chapter.anchor }); f.tick(2)
     const scene = f.doc.querySelector('.services-layout')
     assert.equal(f.app.snapshot().progress, 2)
-    assert.equal(scene.style.transform, 'translate3d(0,' + (-chapter.overflow) + 'px,0)')
-    assert.ok(chapter.top + f.contentHeights[1] - chapter.overflow <= 480 - 64 - 20)
+    assert.equal(scene.style.transform, 'scale(' + chapter.scale + ')')
+    assert.ok(chapter.top + f.contentHeights[1] * chapter.scale <= 480 - 64 - 20)
+    const initial = scene.style.transform
+    f.win.scrollTo({ top: f.heroHeight() + chapter.leave }); f.tick(2)
+    assert.equal(scene.style.transform, initial, 'Scrolling through the stop must not pan or resize its content')
     assert.equal(f.doc.querySelector('.services-station').inert, false)
   } finally { f.close() }
 })
@@ -189,14 +192,14 @@ test('long mobile chapters expose their bottom before the camera leaves', () => 
 test('mobile hero scrubs the same exact progress forwards and backwards without a delayed loop', () => {
   const f = fixture(390, 844)
   try {
-    const stage = f.doc.querySelector('.reel-stage')
+    const hero = f.doc.querySelector('#home'), layer = f.doc.querySelector('[data-logo-part=b]')
     f.win.scrollTo({ top: 844 * .5 }); f.tick(2)
-    assert.equal(stage.style.getPropertyValue('--reel-progress'), '0.500')
-    const part = stage.style.getPropertyValue('--part-b')
+    assert.equal(hero.dataset.progress, '0.500')
+    const part = layer.style.transform
     f.win.scrollTo({ top: 844 * .9 }); f.tick(2)
     f.win.scrollTo({ top: 844 * .5 }); f.tick(2)
-    assert.equal(stage.style.getPropertyValue('--part-b'), part)
-    assert.ok(Number(stage.style.getPropertyValue('--mark-size')) <= 1)
+    assert.equal(layer.style.transform, part)
+    assert.ok(part.includes('translate3d'))
     assert.equal(f.pendingFrames(), 0)
   } finally { f.close() }
 })

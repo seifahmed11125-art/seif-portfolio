@@ -14,7 +14,7 @@ for (const [width, height] of [[320, 480], [390, 844], [430, 932], [844, 390], [
       for (const side of ['top', 'right', 'bottom', 'left']) assert.equal(css('.reel-intro')[side], 'auto')
       assert.equal(css('.reel-stage')['min-height'], '0')
       assert.ok(!css('#home-title')['font-size'].includes('4.2rem'))
-      assert.equal(css('.services-layout')['grid-template-columns'], 'minmax(0, 1fr)')
+      assert.equal(css('.services-layout')['grid-template-columns'], width > height && height <= 560 ? 'minmax(0, .38fr) minmax(0, .62fr)' : 'minmax(0, 1fr)')
       assert.equal(css('.scene-content').bottom, 'auto')
       assert.equal(css('.gallery-window')['overflow-x'], 'auto')
       assert.equal(css('.journey-shell').position, 'sticky')

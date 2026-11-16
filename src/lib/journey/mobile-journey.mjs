@@ -1,16 +1,15 @@
 import {clamp,smooth} from './journey-model.mjs';
 
-// Reading and camera travel share the document scrollbar. Long chapters get
-// their own reading distance before the same camera flies to the next chapter.
+// Every chapter is a complete fitted view. Scroll moves the camera between
+// chapters; it never pans down through a cropped chapter first.
 export function createMobileTimeline(contentHeights,height,headerHeight,footerHeight){
   const available=Math.max(1,height-headerHeight-footerHeight-40);
   let cursor=0;
   const chapters=contentHeights.map((contentHeight,index)=>{
-    const overflow=Math.max(0,contentHeight-available),start=cursor;
-    const readStart=start+height*.12,readEnd=readStart+overflow,leave=readEnd+height*.08;
+    const start=cursor,leave=start+height*.2;
     const end=leave+(index<contentHeights.length-1?height*.82:0);
     cursor=end;
-    return {index:index+1,start,readStart,readEnd,leave,end,overflow,
+    return {index:index+1,start,leave,end,contentHeight,scale:Math.min(1,available/Math.max(1,contentHeight)),
       anchor:start+height*.06,top:headerHeight+20};
   });
   return {chapters,available,distance:cursor,scrollHeight:cursor+height,
@@ -23,8 +22,7 @@ export function mobileJourneyAtOffset(offset,timeline){
   const traveling=position>chapter.leave&&chapter.end>chapter.leave;
   const fraction=traveling?clamp((position-chapter.leave)/(chapter.end-chapter.leave),0,1):0;
   return {position,chapter:chapter.index,traveling,fraction,
-    progress:chapter.index+(traveling?smooth(0,1,fraction):0),
-    contentOffsets:timeline.chapters.map(chapter=>clamp(position-chapter.readStart,0,chapter.overflow))};
+    progress:chapter.index+(traveling?smooth(0,1,fraction):0)};
 }
 
 export function remapMobileOffset(offset,before,after){

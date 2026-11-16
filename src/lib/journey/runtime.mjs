@@ -22,6 +22,7 @@ export function mountApp(doc=document,win=window,data){
   const hashes=['home','about','services','portfolio','contact'];
   const controller=new JourneyController(1,8);
   const stations=$$('.station');
+  const scenes=stations.map(station=>station.querySelector('.scene-content'));
   const shell=$('.journey-shell');
   const travel=$('.journey-scroll');
   const dialog=$('.project-dialog');
@@ -29,11 +30,13 @@ export function mountApp(doc=document,win=window,data){
   let activeStation=-1;
   let galleryActive=0,galleryFilter='All',galleryProjects=filterProjects(data.projects,'All',4);
   let drag=null,suppressProjectClick=false,lastFocused=null,disposed=false;
-  let width=win.innerWidth,height=win.innerHeight,previousFrame=0,lastPaint=0,frameId=0;
+  let width=win.innerWidth,height=win.innerHeight,previousFrame=0,lastPaint=0,frameId=0,layoutFrame=0,layoutSignature='';
   let travelTop=0,travelBottom=0,journeyVisible=false,renderedProgress=-1,lastPointerX=-1,lastPointerY=-1,forcePaint=true,resizeObserver=null;
   const pointer={x:0,y:0,tx:0,ty:0};
   const safeUrl=value=>{try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password?u.href:null;}catch{return null;}};
   const setText=(element,value)=>{if(element)element.textContent=value??'';};
+  const setStyle=(element,property,value)=>{if(element.style[property]!==value)element.style[property]=value;};
+  const setVariable=(name,value)=>{if(root.style.getPropertyValue(name)!==value)root.style.setProperty(name,value);};
   const serviceDeck=createServiceDeck($('.service-deck'),data.services,{reduced,onSelect:index=>{
     $$('.service-tab').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
   }});
@@ -230,24 +233,18 @@ export function mountApp(doc=document,win=window,data){
     const selectedChanged=selected!==activeStation;
     enterStation(selected);
     shell.dataset.direction=controller.direction>0?'forward':'backward';
-    if(!mobileMotion&&!force&&!selectedChanged&&Math.abs(progress-renderedProgress)<.00001)return;
+    if(!force&&!selectedChanged&&Math.abs(progress-renderedProgress)<.00001)return;
     renderedProgress=progress;
     stations.forEach(station=>{
       const index=Number(station.dataset.index),pose=stationPose(index,progress,width,height);
       const visible=reduced?index===selected:pose.visible;
       if(mobileMotion&&!force&&!visible&&station.style.visibility==='hidden')return;
-      station.style.visibility=visible?'visible':'hidden';
-      station.style.opacity=String(reduced?1:pose.opacity);
-      station.style.transform=reduced?'none':'translate3d('+pose.x+'px,'+pose.y+'px,'+pose.z+'px) rotateY('+pose.rotation+'deg)';
-      station.classList.toggle('is-current',index===selected);
-      station.inert=index!==selected||!visible;
-      station.setAttribute('aria-hidden',String(index!==selected));
-      station.style.willChange=mobileMotion&&visible&&mobileState.traveling?'transform, opacity':'auto';
-      if(mobileMotion){
-        const scene=station.querySelector('.scene-content'),read=mobileState.contentOffsets[index-1];
-        scene.style.transform='translate3d(0,'+(-read)+'px,0)';
-        scene.style.willChange=visible&&read>0&&read<mobileTimeline.chapters[index-1].overflow?'transform':'auto';
-      }
+      setStyle(station,'visibility',visible?'visible':'hidden');
+      setStyle(station,'opacity',String(reduced?1:pose.opacity));
+      setStyle(station,'transform',reduced?'none':'translate3d('+pose.x+'px,'+pose.y+'px,'+pose.z+'px) rotateY('+pose.rotation+'deg)');
+      if(force||selectedChanged){station.classList.toggle('is-current',index===selected);station.setAttribute('aria-hidden',String(index!==selected));}
+      if(station.inert!==(index!==selected||!visible))station.inert=index!==selected||!visible;
+      setStyle(station,'willChange',mobileMotion&&visible&&mobileState.traveling?'transform, opacity':'auto');
     });
     $('.journey-route-progress').style.transform='scaleX('+progress/4+')';
     shell.dataset.progress=progress.toFixed(4);
@@ -317,20 +314,27 @@ export function mountApp(doc=document,win=window,data){
     const changed=mobileLayout!==mobileMedia.matches;
     mobileLayout=mobileMedia.matches;
     mobileMotion=isHome&&mobileLayout&&!reduced;
-    root.dataset.layout=mobileLayout?'mobile':'desktop';
-    root.dataset.mobileMotion=String(mobileMotion);
+    if(root.dataset.layout!==(mobileLayout?'mobile':'desktop'))root.dataset.layout=mobileLayout?'mobile':'desktop';
+    if(root.dataset.mobileMotion!==String(mobileMotion))root.dataset.mobileMotion=String(mobileMotion);
     headerHeight=$('.site-header').offsetHeight;
-    root.style.setProperty('--site-header-height',headerHeight+'px');
+    setVariable('--site-header-height',headerHeight+'px');
     width=shell?.clientWidth||win.innerWidth;height=mobileLayout&&!mobileMotion?win.innerHeight:shell?.clientHeight||win.innerHeight;
     dpr=Math.min(win.devicePixelRatio||1,1.25);
-    if(canvas){canvas.width=mobileLayout?1:Math.round(width*dpr);canvas.height=mobileLayout?1:Math.round(height*dpr);}
+    if(canvas){const w=mobileLayout?1:Math.round(width*dpr),h=mobileLayout?1:Math.round(height*dpr);if(canvas.width!==w)canvas.width=w;if(canvas.height!==h)canvas.height=h;}
     if(changed){drag=null;suppressProjectClick=false;$('.gallery-track')?.classList.remove('is-dragging');}
-    positionGallery();
     if(isHome){
       if(mobileMotion){
-        mobileTimeline=createMobileTimeline(stations.map(station=>station.querySelector('.scene-content').offsetHeight),height,headerHeight,$('.journey-controls').offsetHeight);
-        root.style.setProperty('--mobile-travel-height',mobileTimeline.scrollHeight+'px');
-        stations.forEach((station,index)=>{station.querySelector('.scene-content').style.top=mobileTimeline.chapters[index].top+'px';});
+        const footerHeight=$('.journey-controls').offsetHeight;
+        setVariable('--mobile-footer-height',footerHeight+'px');
+        const available=Math.max(1,height-headerHeight-footerHeight-40);
+        setVariable('--mobile-content-height',available+'px');
+        const contentHeights=scenes.map(scene=>Math.ceil(Math.max(scene.offsetHeight,scene.scrollHeight)));
+        const signature=[width,height,headerHeight,footerHeight,...contentHeights].join(':');
+        if(!changed&&signature===layoutSignature)return;
+        layoutSignature=signature;
+        mobileTimeline=createMobileTimeline(contentHeights,height,headerHeight,footerHeight);
+        setVariable('--mobile-travel-height',mobileTimeline.scrollHeight+'px');
+        scenes.forEach((scene,index)=>{scene.style.top='0px';setStyle(scene,'transform','scale('+mobileTimeline.chapters[index].scale+')');setStyle(scene,'willChange','auto');});
       }else if(wasMobileMotion){
         stations.forEach(station=>{
           station.style.willChange='auto';
@@ -352,14 +356,17 @@ export function mountApp(doc=document,win=window,data){
         goTo(activeStation,false,true);
         if(!mobileLayout){controller.progress=controller.target;controller.velocity=0;}
       }else if(mobileMotion&&before&&before.signature!==mobileTimeline.signature&&oldOffset>=0&&oldOffset<=before.distance&&!dialog.open){
-        win.scrollTo({top:travelTop+remapMobileOffset(oldOffset,before,mobileTimeline),behavior:'instant'});
+        const nextTop=travelTop+remapMobileOffset(oldOffset,before,mobileTimeline);
+        if(Math.abs(nextTop-win.scrollY)>.5)win.scrollTo({top:nextTop,behavior:'instant'});
       }
       forcePaint=true;syncScroll();updateJourney(true);
     }
+    if(!mobileLayout||changed||width!==Number(root.dataset.galleryWidth)){positionGallery();root.dataset.galleryWidth=String(width);}
   }
-  listen(win,'resize',resize);
-  mobileMedia.addEventListener?.('change',resize);
-  listeners.push(()=>mobileMedia.removeEventListener?.('change',resize));
+  function scheduleResize(){if(!disposed&&!layoutFrame)layoutFrame=win.requestAnimationFrame(()=>{layoutFrame=0;resize();});}
+  listen(win,'resize',scheduleResize);
+  mobileMedia.addEventListener?.('change',scheduleResize);
+  listeners.push(()=>mobileMedia.removeEventListener?.('change',scheduleResize));
   function paintField(time){
     const camera=cameraAt(controller.progress),focal=width*.81,center=height*.49;
     const drift=reduced?0:time*.25;
@@ -405,7 +412,7 @@ export function mountApp(doc=document,win=window,data){
     if(moving||pointerMoving||deferredPaint)requestFrame();else previousFrame=0;
   }
   const heroScene=isHome?mountHeroScene($('#home'),doc,win):null;
-  if(win.ResizeObserver&&shell){resizeObserver=new win.ResizeObserver(resize);resizeObserver.observe(shell);resizeObserver.observe(travel);stations.forEach(station=>resizeObserver.observe(station.querySelector('.scene-content')));}
+  if(win.ResizeObserver&&shell){resizeObserver=new win.ResizeObserver(scheduleResize);resizeObserver.observe(shell);resizeObserver.observe(travel);scenes.forEach(scene=>resizeObserver.observe(scene));}
   resize();
   if(isHome){
     const start=hashes.indexOf(win.location.hash.slice(1));
@@ -426,7 +433,7 @@ export function mountApp(doc=document,win=window,data){
     resize,
     revealIntro:()=>heroScene?.revealIntro?.(),
     snapshot:()=>({layout:mobileLayout?'mobile':'desktop',mobileMotion,station:activeStation,progress:controller.progress,target:controller.target,service:serviceDeck.snapshot().target,flipping:serviceDeck.snapshot().running,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
-    destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceDeck.destroy();if(dialog.open)closeProject();}
+    destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);win.cancelAnimationFrame(layoutFrame);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceDeck.destroy();if(dialog.open)closeProject();}
   };
   return api;
 }
