@@ -1,7 +1,7 @@
 // The production hero's SVG, breakpoints, scroll length and assembly timings.
 // It uses native document scrolling before the camera journey begins.
 import {clamp,smooth} from './journey-model.mjs';
-import {MOBILE_LAYOUT_QUERY,SHORT_LANDSCAPE_QUERY} from './responsive.mjs';
+import {MOBILE_LAYOUT_QUERY} from './responsive.mjs';
 const labels=['Scroll to assemble','Finish sequence','Replay sequence'];
 const pieces=[
   {name:'part-a',x:-44,y:-17,angle:-16,start:.07,end:.48},
@@ -14,12 +14,13 @@ export function heroFrame(value,compact=false,reduced=false){
   const intro=smooth(.29,.61,p),statement=smooth(.61,.9,p);
   const entry=compact?[46,5,12,5]:[17,7,12,51],exit=compact?[20,4,12,4]:[11,3.5,11,3.5];
   const vars={
-    'intro-opacity':1-intro,'intro-offset':(compact?-30:-54)*intro+'px',
+    'intro-opacity':1-intro,'intro-offset':(compact?-12:-54)*intro+'px',
     'board-opacity':1-smooth(.55,.89,p),'end-opacity':statement,
     'end-offset':(1-statement)*18+'px','grid-alpha':1-statement*.8,
     'mark-x':compact?'0%':(expansion*37).toFixed(2)+'%',
-    'mark-y':compact?(expansion*20).toFixed(2)+'%':'0%',
-    'mark-size':(1+expansion*(compact?.07:.27)).toFixed(3),
+    'mark-y':'0%',
+    'mark-size':(compact?.94+expansion*.06:1+expansion*.27).toFixed(3),
+    'mobile-board-scale':(.96+expansion*.04).toFixed(3),
     'reel-progress':p.toFixed(3),'dot-alpha':reduced?1:.34+statement*.66
   };
   entry.forEach((edge,i)=>{vars['edge-'+i]=(edge+(exit[i]-edge)*expansion).toFixed(2)+'%';});
@@ -32,14 +33,14 @@ export function heroFrame(value,compact=false,reduced=false){
 export function mountHeroScene(hero,doc=document,win=window){
   if(!hero)return {measure(){},destroy(){}};
   const stage=hero.querySelector('.reel-stage'),work=hero.querySelector('.reel-work');
-  const reduced=win.matchMedia('(prefers-reduced-motion: reduce)'),compact=win.matchMedia(MOBILE_LAYOUT_QUERY),landscape=win.matchMedia(SHORT_LANDSCAPE_QUERY);
+  const reduced=win.matchMedia('(prefers-reduced-motion: reduce)'),compact=win.matchMedia(MOBILE_LAYOUT_QUERY);
   let pending=0,top=0,length=1,previous=-1,phase=0;
   function draw(){
     pending=0;
     const progress=reduced.matches?0:clamp((win.scrollY-top)/length,0,1);
     if(progress===previous)return;
     previous=progress;
-    const state=heroFrame(progress,compact.matches&&!landscape.matches,reduced.matches);
+    const state=heroFrame(progress,compact.matches,reduced.matches);
     for(const [key,value] of Object.entries(state.vars))stage.style.setProperty('--'+key,String(value));
     phase=state.phase;hero.dataset.phase=String(phase);
     hero.querySelector('.reel-counter').textContent='0'+(phase+1);
@@ -59,7 +60,7 @@ export function mountHeroScene(hero,doc=document,win=window){
   const cue=hero.querySelector('.reel-cue');cue.addEventListener('click',jump);
   win.addEventListener('scroll',queue,{passive:true});win.addEventListener('resize',measure,{passive:true});
   doc.addEventListener('visibilitychange',queue);
-  reduced.addEventListener?.('change',measure);compact.addEventListener?.('change',measure);landscape.addEventListener?.('change',measure);
+  reduced.addEventListener?.('change',measure);compact.addEventListener?.('change',measure);
   measure();
   function revealIntro(){
     if(hero.dataset.entered==='true')return;
@@ -68,6 +69,6 @@ export function mountHeroScene(hero,doc=document,win=window){
   return {measure,revealIntro,destroy(){
     win.cancelAnimationFrame(pending);observer?.disconnect();cue.removeEventListener('click',jump);
     win.removeEventListener('scroll',queue);win.removeEventListener('resize',measure);
-    doc.removeEventListener('visibilitychange',queue);reduced.removeEventListener?.('change',measure);compact.removeEventListener?.('change',measure);landscape.removeEventListener?.('change',measure);
+    doc.removeEventListener('visibilitychange',queue);reduced.removeEventListener?.('change',measure);compact.removeEventListener?.('change',measure);
   }};
 }

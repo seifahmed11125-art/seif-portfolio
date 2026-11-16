@@ -3,13 +3,14 @@ import {mountHeroScene} from './hero.mjs';
 import {createInlinePlayers,createVideoMarkup} from './inline-video.mjs';
 import {createServiceDeck} from './service-deck.mjs';
 import {MOBILE_LAYOUT_QUERY,nativeStationAt,nativeGalleryOffset,nativeGalleryIndex} from './responsive.mjs';
+import {createMobileTimeline,mobileJourneyAtOffset,remapMobileOffset} from './mobile-journey.mjs';
 
 export function mountApp(doc=document,win=window,data){
   const root=doc.querySelector('.portfolio-experience')||doc;
   const isHome=(root.dataset?.page||doc.body.dataset.page)==='home';
   const reduced=win.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false;
   const mobileMedia=win.matchMedia(MOBILE_LAYOUT_QUERY);
-  let mobileLayout=mobileMedia.matches,nativeOffsets=[],headerHeight=0;
+  let mobileLayout=mobileMedia.matches,mobileMotion=false,mobileTimeline=null,mobileState=null,nativeOffsets=[],headerHeight=0;
   const $=selector=>root.querySelector(selector);
   const $$=selector=>Array.from(root.querySelectorAll(selector));
   const listeners=[];
@@ -214,7 +215,7 @@ export function mountApp(doc=document,win=window,data){
     setText($('.station-announcement'),names[index]);
   }
   function updateJourney(force=false){
-    if(mobileLayout){
+    if(mobileLayout&&!mobileMotion){
       const selected=nativeStationAt(win.scrollY,nativeOffsets,height);
       if(selected!==activeStation)stations.forEach(station=>station.classList.toggle('is-current',Number(station.dataset.index)===selected));
       enterStation(selected);
@@ -229,17 +230,24 @@ export function mountApp(doc=document,win=window,data){
     const selectedChanged=selected!==activeStation;
     enterStation(selected);
     shell.dataset.direction=controller.direction>0?'forward':'backward';
-    if(!force&&!selectedChanged&&Math.abs(progress-renderedProgress)<.00001)return;
+    if(!mobileMotion&&!force&&!selectedChanged&&Math.abs(progress-renderedProgress)<.00001)return;
     renderedProgress=progress;
     stations.forEach(station=>{
       const index=Number(station.dataset.index),pose=stationPose(index,progress,width,height);
       const visible=reduced?index===selected:pose.visible;
+      if(mobileMotion&&!force&&!visible&&station.style.visibility==='hidden')return;
       station.style.visibility=visible?'visible':'hidden';
       station.style.opacity=String(reduced?1:pose.opacity);
       station.style.transform=reduced?'none':'translate3d('+pose.x+'px,'+pose.y+'px,'+pose.z+'px) rotateY('+pose.rotation+'deg)';
       station.classList.toggle('is-current',index===selected);
       station.inert=index!==selected||!visible;
       station.setAttribute('aria-hidden',String(index!==selected));
+      station.style.willChange=mobileMotion&&visible&&mobileState.traveling?'transform, opacity':'auto';
+      if(mobileMotion){
+        const scene=station.querySelector('.scene-content'),read=mobileState.contentOffsets[index-1];
+        scene.style.transform='translate3d(0,'+(-read)+'px,0)';
+        scene.style.willChange=visible&&read>0&&read<mobileTimeline.chapters[index-1].overflow?'transform':'auto';
+      }
     });
     $('.journey-route-progress').style.transform='scaleX('+progress/4+')';
     shell.dataset.progress=progress.toFixed(4);
@@ -248,18 +256,25 @@ export function mountApp(doc=document,win=window,data){
     if(!isHome||dialog.open)return;
     const selected=clamp(index,0,4);
     if(hash)win.history.replaceState({},'','#'+hashes[selected]);
-    const top=selected===0?0:mobileLayout?Math.max(0,nativeOffsets[selected]-headerHeight-12):travelTop+stationOffset(selected,height);
+    const top=selected===0?0:mobileMotion?travelTop+mobileTimeline.chapters[selected-1].anchor:mobileLayout?Math.max(0,nativeOffsets[selected]-headerHeight-12):travelTop+stationOffset(selected,height);
     win.scrollTo({top,behavior:reduced||instant?'instant':'smooth'});
     syncScroll();
   }
-  function requestFrame(){if(isHome&&!mobileLayout&&!disposed&&!frameId&&!doc.hidden)frameId=win.requestAnimationFrame(frame);}
+  function requestFrame(){if(isHome&&(!mobileLayout||mobileMotion)&&!disposed&&!frameId&&!doc.hidden)frameId=win.requestAnimationFrame(frame);}
   let previousScroll=win.scrollY;
   function syncScroll(){
     if(!isHome)return;
     const y=win.scrollY,delta=y-previousScroll;previousScroll=y;
     if(delta)controller.direction=Math.sign(delta);
-    if(mobileLayout){updateJourney();return;}
     journeyVisible=y+height>travelTop&&y<travelBottom;
+    if(mobileMotion){
+      mobileState=mobileJourneyAtOffset(y-travelTop,mobileTimeline);
+      controller.progress=controller.target=mobileState.progress;controller.velocity=0;
+      if(y<travelTop-height*.45)enterStation(0);
+      if(journeyVisible)requestFrame();
+      return;
+    }
+    if(mobileLayout){updateJourney();return;}
     controller.goTo(journeyAtOffset(y-travelTop,height));
     if(reduced||!journeyVisible){controller.progress=controller.target;controller.velocity=0;renderedProgress=-1;}
     if(y<travelTop-height*.45)enterStation(0);
@@ -298,19 +313,34 @@ export function mountApp(doc=document,win=window,data){
   const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   const field=isHome?Array.from({length:1500},()=>({x:(random()-.5)*130,z:random()*405-35,seed:random()})):[];
   function resize(){
+    const before=mobileTimeline,oldTop=travelTop,oldOffset=win.scrollY-oldTop,wasMobileMotion=mobileMotion;
     const changed=mobileLayout!==mobileMedia.matches;
     mobileLayout=mobileMedia.matches;
+    mobileMotion=isHome&&mobileLayout&&!reduced;
     root.dataset.layout=mobileLayout?'mobile':'desktop';
-    width=shell?.clientWidth||win.innerWidth;height=mobileLayout?win.innerHeight:shell?.clientHeight||win.innerHeight;
+    root.dataset.mobileMotion=String(mobileMotion);
+    headerHeight=$('.site-header').offsetHeight;
+    root.style.setProperty('--site-header-height',headerHeight+'px');
+    width=shell?.clientWidth||win.innerWidth;height=mobileLayout&&!mobileMotion?win.innerHeight:shell?.clientHeight||win.innerHeight;
     dpr=Math.min(win.devicePixelRatio||1,1.25);
     if(canvas){canvas.width=mobileLayout?1:Math.round(width*dpr);canvas.height=mobileLayout?1:Math.round(height*dpr);}
     if(changed){drag=null;suppressProjectClick=false;$('.gallery-track')?.classList.remove('is-dragging');}
     positionGallery();
     if(isHome){
-      headerHeight=$('.site-header').offsetHeight;
+      if(mobileMotion){
+        mobileTimeline=createMobileTimeline(stations.map(station=>station.querySelector('.scene-content').offsetHeight),height,headerHeight,$('.journey-controls').offsetHeight);
+        root.style.setProperty('--mobile-travel-height',mobileTimeline.scrollHeight+'px');
+        stations.forEach((station,index)=>{station.querySelector('.scene-content').style.top=mobileTimeline.chapters[index].top+'px';});
+      }else if(wasMobileMotion){
+        stations.forEach(station=>{
+          station.style.willChange='auto';
+          const scene=station.querySelector('.scene-content');scene.style.removeProperty('top');scene.style.removeProperty('transform');scene.style.removeProperty('will-change');
+        });
+        mobileTimeline=null;mobileState=null;
+      }
       travelTop=win.scrollY+travel.getBoundingClientRect().top;
       travelBottom=travelTop+travel.offsetHeight;
-      if(mobileLayout){
+      if(mobileLayout&&!mobileMotion){
         win.cancelAnimationFrame(frameId);frameId=0;previousFrame=0;
         stations.forEach(station=>{
           station.style.visibility='visible';station.style.opacity='1';station.style.transform='none';
@@ -321,6 +351,8 @@ export function mountApp(doc=document,win=window,data){
       if(changed&&activeStation>=0){
         goTo(activeStation,false,true);
         if(!mobileLayout){controller.progress=controller.target;controller.velocity=0;}
+      }else if(mobileMotion&&before&&before.signature!==mobileTimeline.signature&&oldOffset>=0&&oldOffset<=before.distance&&!dialog.open){
+        win.scrollTo({top:travelTop+remapMobileOffset(oldOffset,before,mobileTimeline),behavior:'instant'});
       }
       forcePaint=true;syncScroll();updateJourney(true);
     }
@@ -351,7 +383,9 @@ export function mountApp(doc=document,win=window,data){
   }
   function frame(now){
     frameId=0;
-    if(disposed||mobileLayout||doc.hidden||!journeyVisible||dialog.open){previousFrame=0;return;}
+    if(disposed||doc.hidden||!journeyVisible||dialog.open){previousFrame=0;return;}
+    if(mobileMotion){updateJourney();previousFrame=0;return;}
+    if(mobileLayout)return;
     const dt=previousFrame?Math.min((now-previousFrame)/1000,.032):.016;
     previousFrame=now;
     if(!reduced)controller.advance(dt);
@@ -371,7 +405,7 @@ export function mountApp(doc=document,win=window,data){
     if(moving||pointerMoving||deferredPaint)requestFrame();else previousFrame=0;
   }
   const heroScene=isHome?mountHeroScene($('#home'),doc,win):null;
-  if(win.ResizeObserver&&shell){resizeObserver=new win.ResizeObserver(resize);resizeObserver.observe(shell);resizeObserver.observe(travel);}
+  if(win.ResizeObserver&&shell){resizeObserver=new win.ResizeObserver(resize);resizeObserver.observe(shell);resizeObserver.observe(travel);stations.forEach(station=>resizeObserver.observe(station.querySelector('.scene-content')));}
   resize();
   if(isHome){
     const start=hashes.indexOf(win.location.hash.slice(1));
@@ -391,7 +425,7 @@ export function mountApp(doc=document,win=window,data){
     closeProject,
     resize,
     revealIntro:()=>heroScene?.revealIntro?.(),
-    snapshot:()=>({layout:mobileLayout?'mobile':'desktop',station:activeStation,progress:controller.progress,target:controller.target,service:serviceDeck.snapshot().target,flipping:serviceDeck.snapshot().running,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
+    snapshot:()=>({layout:mobileLayout?'mobile':'desktop',mobileMotion,station:activeStation,progress:controller.progress,target:controller.target,service:serviceDeck.snapshot().target,flipping:serviceDeck.snapshot().running,filter:galleryFilter,projectCount:(isHome?galleryProjects:filterProjects(data.projects,galleryFilter)).length,projectIndex:galleryActive}),
     destroy:()=>{disposed=true;listeners.forEach(remove=>remove());win.cancelAnimationFrame(frameId);resizeObserver?.disconnect();heroScene?.destroy();inlinePlayers.destroy();serviceDeck.destroy();if(dialog.open)closeProject();}
   };
   return api;

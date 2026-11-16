@@ -3,7 +3,8 @@ import { createRequire } from 'node:module'
 import { JSDOM } from 'jsdom'
 import postcss from 'postcss'
 import { mountApp } from '../../src/lib/journey/runtime.mjs'
-import { MOBILE_LAYOUT_QUERY, SHORT_LANDSCAPE_QUERY } from '../../src/lib/journey/responsive.mjs'
+import { MOBILE_LAYOUT_QUERY } from '../../src/lib/journey/responsive.mjs'
+import { createMobileTimeline } from '../../src/lib/journey/mobile-journey.mjs'
 const require = createRequire(import.meta.url), React = require('react')
 const { renderToStaticMarkup } = require('react-dom/server'), { component } = require('../components.cjs')
 export const copy = JSON.parse(fs.readFileSync(new URL('../../src/lib/journey/copy.json', import.meta.url)))
@@ -38,7 +39,10 @@ export function fixture(width, height, { coarse = true, reduced = false, page = 
     return media.get(query)
   }
   const mobile = () => win.matchMedia(MOBILE_LAYOUT_QUERY).matches
-  const heroHeight = () => dimensions.height * (reduced ? 1 : mobile() && !win.matchMedia(SHORT_LANDSCAPE_QUERY).matches ? 1.65 : 1.9)
+  const heroHeight = () => dimensions.height * (reduced ? 1 : mobile() ? 2 : 1.9)
+  const contentHeights = [800, 840, 760, 650]
+  const timeline = () => createMobileTimeline(contentHeights, dimensions.height, 68, 64)
+  const targets = () => [0, ...timeline().chapters.map(chapter => heroHeight() + chapter.anchor)]
   const offsets = () => [0, heroHeight(), heroHeight() + 800, heroHeight() + 1640, heroHeight() + 2400]
   const gutter = () => Math.max(20, Math.min(40, dimensions.width * .05))
   const viewWidth = () => dimensions.width - gutter() * 2
@@ -46,8 +50,15 @@ export function fixture(width, height, { coarse = true, reduced = false, page = 
   win.HTMLElement.prototype.scrollTo = function ({ left }) { this.scrollLeft = left; this.dispatchEvent(new win.Event('scroll')) }
   Object.defineProperties(win.HTMLElement.prototype, {
     clientWidth: { get() { return this.classList.contains('gallery-window') ? viewWidth() : dimensions.width } },
-    clientHeight: { get() { return mobile() && this.classList.contains('journey-shell') ? 3100 : dimensions.height } },
-    offsetHeight: { get() { if (this.id === 'home') return heroHeight(); if (this.classList.contains('site-header')) return 68; if (this.classList.contains('journey-scroll')) return mobile() ? 3100 : dimensions.height * 4.9; return dimensions.height } },
+    clientHeight: { get() { return mobile() && doc.querySelector('.portfolio-experience').dataset.mobileMotion !== 'true' && this.classList.contains('journey-shell') ? 3100 : dimensions.height } },
+    offsetHeight: { get() {
+      if (this.id === 'home') return heroHeight()
+      if (this.classList.contains('site-header')) return 68
+      if (this.classList.contains('journey-controls')) return 64
+      if (this.classList.contains('scene-content')) return contentHeights[Number(this.closest('.station').dataset.index) - 1]
+      if (this.classList.contains('journey-scroll')) return doc.querySelector('.portfolio-experience').dataset.mobileMotion === 'true' ? parseFloat(doc.querySelector('.portfolio-experience').style.getPropertyValue('--mobile-travel-height')) || 3100 : mobile() ? 3100 : dimensions.height * 4.9
+      return dimensions.height
+    } },
     offsetWidth: { get() { return this.classList.contains('project-card--video') ? Math.min(viewWidth(), 580) : Math.min(dimensions.width * .76, 320) } },
     offsetLeft: { get() { let left = 0, node = this.previousElementSibling; while (node) { left += node.offsetWidth + 18; node = node.previousElementSibling } return left } },
   })
@@ -66,7 +77,7 @@ export function fixture(width, height, { coarse = true, reduced = false, page = 
   win.HTMLDialogElement.prototype.showModal = function () { this.setAttribute('open', '') }
   win.HTMLDialogElement.prototype.close = function () { this.removeAttribute('open'); this.dispatchEvent(new win.Event('close')) }
   const app = mountApp(doc, win, data)
-  return { dom, win, doc, app, paints, offsets, pendingFrames: () => raf.size,
+  return { dom, win, doc, app, paints, offsets, targets, timeline, heroHeight, contentHeights, pendingFrames: () => raf.size,
     tick(frames = 200) { for (let i = 0; i < frames; i++) { now += 1000 / 60; const callbacks = [...raf.values()]; raf.clear(); callbacks.forEach(fn => fn(now)) } },
     setViewport(width, height, coarse = true) { dimensions = { ...dimensions, width, height, coarse }; win.dispatchEvent(new win.Event('resize')); media.forEach(value => value.listeners.forEach(fn => fn())) },
     close() { app.destroy(); win.close() },
