@@ -1,6 +1,6 @@
 # Cinematic portfolio update
 
-Branch: `update/cinematic-journey`. Base: `ad4979c06c17dbbad560d22d9d76655e74c0c85a` on `main`.
+The cinematic version is the current `main`. The previous website is preserved on `archive/pre-cinematic-journey` at `ad4979c06c17dbbad560d22d9d76655e74c0c85a`. The implementation history is also available on `update/cinematic-journey`.
 
 The public pages now use the reviewed cinematic journey: the original SVG hero and native scroll sequence, a reversible camera path, separate service cards that shuffle through a stack, and an edge-aligned project gallery. Design covers stay 4:5; AI video players stay 16:9. Both the homepage and All Projects use the live public project records. Admin sign-in, upload routes and authorization are unchanged.
 
@@ -16,6 +16,6 @@ Instagram and LinkedIn now point directly to the existing profiles without mobil
 
 ## Deployment and rollback
 
-Keep `main` on its existing commit. A Git push to this branch lets the existing Vercel integration build a preview. Promote that verified branch deployment to Production to serve the current `seif-portfolio0.vercel.app` domain, and select this branch as the Vercel Production Branch if future pushes should update that domain automatically. Retain the existing Supabase production environment variables. Do not copy local build placeholders into Vercel.
+`main` remains the Vercel Production Branch. Its current cinematic source serves `seif-portfolio0.vercel.app`, and future pushes to `main` follow the existing automatic production deployment workflow. Retain the existing Supabase production environment variables. Do not copy local build placeholders into Vercel.
 
-The previous production deployment and unchanged `main` remain available for rollback. Promoting the previous deployment restores the prior website without rewriting branch history.
+The previous production deployment and `archive/pre-cinematic-journey` remain available for rollback. Promoting the previous deployment restores the prior website without rewriting branch history. No database records, storage objects or admin credentials were changed by this UI update.
